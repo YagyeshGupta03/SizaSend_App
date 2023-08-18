@@ -44,8 +44,8 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: s.height * 0.04,
+              const SizedBox(
+                height: 15
               ),
               Text(
                 S.of(context).personalInfo,
