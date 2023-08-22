@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart'as http;
+import 'package:image_picker/image_picker.dart';
 
 
 class NetworkHelper {
@@ -22,28 +23,28 @@ class NetworkHelper {
     }
   }
 
-  // Future postMultiPartData(
-  //     Map<String, String> data, List<XFile> image, String imageKey) async {
-  //   var request = http.MultipartRequest('POST', Uri.parse(url));
-  //   request.fields.addAll(data);
-  //   image.forEach((element) async {
-  //     request.files
-  //         .add(await http.MultipartFile.fromPath('$imageKey', element.path));
-  //   });
-  //
-  //   http.StreamedResponse response = await request.send();
-  //
-  //   if (response.statusCode == 200) {
-  //     var responseData = await response.stream.bytesToString();
-  //     var jsonData = jsonDecode(responseData);
-  //     return jsonData;
-  //   } else {
-  //     var responseData = await response.stream.bytesToString();
-  //     var jsonData = jsonDecode(responseData);
-  //     return jsonData;
-  //   }
-  // }
-  //
+  Future postMultiPartData(
+      Map<String, String> data, List<XFile> image, String imageKey) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.fields.addAll(data);
+    image.forEach((element) async {
+      request.files
+          .add(await http.MultipartFile.fromPath('$imageKey', element.path));
+    });
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var responseData = await response.stream.bytesToString();
+      var jsonData = jsonDecode(responseData);
+      return jsonData;
+    } else {
+      var responseData = await response.stream.bytesToString();
+      var jsonData = jsonDecode(responseData);
+      return jsonData;
+    }
+  }
+
   //
   // Future postMultiPartDataDifferentKey(
   //     Map<String, String> data, Map<String, XFile> images) async {

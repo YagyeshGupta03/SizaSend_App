@@ -16,7 +16,6 @@ class CredentialController extends GetxController{
     await prefs.setString('user_id', userID);
     id = prefs.getString('user_id');
     update();
-    print ('$id>>>>>>>>>>>>>>>>>>>>>>>>>>>');
   }
   //
   //

@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "addAccount": MessageLookupByLibrary.simpleMessage("Add Account"),
         "addNewBankAccount":
             MessageLookupByLibrary.simpleMessage("Add new bank account"),
+        "addProduct": MessageLookupByLibrary.simpleMessage("Add product"),
         "alreadyHaveAnAccountYet": MessageLookupByLibrary.simpleMessage(
             "Already have an account yet?"),
         "bankAccount": MessageLookupByLibrary.simpleMessage("Bank Account"),
@@ -47,6 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Create an Account"),
         "dontHaveAnAccount":
             MessageLookupByLibrary.simpleMessage("Don’t have an account?"),
+        "editAccount": MessageLookupByLibrary.simpleMessage("Edit Account"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "employer": MessageLookupByLibrary.simpleMessage("Employer"),
         "enterAccountNumber":
@@ -56,6 +58,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "enterName": MessageLookupByLibrary.simpleMessage("Enter name"),
         "enterTheOtpCodeWeSentYou": MessageLookupByLibrary.simpleMessage(
             "Enter the OTP code we sent you"),
+        "enterYourMail":
+            MessageLookupByLibrary.simpleMessage("Enter your mail"),
         "enterYourOtp": MessageLookupByLibrary.simpleMessage("Enter your OTP"),
         "fillTheMandatoryFields":
             MessageLookupByLibrary.simpleMessage("Fill the mandatory fields"),
@@ -68,6 +72,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "history": MessageLookupByLibrary.simpleMessage("History"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "ifscCode": MessageLookupByLibrary.simpleMessage("IFSC code"),
+        "imageUpdatedSuccessfully":
+            MessageLookupByLibrary.simpleMessage("Image updated successfully"),
         "kindlyFillAllTheFields":
             MessageLookupByLibrary.simpleMessage("Kindly fill all the fields"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
@@ -78,9 +84,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "loremIpsumDolorSitAmetConsecteturAdipiscingElitSedDo":
             MessageLookupByLibrary.simpleMessage(
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"),
+        "name": MessageLookupByLibrary.simpleMessage("Name"),
         "noAccountCurrently":
             MessageLookupByLibrary.simpleMessage("No account currently"),
         "occupation": MessageLookupByLibrary.simpleMessage("Occupation"),
+        "ourPolicy": MessageLookupByLibrary.simpleMessage("Our Policy"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "passwordConfirmationDoesNotMatch":
             MessageLookupByLibrary.simpleMessage(
@@ -89,6 +97,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "phoneNo": MessageLookupByLibrary.simpleMessage("Phone No."),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone number"),
         "profile": MessageLookupByLibrary.simpleMessage("Profile"),
+        "profileUpdatedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Profile updated successfully"),
         "quotation": MessageLookupByLibrary.simpleMessage("Quotation"),
         "recentTransactions":
             MessageLookupByLibrary.simpleMessage("Recent Transactions"),
@@ -99,10 +109,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "Sign up or login into to have a full digital experience in our Business."),
         "submit": MessageLookupByLibrary.simpleMessage("Submit"),
         "successfully": MessageLookupByLibrary.simpleMessage("Successfully"),
+        "termsAndConditions":
+            MessageLookupByLibrary.simpleMessage("Terms and conditions"),
+        "thisField": MessageLookupByLibrary.simpleMessage("This field"),
         "toResetYourPasswordYouNeedYourEmailOrMobile":
             MessageLookupByLibrary.simpleMessage(
                 "To reset your password, you need your email or mobile number that can be authenticated"),
         "topBuyers": MessageLookupByLibrary.simpleMessage("Top Buyers"),
+        "update": MessageLookupByLibrary.simpleMessage("Update"),
         "viewAll": MessageLookupByLibrary.simpleMessage("View All"),
         "welcomeBack": MessageLookupByLibrary.simpleMessage("Welcome Back"),
         "yourBankAccount":

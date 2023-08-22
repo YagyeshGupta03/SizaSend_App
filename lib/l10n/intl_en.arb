@@ -58,5 +58,16 @@
   "noAccountCurrently": "No account currently",
   "yourBankAccount": "Your bank account",
   "passwordConfirmationDoesNotMatch": "Password confirmation does not match",
-  "kindlyFillAllTheFields": "Kindly fill all the fields"
+  "kindlyFillAllTheFields": "Kindly fill all the fields",
+  "imageUpdatedSuccessfully": "Image updated successfully",
+  "editAccount": "Edit Account",
+  "update": "Update",
+  "thisField": "This field",
+  "name": "Name",
+  "profileUpdatedSuccessfully": "Profile updated successfully",
+  "enterYourMail": "Enter your mail",
+  "termsAndConditions": "Terms and conditions",
+  "ourPolicy": "Our Policy",
+  "addProduct": "Add product",
+  "fillAllTheFields": "Fill all the fields",
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:random_avatar/random_avatar.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/screen/authentication/login_screen.dart';
 import 'package:savo/screen/profile/BankAccount_screens/bankAc_listing.dart';
-import 'package:savo/screen/profile/account_info_screen.dart';
+import 'package:savo/screen/profile/GeneralSettings/general_settings.dart';
+import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
 import 'package:savo/screen/profile/change_password_screen.dart';
+import '../../Constants/all_urls.dart';
 import '../../generated/l10n.dart';
 import '../../util/images.dart';
 
@@ -32,17 +33,36 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
                   borderRadius: BorderRadius.circular(10),
                   color: themeController.currentTheme.value.cardColor),
               padding: const EdgeInsets.all(5),
-              child: SizedBox(
-                height: 10,
-                width: 10,
-                child: Image.asset('assets/images/profilePic.jpg', fit: BoxFit.fill,),
-              ),
+              child: userInfoController.profileImage == ''
+                  ? SizedBox(
+                      height: 10,
+                      width: 10,
+                      child: Image.asset(
+                        'assets/images/profilePic.jpg',
+                        fit: BoxFit.fill,
+                      ),
+                    )
+                  : SizedBox(
+                      height: 10,
+                      width: 10,
+                      child: Image.network(
+                        '$imageUrl${userInfoController.profileImage.toString()}',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
             ),
           ),
           const SizedBox(height: 10),
-          const Text("Marvin McKinney"),
+          Text(
+            userInfoController.fullName,
+            style: themeController.currentTheme.value.textTheme.titleMedium,
+          ),
           const SizedBox(height: 10),
-          const Text("(303) 555-0105"),
+          Text(
+            '${userInfoController.countryCode}${userInfoController.phone}',
+            style: themeController.currentTheme.value.textTheme.displaySmall,
+          ),
+
           // List Tiles
           const SizedBox(height: 10),
           ImageListTile(
@@ -62,7 +82,12 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
               image: Images.icLanguage, title: S.of(context).language),
           const SizedBox(height: 20),
           ImageListTile(
-              image: Images.icSetting, title: S.of(context).generalSetting),
+            image: Images.icSetting,
+            title: S.of(context).generalSetting,
+            onTap: () {
+              Get.to(const GeneralSettings());
+            },
+          ),
           ImageListTile(
             image: Images.icChangePassword,
             title: S.of(context).changePassword,
@@ -103,6 +128,8 @@ class _ImageListTileState extends State<ImageListTile> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: themeController
+          .currentTheme.value.cardColor,
       child: InkWell(
         onTap: () {
           widget.onTap!();

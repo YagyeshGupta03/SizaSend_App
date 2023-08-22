@@ -649,6 +649,106 @@ class S {
       args: [],
     );
   }
+
+  /// `Image updated successfully`
+  String get imageUpdatedSuccessfully {
+    return Intl.message(
+      'Image updated successfully',
+      name: 'imageUpdatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Account`
+  String get editAccount {
+    return Intl.message(
+      'Edit Account',
+      name: 'editAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update`
+  String get update {
+    return Intl.message(
+      'Update',
+      name: 'update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This field`
+  String get thisField {
+    return Intl.message(
+      'This field',
+      name: 'thisField',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name`
+  String get name {
+    return Intl.message(
+      'Name',
+      name: 'name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile updated successfully`
+  String get profileUpdatedSuccessfully {
+    return Intl.message(
+      'Profile updated successfully',
+      name: 'profileUpdatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your mail`
+  String get enterYourMail {
+    return Intl.message(
+      'Enter your mail',
+      name: 'enterYourMail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Terms and conditions`
+  String get termsAndConditions {
+    return Intl.message(
+      'Terms and conditions',
+      name: 'termsAndConditions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Our Policy`
+  String get ourPolicy {
+    return Intl.message(
+      'Our Policy',
+      name: 'ourPolicy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add product`
+  String get addProduct {
+    return Intl.message(
+      'Add product',
+      name: 'addProduct',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

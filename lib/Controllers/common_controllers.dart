@@ -13,12 +13,18 @@ class ThemeController extends GetxController {
     currentTheme.value = theme;
   }
 }
-
+//
+//
+//
 class UserInfoController extends GetxController{
 
   String fullName = '';
   String phone = '';
   String countryCode = '';
+  String profileImage = '';
+  String occupation = '';
+  String employer = '';
+  String email = '';
 
 
   Future getUserInfo() async {
@@ -30,15 +36,33 @@ class UserInfoController extends GetxController{
     fullName = '';
     phone = '';
     countryCode = '';
+    profileImage = '';
+    occupation = '';
+    employer = '';
+    email = '';
 
     if (reply['status'] == 1) {
      fullName = reply['data']['full_name'];
      phone = reply['data']['phone'];
      countryCode = reply['data']['country_code'];
+     profileImage = reply['data']['profile_image']??'';
+     employer = reply['data']['employer']??'';
+     occupation = reply['data']['occupation_name']??'';
+     email = reply['data']['email']??'';
       update();
     } else {
       print('Error in getting user details');
     }
   }
+}
+//
+//
+//
+class LoadingController extends GetxController {
+  RxBool loading = false.obs;
 
+  updateLoading(val) {
+    loading.value = val;
+    update();
+  }
 }

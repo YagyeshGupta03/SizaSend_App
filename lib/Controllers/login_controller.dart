@@ -3,8 +3,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/screen/dashboard_screen.dart';
-import 'package:savo/screen/home/home_screen.dart';
-import 'package:savo/screen/profile/profile_home_screen.dart';
 import '../Constants/all_urls.dart';
 import '../Helper/http_helper.dart';
 
@@ -92,6 +90,25 @@ class LoginController extends GetxController {
         gravity: ToastGravity.SNACKBAR,
         backgroundColor: Colors.red,
       );
+    }
+  }
+  //
+  //
+  //
+  //
+  String title = '';
+  String description = '';
+  Future termsAndConditions () async {
+    final NetworkHelper networkHelper = NetworkHelper(url: termsUrl);
+    var reply = await networkHelper.postData({});
+
+    if (reply['status'] == 1) {
+      title = reply['data']['title'];
+      description = reply['data']['description'];
+
+      // Navigator.pop(context);
+    } else {
+     print('error in getting terms and conditons');
     }
   }
 }

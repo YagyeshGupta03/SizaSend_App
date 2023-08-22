@@ -27,6 +27,10 @@ dependencies:
   country_code_picker: ^3.0.0
   loading_animation_widget: ^1.2.0+4
   fluttertoast: ^8.2.2
+  image_picker: ^1.0.2
+  flutter_html: any
+  video_player: ^2.7.0
+  video_thumbnail: ^0.5.3
 
 dependency_overrides:
   intl: ^0.18.0

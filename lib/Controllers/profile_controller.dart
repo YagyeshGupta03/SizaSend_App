@@ -5,12 +5,14 @@ import 'package:savo/Constants/all_urls.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Models/Models.dart';
 import 'package:savo/screen/profile/BankAccount_screens/bankAc_listing.dart';
+import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
 import '../Helper/http_helper.dart';
+import '../generated/l10n.dart';
 
 class BankController extends GetxController {
   //
   //
-  //
+  //  Add bank account
   void addBankAc(context, fullName, bankName, ifsc, account) async {
     final NetworkHelper networkHelper = NetworkHelper(url: addBankAcUrl);
     var reply = await networkHelper.postData({
@@ -28,7 +30,7 @@ class BankController extends GetxController {
         gravity: ToastGravity.SNACKBAR,
         backgroundColor: Colors.green,
       );
-      Get.to(()=> const BankListingScreen());
+      Get.to(() => const BankListingScreen());
     } else {
       Fluttertoast.showToast(
         msg: "${reply['message']}",
@@ -37,10 +39,9 @@ class BankController extends GetxController {
       );
     }
   }
-
   //
   //
-  //
+  //  Get bank account list
   RxList<BankModel> bankList = <BankModel>[].obs;
   void showBankAc() async {
     final NetworkHelper networkHelper = NetworkHelper(url: getBankAcUrl);
@@ -66,7 +67,7 @@ class BankController extends GetxController {
   }
   //
   //
-  //
+  //  Delete bank account
   void deleteBankAc(context, bankId) async {
     final NetworkHelper networkHelper = NetworkHelper(url: deleteBankAcUrl);
     var reply = await networkHelper.postData({
@@ -89,16 +90,83 @@ class BankController extends GetxController {
     }
   }
 }
+
 //
 //
 //
 //
 //
-class Profile extends GetxController{
+class ProfileController extends GetxController {
 
+  //  Image updates
+  Future profileImageUpdate(context, image) async {
+    final NetworkHelper networkHelper = NetworkHelper(url: profileImageUrl);
+    var reply = await networkHelper.postMultiPartData(
+        {"user_id": credentialController.id.toString()},
+        [image],
+        "profile_image");
 
+    if (reply['status'] == 1) {
+      userInfoController.getUserInfo();
+      Fluttertoast.showToast(
+        msg: S.of(context).imageUpdatedSuccessfully,
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.green,
+      );
+    } else {
+      print('Error in uploading image');
+    }
+  }
+  //
+  //
+  //
+  //  Occupation list
+  RxList<OccupationModel> occupationList = <OccupationModel>[].obs;
+  void getOccupationData() async {
+    final NetworkHelper networkHelper = NetworkHelper(url: occupationUrl);
+    var reply = await networkHelper.postData({});
 
+    if (reply['status'] == 1) {
+      occupationList.clear();
+      for (int i = 0; i < reply['data'].length; i++) {
+        occupationList.add(
+          OccupationModel(
+            id: reply['data'][i]['id'],
+            title: reply['data'][i]['title'],
+          ),
+        );
+        update();
+        print(occupationList.length);
+      }
+    } else {
+      print('Error in getting occupation list');
+    }
+  }
+  //
+  //
+  //
+  //  Update Profile
+  void updateProfile(context, fullName, employer, occupation, phone, email) async {
+    final NetworkHelper networkHelper = NetworkHelper(url: updateProfileUrl);
+    var reply = await networkHelper.postData({
+      'user_id': credentialController.id,
+      'full_name': fullName,
+      'email': email,
+      'phone': phone,
+      'occupation_id': occupation,
+      'employer': employer,
+    });
 
-
-
+    if (reply['status'] == 1) {
+     userInfoController.getUserInfo();
+     Get.to(()=> const AccountInfoScreen());
+     Fluttertoast.showToast(
+       msg: S.of(context).profileUpdatedSuccessfully,
+       gravity: ToastGravity.SNACKBAR,
+       backgroundColor: Colors.green,
+     );
+    } else {
+      print('Profile update failed');
+    }
+  }
 }

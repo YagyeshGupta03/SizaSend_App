@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:savo/Constants/theme_data.dart';
+import 'package:savo/Controllers/quotation_controller.dart';
+import 'package:savo/screen/quotation/add_quotation_screen.dart';
 import 'package:savo/screen/quotation/quotation_list.dart';
 
 class QuotationHomeScreen extends StatefulWidget {
@@ -9,14 +13,35 @@ class QuotationHomeScreen extends StatefulWidget {
 }
 
 class _QuotationHomeScreenState extends State<QuotationHomeScreen> {
+  final QuotationController _quotationController = Get.put(QuotationController());
+  @override
+  void initState() {
+    super.initState();
+    _quotationController.showQuotation();
+    print(_quotationController.quotationList.length);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
+    return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column( crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            QuotationList(),
+            TextButton(
+              onPressed: (){
+                Get.to(()=> const AddQuotationScreen(edit: false,));
+              },
+              child: const Text(
+                'Add Quotation +',
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: primaryColor),
+              ),
+            ),
+            const SizedBox(height: 10),
+           const QuotationList(),
           ],
         ),
       ),

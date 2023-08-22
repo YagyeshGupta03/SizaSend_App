@@ -9,7 +9,7 @@ import 'package:savo/screen/authentication/sign_up_screen.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import 'package:savo/screen/profile/BankAccount_screens/add_bankAc_screen.dart';
 import 'package:savo/screen/profile/BankAccount_screens/bankAc_listing.dart';
-import 'package:savo/screen/profile/account_info_screen.dart';
+import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
 import 'package:savo/screen/profile/change_password_screen.dart';
 import 'package:savo/screen/profile/profile_home_screen.dart';
 import 'Controllers/common_controllers.dart';

@@ -42,6 +42,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         TextFormField(
           controller: widget.cont,
           keyboardType: widget.keyboardType,
+          style: themeController.currentTheme.value.textTheme.displayMedium,
           decoration: InputDecoration(
               fillColor: themeController.currentTheme.value.cardColor,
               border: OutlineInputBorder(
@@ -102,7 +103,7 @@ class CustomTextField extends StatelessWidget {
             fillColor: fillColor,
             hintText: hintText,
             hintStyle: themeController.currentTheme.value.textTheme.displayMedium,
-            border: OutlineInputBorder(borderSide: BorderSide.none),
+            border: const OutlineInputBorder( borderSide: BorderSide.none),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
           ),

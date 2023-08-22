@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/login_controller.dart';
+import 'package:savo/screen/authentication/login_screen.dart';
 import 'package:savo/util/widgets/text_field.dart';
 import '../../Constants/theme_data.dart';
 import '../../generated/l10n.dart';
@@ -152,11 +153,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           text: S.of(context).login,
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.pop(context);
-                              Navigator.pushNamed(context, "/loginScreen");
+                             Get.to(()=> const LoginScreen());
                             },
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, color: buttonColor)),
+                              fontWeight: FontWeight.bold, color: buttonColor),
+                      ),
                     ],
                   ),
                 ),
