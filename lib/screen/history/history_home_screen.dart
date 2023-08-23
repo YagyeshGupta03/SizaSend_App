@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:savo/screen/history/transaction_list.dart';
+import '../../Controllers/quotation_controller.dart';
 
 class HistoryHomeScreen extends StatefulWidget {
   const HistoryHomeScreen({super.key});
@@ -9,14 +11,23 @@ class HistoryHomeScreen extends StatefulWidget {
 }
 
 class _HistoryHomeScreenState extends State<HistoryHomeScreen> {
+  final QuotationController _quotationController =
+  Get.put(QuotationController());
+
+  @override
+  void initState() {
+    super.initState();
+   _quotationController.receiveQuotation();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return const SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: <Widget>[
-            TransactionList()
+            TransactionList(),
           ],
         ),
       ),

@@ -85,6 +85,12 @@ class _VideoAppState extends State<VideoApp> {
                 height: screenHeight(context) / 1.2,
                 width: screenWidth(context),
                 color: themeController.currentTheme.value.cardColor,
+                child: Center(
+                  child: LoadingAnimationWidget.threeArchedCircle(
+                    color: primaryColor,
+                    size: 50,
+                  ),
+                ),
               ),
               _controller.value.isBuffering
                   ? const SizedBox()

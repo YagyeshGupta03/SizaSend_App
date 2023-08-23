@@ -36,14 +36,8 @@ ThemeData lightTheme = ThemeData(
 
     bodyLarge: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
 
+    titleSmall: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
 
-    // //User name on dashboard screen
-    // titleSmall: TextStyle(
-    //     color: txtColor,
-    //     fontFamily: fontFamily,
-    //     fontSize: 12,
-    //     fontWeight: FontWeight.w400),
-    //
     titleMedium: TextStyle(
       fontWeight: FontWeight.w700, fontSize: 20, color: Colors.black),
 

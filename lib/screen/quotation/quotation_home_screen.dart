@@ -17,8 +17,7 @@ class _QuotationHomeScreenState extends State<QuotationHomeScreen> {
   @override
   void initState() {
     super.initState();
-    _quotationController.showQuotation();
-    print(_quotationController.quotationList.length);
+    _quotationController.receiveQuotation();
   }
 
   @override

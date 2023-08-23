@@ -70,7 +70,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                         final videoSizeInMB = videoSizeInBytes /
                             (1024 * 1024); // Convert bytes to MB
 
-                        if (videoSizeInMB <= 10) {
+                        if (videoSizeInMB <= 1) {
                           setState(() {
                             _video = pickedFile;
                           });
@@ -201,7 +201,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                           _weight.text.isNotEmpty &&
                           _width.text.isNotEmpty &&
                           _height.text.isNotEmpty &&
-                          _productDescription.text.isNotEmpty) {
+                          _productDescription.text.isNotEmpty && _video != null) {
                         loadingController.updateLoading(true);
                         _quotationController.addQuotation(
                             context,

@@ -1,19 +1,18 @@
-
-
-
 class UserModel {
   UserModel({
     required this.fullName,
     required this.phone,
     required this.countryCode,
+    required this.image,
+    required this.userId,
   });
 
   final String fullName;
   final String phone;
   final String countryCode;
+  final String image;
+  final String userId;
 }
-
-
 
 class BankModel {
   BankModel({
@@ -31,8 +30,6 @@ class BankModel {
   final String account;
 }
 
-
-
 class OccupationModel {
   OccupationModel({
     required this.id,
@@ -43,20 +40,21 @@ class OccupationModel {
   final String title;
 }
 
-
-
 class QuotationModel {
   QuotationModel({
-   required this.productID,
-   required this.productName,
-   required this.price,
-   required this.store,
-   required this.quantity,
-   required this.weight,
-   required this.width,
-   required this.height,
-   required this.description,
-   required this.video,
+    required this.productID,
+    required this.productName,
+    required this.price,
+    required this.store,
+    required this.quantity,
+    required this.weight,
+    required this.width,
+    required this.height,
+    required this.description,
+    required this.video,
+    this.senderId = '',
+    this.receiverId = '',
+    this.status = '',
   });
 
   final String productID;
@@ -69,4 +67,7 @@ class QuotationModel {
   final String height;
   final String description;
   final String video;
+  final String senderId;
+  final String receiverId;
+  final String status;
 }

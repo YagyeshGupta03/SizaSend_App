@@ -75,7 +75,6 @@ class QuotationController extends GetxController {
         );
         update();
       }
-      print(quotationList.length);
     } else {
       print('Error in getting quotation list');
     }
@@ -181,6 +180,103 @@ class QuotationController extends GetxController {
         backgroundColor: Colors.red,
       );
       loadingController.updateLoading(false);
+    }
+  }
+
+  //
+  //
+  //
+  //Function to search user
+  RxList<UserModel> searchList = <UserModel>[].obs;
+  void getSearchData(search) async {
+    loadingController.updateLoading(true);
+    final NetworkHelper networkHelper = NetworkHelper(url: searchUserUrl);
+    var reply = await networkHelper.postData({
+      'search': search,
+    });
+
+    searchList.clear();
+    if (reply['status'] == 1) {
+      for (int i = 0; i < reply['data'].length; i++) {
+        searchList.add(
+          UserModel(
+              userId: reply['data'][i]['id'],
+              fullName: reply['data'][i]['full_name'],
+              phone: reply['data'][i]['phone'],
+              countryCode: reply['data'][i]['country_code']?? '',
+              image: reply['data'][i]['profile_image'] ??'',
+          ),
+        );
+        update();
+      }
+      loadingController.updateLoading(false);
+    } else {
+      loadingController.updateLoading(false);
+    }
+  }
+  //
+  //
+  // Function to add quotation
+  void sendQuotation(context, orderId, receiver) async {
+    loadingController.updateLoading(true);
+    final NetworkHelper networkHelper = NetworkHelper(url: sendQuotationUrl);
+    var reply = await networkHelper.postData({
+      'sender_id': credentialController.id,
+      'receiver_id': receiver,
+      'order_id': orderId
+    });
+
+    if (reply['status'] == 1) {
+      Get.back();
+      Fluttertoast.showToast(
+        msg: 'Quotation sent successfully',
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.green,
+      );
+      loadingController.updateLoading(false);
+    } else {
+      Fluttertoast.showToast(
+        msg: reply['message'],
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      loadingController.updateLoading(false);
+    }
+  }
+
+  //
+  //
+  //
+  //Function to show quotation
+  RxList<QuotationModel> getQuotationList = <QuotationModel>[].obs;
+  void receiveQuotation() async {
+    final NetworkHelper networkHelper = NetworkHelper(url: receiveQuotationUrl);
+    var reply = await networkHelper.postData({
+      'user_id': credentialController.id,
+    });
+
+    if (reply['status'] == 1) {
+      getQuotationList.clear();
+      for (int i = 0; i < reply['data'].length; i++) {
+        getQuotationList.add(
+            QuotationModel(
+              productID: reply['data'][i]['order_id'],
+              productName: reply['data'][i]['name'],
+              price: reply['data'][i]['price'],
+              store: reply['data'][i]['store_name'],
+              quantity: reply['data'][i]['quantity'],
+              weight: reply['data'][i]['weight'],
+              width: reply['data'][i]['width'],
+              height: reply['data'][i]['height'],
+              description: reply['data'][i]['description'],
+              senderId: reply['data'][i]['sender_id'],
+              receiverId: reply['data'][i]['receiver_id'],
+              video: reply['data'][i]['video'] ?? ''),
+        );
+        update();
+      }
+    } else {
+      print('Error in getting quotation list');
     }
   }
 }
