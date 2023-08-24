@@ -34,5 +34,6 @@ const String editQuotationUrl = '${baseUrl}updateOrdersByOrederId';
 const String searchUserUrl = '${baseUrl}get_searchByFullnamePhone';
 const String sendQuotationUrl = '${baseUrl}send_quotation';
 const String receiveQuotationUrl = '${baseUrl}getQuotationById';
+const String sendNotificationUrl = '${baseUrl}send_notification';
 
 

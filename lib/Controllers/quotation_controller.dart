@@ -279,4 +279,27 @@ class QuotationController extends GetxController {
       print('Error in getting quotation list');
     }
   }
+  //
+  //
+  //
+  //
+  void sendNotification(orderId, receiverId) async {
+    final NetworkHelper networkHelper = NetworkHelper(url: sendNotificationUrl);
+    var reply = await networkHelper.postData({
+      'user_id': credentialController.id,
+      'order_id': orderId,
+      'sender_id': credentialController.id,
+      'receiver_id': receiverId,
+    });
+
+    if (reply['status'] == 1) {
+      Fluttertoast.showToast(
+        msg: 'Quotation sent successfully',
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+    } else {
+      print('Error in getting quotation list');
+    }
+  }
 }

@@ -32,6 +32,13 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     const ProfileHomeScreen(),
   ];
 
+  List drawer = [
+    const Drawer(),
+    const SizedBox(),
+    const SizedBox(),
+    const SizedBox(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,7 +122,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         ],
         title: screenTitle[selectedIndex],
       ),
-      drawer: const Drawer(),
+      drawer: drawer.elementAt(selectedIndex),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.transparent,
         elevation: 0,

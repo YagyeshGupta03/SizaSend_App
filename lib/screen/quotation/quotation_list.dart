@@ -17,7 +17,7 @@ class _QuotationListState extends State<QuotationList> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => _quotationController.quotationList.length.isEqual(0)
+      () => _quotationController.getQuotationList.length.isEqual(0)
           ? Center(
               child: Text('No quotations available',
                   style:
