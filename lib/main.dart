@@ -1,26 +1,25 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:savo/Controllers/global_controllers.dart';
-import 'package:savo/screen/authentication/forgot_screen.dart';
-import 'package:savo/screen/authentication/otp_screen.dart';
-import 'package:savo/screen/authentication/sign_up_screen.dart';
-import 'package:savo/screen/dashboard_screen.dart';
-import 'package:savo/screen/profile/BankAccount_screens/add_bankAc_screen.dart';
-import 'package:savo/screen/profile/BankAccount_screens/bankAc_listing.dart';
-import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
-import 'package:savo/screen/profile/change_password_screen.dart';
-import 'package:savo/screen/profile/profile_home_screen.dart';
 import 'Controllers/common_controllers.dart';
 import 'generated/l10n.dart';
-import 'landing.dart';
-import 'screen/authentication/login_screen.dart';
-import 'screen/authentication/success_screen.dart';
-import 'screen/onboard/onboarding_screen.dart';
 import 'screen/splash_screen.dart';
 
-void main() {
+FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  // // Request permission
+  // NotificationSettings settings = await messaging.requestPermission(
+  // alert: true,
+  // badge: true,
+  // sound: true,
+  // );
   final ThemeController themeController = ThemeController();
   runApp(
     const MyApp(),

@@ -11,7 +11,7 @@ class QuotationController extends GetxController {
   //
   // Function to add quotation
   void addQuotation(context, productName, storeLocation, price, quantity,
-      weight, width, height, description, video) async {
+      weight, width, height, description, video, receiverId) async {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: addQuotationUrl);
     var reply = await networkHelper.postMultiPartData({
@@ -28,13 +28,9 @@ class QuotationController extends GetxController {
       video
     ], "video");
 
+    print(reply);
     if (reply['status'] == 1) {
-      Navigator.pop(context);
-      Fluttertoast.showToast(
-        msg: reply['message'],
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.green,
-      );
+      sendNotification(reply['data']['id'], receiverId);
       loadingController.updateLoading(false);
     } else {
       Fluttertoast.showToast(
@@ -296,7 +292,7 @@ class QuotationController extends GetxController {
       Fluttertoast.showToast(
         msg: 'Quotation sent successfully',
         gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.green,
       );
     } else {
       print('Error in getting quotation list');

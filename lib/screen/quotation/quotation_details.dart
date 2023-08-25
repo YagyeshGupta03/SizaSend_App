@@ -9,7 +9,6 @@ import 'package:video_player/video_player.dart';
 import '../../Constants/all_urls.dart';
 import '../../Constants/theme_data.dart';
 import '../../Controllers/global_controllers.dart';
-import '../../Controllers/quotation_controller.dart';
 
 class QuotationDetailScreen extends StatefulWidget {
   const QuotationDetailScreen(
@@ -42,9 +41,6 @@ class QuotationDetailScreen extends StatefulWidget {
 
 class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
   late VideoPlayerController _controller;
-  final QuotationController _quotationController =
-      Get.put(QuotationController());
-  final _searchBar = TextEditingController();
   Timer? _timer;
 
   @override
@@ -233,9 +229,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
               ),
               const SizedBox(height: 40),
               LoginButton(
-                  onTap: () {
-                    _showBottomSheet(context);
-                  },
+                  onTap: () {},
                   title: 'Send',
                   txtColor: Colors.white,
                   btnColor: primaryColor),
@@ -248,143 +242,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
 
   //
   //
-  void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          expand: false,
-          builder: (context, scrollController) {
-            return Container(
-              color: themeController.currentTheme.value.scaffoldBackgroundColor,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ListView(
-                controller: scrollController,
-                children: [
-                  const SizedBox(height: 40),
-                  TextFormField(
-                    controller: _searchBar,
-                    style: themeController
-                        .currentTheme.value.textTheme.displaySmall,
-                    onFieldSubmitted: (val) {
-                      loadingController.updateLoading(true);
-                      _quotationController.getSearchData(val);
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Name or phone number',
-                      border: InputBorder.none,
-                      hoverColor: Colors.transparent,
-                      hintStyle: themeController
-                          .currentTheme.value.textTheme.displaySmall,
-                      filled: true,
-                      fillColor: themeController.currentTheme.value.cardColor,
-                      focusColor: Colors.transparent,
-                      focusedBorder: InputBorder.none,
-                      contentPadding:
-                          const EdgeInsets.only(left: 15, right: 10, bottom: 0),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Stack(
-                    children: [
-                      Obx(
-                        () => loadingController.loading.value
-                            ? Padding(
-                                padding: const EdgeInsets.only(top: 40),
-                                child: Center(
-                                  child: LoadingAnimationWidget.stretchedDots(
-                                    color: primaryColor,
-                                    size: 60,
-                                  ),
-                                ),
-                              )
-                            : SizedBox(
-                                height: screenHeight(context) / 1.4,
-                                child: _quotationController.searchList.length
-                                        .isEqual(0)
-                                    ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(height: 40),
-                                          Text('No user',
-                                              style: themeController
-                                                  .currentTheme
-                                                  .value
-                                                  .textTheme
-                                                  .bodyLarge),
-                                        ],
-                                      )
-                                    : ListView.builder(
-                                        controller: scrollController,
-                                        itemCount: _quotationController
-                                            .searchList.length,
-                                        itemBuilder: (context, index) {
-                                          return InkWell(
-                                            onTap: () {
-                                              _quotationController
-                                                  .sendQuotation(
-                                                      context,
-                                                      widget.productId,
-                                                      _quotationController
-                                                          .searchList[index]
-                                                          .userId);
-                                            },
-                                            child: ListTile(
-                                              leading: CircleAvatar(
-                                                radius: 25,
-                                                backgroundColor: Colors.white,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: _quotationController
-                                                              .searchList[index]
-                                                              .image ==
-                                                          ''
-                                                      ? Image.asset(
-                                                          'assets/images/profilePic.jpg')
-                                                      : Image.network(
-                                                          '$imageUrl${_quotationController.searchList[index].image}',
-                                                          height: 40,
-                                                          width: 40,
-                                                        ),
-                                                ),
-                                              ),
-                                              title: Text(
-                                                  _quotationController
-                                                      .searchList[index]
-                                                      .fullName,
-                                                  style: themeController
-                                                      .currentTheme
-                                                      .value
-                                                      .textTheme
-                                                      .bodyLarge),
-                                              subtitle: Text(
-                                                  '${_quotationController.searchList[index].countryCode}${_quotationController.searchList[index].phone}',
-                                                  style: themeController
-                                                      .currentTheme
-                                                      .value
-                                                      .textTheme
-                                                      .displayMedium),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                              ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
+
 }
 
 //

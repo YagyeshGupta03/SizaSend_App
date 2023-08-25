@@ -1,4 +1,4 @@
-package com.example.savo
+package com.sizasend.user
 
 import io.flutter.embedding.android.FlutterActivity
 

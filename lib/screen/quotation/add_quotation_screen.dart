@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:savo/Controllers/quotation_controller.dart';
+import '../../Constants/all_urls.dart';
 import '../../Constants/sizes.dart';
 import '../../Constants/theme_data.dart';
 import '../../Controllers/global_controllers.dart';
@@ -30,6 +31,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
   final _productDescription = TextEditingController(text: 'Item made of glass');
   final QuotationController _quotationController =
       Get.put(QuotationController());
+  final _searchBar = TextEditingController();
   XFile? _video;
 
   @override
@@ -70,7 +72,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                         final videoSizeInMB = videoSizeInBytes /
                             (1024 * 1024); // Convert bytes to MB
 
-                        if (videoSizeInMB <= 1) {
+                        if (videoSizeInMB <= 10) {
                           setState(() {
                             _video = pickedFile;
                           });
@@ -202,18 +204,8 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                           _width.text.isNotEmpty &&
                           _height.text.isNotEmpty &&
                           _productDescription.text.isNotEmpty && _video != null) {
-                        loadingController.updateLoading(true);
-                        _quotationController.addQuotation(
-                            context,
-                            _productName.text,
-                            _storeLocation.text,
-                            _price.text,
-                            _quantity.text,
-                            _weight.text,
-                            _width.text,
-                            _height.text,
-                            _productDescription.text,
-                            _video);
+                        // loadingController.updateLoading(true);
+                        _showBottomSheet(context);
                       } else {
                         Fluttertoast.showToast(
                           msg: S.of(context).kindlyFillAllTheFields,
@@ -248,6 +240,148 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
           ),
         ],
       ),
+    );
+  }
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          builder: (context, scrollController) {
+            return Container(
+              color: themeController.currentTheme.value.scaffoldBackgroundColor,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ListView(
+                controller: scrollController,
+                children: [
+                  const SizedBox(height: 40),
+                  TextFormField(
+                    controller: _searchBar,
+                    style: themeController
+                        .currentTheme.value.textTheme.displaySmall,
+                    onFieldSubmitted: (val) {
+                      loadingController.updateLoading(true);
+                      _quotationController.getSearchData(val);
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Name or phone number',
+                      border: InputBorder.none,
+                      hoverColor: Colors.transparent,
+                      hintStyle: themeController
+                          .currentTheme.value.textTheme.displaySmall,
+                      filled: true,
+                      fillColor: themeController.currentTheme.value.cardColor,
+                      focusColor: Colors.transparent,
+                      focusedBorder: InputBorder.none,
+                      contentPadding:
+                      const EdgeInsets.only(left: 15, right: 10, bottom: 0),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Stack(
+                    children: [
+                      Obx(
+                            () => loadingController.loading.value
+                            ? Padding(
+                          padding: const EdgeInsets.only(top: 40),
+                          child: Center(
+                            child: LoadingAnimationWidget.stretchedDots(
+                              color: primaryColor,
+                              size: 60,
+                            ),
+                          ),
+                        )
+                            : SizedBox(
+                          height: screenHeight(context) / 1.4,
+                          child: _quotationController.searchList.length
+                              .isEqual(0)
+                              ? Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.center,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 40),
+                              Text('No user',
+                                  style: themeController
+                                      .currentTheme
+                                      .value
+                                      .textTheme
+                                      .bodyLarge),
+                            ],
+                          )
+                              : ListView.builder(
+                            controller: scrollController,
+                            itemCount: _quotationController
+                                .searchList.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  _quotationController.addQuotation(
+                                    context,
+                                    _productName.text,
+                                    _storeLocation.text,
+                                    _price.text,
+                                    _quantity.text,
+                                    _weight.text,
+                                    _width.text,
+                                    _height.text,
+                                    _productDescription.text,
+                                    _video, _quotationController.searchList[index].userId);
+                                  Navigator.pop(context);
+                                },
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    radius: 25,
+                                    backgroundColor: Colors.white,
+                                    child: Padding(
+                                      padding:
+                                      const EdgeInsets.all(8.0),
+                                      child: _quotationController
+                                          .searchList[index]
+                                          .image ==
+                                          ''
+                                          ? Image.asset(
+                                          'assets/images/profilePic.jpg')
+                                          : Image.network(
+                                        '$imageUrl${_quotationController.searchList[index].image}',
+                                        height: 40,
+                                        width: 40,
+                                      ),
+                                    ),
+                                  ),
+                                  title: Text(
+                                      _quotationController
+                                          .searchList[index]
+                                          .fullName,
+                                      style: themeController
+                                          .currentTheme
+                                          .value
+                                          .textTheme
+                                          .bodyLarge),
+                                  subtitle: Text(
+                                      '${_quotationController.searchList[index].countryCode}${_quotationController.searchList[index].phone}',
+                                      style: themeController
+                                          .currentTheme
+                                          .value
+                                          .textTheme
+                                          .displayMedium),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

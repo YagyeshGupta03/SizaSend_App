@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "472072044712",
+    "project_id": "sizasend-302ec",
+    "storage_bucket": "sizasend-302ec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472072044712:android:8e8b13a13ba35858ba429d",
+        "android_client_info": {
+          "package_name": "com.sizasend.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "472072044712-ofai6hgumt6955hkcfpqsst47m10tipl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNo5mLqdZq3_n26EKXTXM1GKi6OmDD2wM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "472072044712-ofai6hgumt6955hkcfpqsst47m10tipl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
