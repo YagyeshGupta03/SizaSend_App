@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:savo/Constants/sizes.dart';
+import 'package:savo/Controllers/walllet_controller.dart';
 import 'package:savo/screen/quotation/full_video_screen.dart';
 import 'package:savo/util/widgets/login_button.dart';
 import 'package:video_player/video_player.dart';
@@ -13,26 +14,30 @@ import '../../Controllers/global_controllers.dart';
 class QuotationDetailScreen extends StatefulWidget {
   const QuotationDetailScreen(
       {super.key,
-      required this.productId,
       required this.productName,
+      required this.orderId,
       required this.description,
       required this.store,
       required this.weight,
       required this.height,
       required this.width,
+      required this.status,
       required this.price,
+      required this.senderId,
       required this.quantity,
       required this.video});
 
-  final String productId;
   final String productName;
+  final String orderId;
   final String description;
   final String store;
   final String weight;
+  final String status;
   final String height;
   final String width;
   final String price;
   final String quantity;
+  final String senderId;
   final String video;
 
   @override
@@ -40,6 +45,7 @@ class QuotationDetailScreen extends StatefulWidget {
 }
 
 class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
+  final WalletController _walletController = Get.put(WalletController());
   late VideoPlayerController _controller;
   Timer? _timer;
 
@@ -69,7 +75,6 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
         centerTitle: true,
       ),
       body: Container(
-        // width: screenWidth(context),
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Column(
@@ -191,7 +196,8 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
               Container(
                 height: 150,
                 width: screenWidth(context),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
                 child: Image.asset(
                   'assets/images/map.png',
                   fit: BoxFit.fill,
@@ -228,11 +234,18 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                 ),
               ),
               const SizedBox(height: 40),
-              LoginButton(
-                  onTap: () {},
-                  title: 'Send',
-                  txtColor: Colors.white,
-                  btnColor: primaryColor),
+              widget.senderId == credentialController.id
+                  ? widget.status == 'reject'
+                      ? const SizedBox()
+                      : LoginButton(
+                          onTap: () {
+                            // _walletController.quotationPay(
+                            //     widget.price, widget.senderId, widget.orderId);
+                          },
+                          title: 'Dispatch',
+                          txtColor: Colors.white,
+                          btnColor: primaryColor)
+                  : const SizedBox()
             ],
           ),
         ),
@@ -242,7 +255,6 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
 
   //
   //
-
 }
 
 //

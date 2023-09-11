@@ -31,27 +31,30 @@ class _QuotationListState extends State<QuotationList> {
                 return InkWell(
                   onTap: () {
                     Get.to(
-                      () => QuotationDetailScreen(
-                        productId: _quotationController
-                            .getQuotationList[index].productID,
+                          () => QuotationDetailScreen(
+                            orderId: _quotationController
+                                .getQuotationList[index].orderId,
+                          status: _quotationController
+                              .getQuotationList[index].status,
                           productName: _quotationController
                               .getQuotationList[index].productName,
                           description: _quotationController
                               .getQuotationList[index].description,
                           store:
-                              _quotationController.getQuotationList[index].store,
+                          _quotationController.getQuotationList[index].store,
                           weight:
-                              _quotationController.getQuotationList[index].weight,
+                          _quotationController.getQuotationList[index].weight,
                           height:
-                              _quotationController.getQuotationList[index].height,
+                          _quotationController.getQuotationList[index].height,
                           width:
-                              _quotationController.getQuotationList[index].width,
+                          _quotationController.getQuotationList[index].width,
                           price:
-                              _quotationController.getQuotationList[index].price,
+                          _quotationController.getQuotationList[index].price,
                           quantity: _quotationController
                               .getQuotationList[index].quantity,
                           video:
-                              _quotationController.getQuotationList[index].video),
+                          _quotationController.getQuotationList[index].video,
+                          senderId: _quotationController.getQuotationList[index].senderId),
                     );
                   },
                   child: Card(
@@ -69,9 +72,13 @@ class _QuotationListState extends State<QuotationList> {
                                 height: 60,
                                 margin: const EdgeInsets.only(top: 10),
                                 color: Colors.white30,
-                                child: const Column( mainAxisAlignment: MainAxisAlignment.start,
+                                child: const Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Icon(Icons.play_circle, size: 50,),
+                                    Icon(
+                                      Icons.play_circle,
+                                      size: 50,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -89,7 +96,8 @@ class _QuotationListState extends State<QuotationList> {
                                     children: [
                                       Text(
                                         _quotationController
-                                            .getQuotationList[index].description,
+                                            .getQuotationList[index]
+                                            .description,
                                         style: themeController.currentTheme
                                             .value.textTheme.bodySmall,
                                         maxLines: 1,
@@ -97,23 +105,41 @@ class _QuotationListState extends State<QuotationList> {
                                       ),
                                       const SizedBox(height: 7),
                                       _quotationController
-                                          .getQuotationList[index].senderId == credentialController.id
-                                          ? const Text('Sent', style: TextStyle(fontSize: 12, color: Colors.red),)
-                                      : const Text('Received', style: TextStyle(fontSize: 12, color: Colors.green),),
+                                                  .getQuotationList[index]
+                                                  .senderId ==
+                                              credentialController.id
+                                          ? const Text(
+                                              'Sent',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.red),
+                                            )
+                                          : const Text(
+                                              'Received',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.green),
+                                            ),
                                     ],
                                   ),
-                                  trailing: IconButton(
-                                    onPressed: () {
-                                      _quotationController.deleteQuotation(
-                                          context,
-                                          _quotationController
-                                              .getQuotationList[index].productID);
-                                    },
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                    ),
-                                  ),
+                                  // trailing: _quotationController
+                                  //     .getQuotationList[index]
+                                  //     .senderId ==
+                                  //     credentialController.id
+                                  //     ?  IconButton(
+                                  //   onPressed: () {
+                                  //     _quotationController.deleteQuotation(
+                                  //         context,
+                                  //         _quotationController
+                                  //             .getQuotationList[index]
+                                  //             .orderId);
+                                  //   },
+                                  //   icon: const Icon(
+                                  //     Icons.delete,
+                                  //     color: Colors.red,
+                                  //   ),
+                                  // )
+                                  // : const SizedBox(),
                                 ),
                               ),
                             ],
@@ -140,7 +166,8 @@ class _QuotationListState extends State<QuotationList> {
                                         .getQuotationList[index].weight,
                                     style: const TextStyle(
                                         fontSize: 10,
-                                        fontWeight: FontWeight.bold),maxLines: 1,
+                                        fontWeight: FontWeight.bold),
+                                    maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
@@ -181,7 +208,8 @@ class _QuotationListState extends State<QuotationList> {
                                         .getQuotationList[index].price,
                                     style: const TextStyle(
                                         fontSize: 10,
-                                        fontWeight: FontWeight.bold), maxLines: 1,
+                                        fontWeight: FontWeight.bold),
+                                    maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
@@ -198,3 +226,4 @@ class _QuotationListState extends State<QuotationList> {
     );
   }
 }
+

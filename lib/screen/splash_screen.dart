@@ -1,6 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/util/images.dart';
+
+import 'no_connection_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -29,8 +35,20 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller!.forward();
     Future.delayed(const Duration(seconds: 3)).then((value) {
-       credentialController.getData(context);
+      connectivityController.connectionChecking(context);
+       _navigateToHome();
     });
+  }
+
+  _navigateToHome() async {
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      credentialController.getData(context);
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      credentialController.getData(context);
+    } else if (connectivityResult == ConnectivityResult.none) {
+      Get.to(() => const NoConnectionScreen());
+    }
   }
 
   @override

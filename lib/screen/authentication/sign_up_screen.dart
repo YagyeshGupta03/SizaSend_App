@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/login_controller.dart';
@@ -33,85 +34,87 @@ class _SignUpScreenState extends State<SignUpScreen> {
         backgroundColor: Colors.transparent,
         toolbarHeight: 50,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
+      body: Stack(children: [
+        Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Center(
-                child: Text(S.of(context).createAnAccount,
-                    style: themeController
-                        .currentTheme.value.textTheme.displayLarge),
-              ),
-              Text(
-                S
-                    .of(context)
-                    .loremIpsumDolorSitAmetConsecteturAdipiscingElitSedDo,
-                style:
-                    themeController.currentTheme.value.textTheme.displaySmall,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              CustomTextFormField(
-                topTitle: S.of(context).fullName,
-                keyboardType: TextInputType.name,
-                cont: _fullName,
-                suffixWidget: const SizedBox(),
-                prefixWidget: Icon(
-                  Icons.person,
-                  color: themeController.currentTheme.value.iconTheme.color,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Center(
+                  child: Text(S.of(context).createAnAccount,
+                      style: themeController
+                          .currentTheme.value.textTheme.displayLarge),
                 ),
-              ),
-              SizedBox(height: screenHeight(context) * .015),
-              CustomTextFormField(
-                topTitle: S.of(context).phoneNo,
-                keyboardType: TextInputType.phone,
-                cont: _phone,
-                prefixWidget: SizedBox(
-                  child: CountryCodePicker(
-                    onChanged: (countryCode) {
-                      setState(() {
-                        codeOfCountry = countryCode.toString();
-                      });
-                    },
-                    dialogBackgroundColor:
-                        themeController.currentTheme.value.cardColor,
-                    initialSelection: '+91',
-                    showFlag: false,
-                    favorite: ['+91', 'FR'],
-                    showCountryOnly: false,
-                    showOnlyCountryWhenClosed: false,
-                    alignLeft: false,
+                Text(
+                  S
+                      .of(context)
+                      .loremIpsumDolorSitAmetConsecteturAdipiscingElitSedDo,
+                  style:
+                  themeController.currentTheme.value.textTheme.displaySmall,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                CustomTextFormField(
+                  topTitle: S.of(context).fullName,
+                  keyboardType: TextInputType.name,
+                  cont: _fullName,
+                  suffixWidget: const SizedBox(),
+                  prefixWidget: Icon(
+                    Icons.person,
+                    color: themeController.currentTheme.value.iconTheme.color,
                   ),
                 ),
-                suffixWidget: const SizedBox(),
-              ),
-              SizedBox(height: screenHeight(context) * .015),
-              CustomTextFormField(
-                topTitle: S.of(context).password,
-                keyboardType: TextInputType.visiblePassword,
-                cont: _password,
-                prefixWidget: Icon(
-                  Icons.lock_outline,
-                  color: themeController.currentTheme.value.iconTheme.color,
+                SizedBox(height: screenHeight(context) * .015),
+                CustomTextFormField(
+                  topTitle: S.of(context).phoneNo,
+                  keyboardType: TextInputType.phone,
+                  cont: _phone,
+                  prefixWidget: SizedBox(
+                    child: CountryCodePicker(
+                      onChanged: (countryCode) {
+                        setState(() {
+                          codeOfCountry = countryCode.toString();
+                        });
+                      },
+                      dialogBackgroundColor:
+                      themeController.currentTheme.value.cardColor,
+                      initialSelection: '+91',
+                      showFlag: false,
+                      favorite: ['+91', 'FR'],
+                      showCountryOnly: false,
+                      showOnlyCountryWhenClosed: false,
+                      alignLeft: false,
+                    ),
+                  ),
+                  suffixWidget: const SizedBox(),
                 ),
-                suffixWidget: const SizedBox(),
-              ),
-              SizedBox(height: screenHeight(context) * .015),
-              CustomTextFormField(
-                topTitle: S.of(context).confirmPassword,
-                keyboardType: TextInputType.visiblePassword,
-                cont: _confirmPassword,
-                prefixWidget: Icon(
-                  Icons.lock_outline,
-                  color: themeController.currentTheme.value.iconTheme.color,
+                SizedBox(height: screenHeight(context) * .015),
+                CustomTextFormField(
+                  topTitle: S.of(context).password,
+                  keyboardType: TextInputType.visiblePassword,
+                  cont: _password,
+                  prefixWidget: Icon(
+                    Icons.lock_outline,
+                    color: themeController.currentTheme.value.iconTheme.color,
+                  ),
+                  suffixWidget: const SizedBox(),
                 ),
-                suffixWidget: const SizedBox(),
-              ),
-              SizedBox(height: screenHeight(context) * .033),
-              ElevatedButton(
+                SizedBox(height: screenHeight(context) * .015),
+                CustomTextFormField(
+                  topTitle: S.of(context).confirmPassword,
+                  keyboardType: TextInputType.visiblePassword,
+                  cont: _confirmPassword,
+                  prefixWidget: Icon(
+                    Icons.lock_outline,
+                    color: themeController.currentTheme.value.iconTheme.color,
+                  ),
+                  suffixWidget: const SizedBox(),
+                ),
+                SizedBox(height: screenHeight(context) * .033),
+                ElevatedButton(
                   onPressed: () {
+                    loadingController.updateLoading(true);
                     if (_fullName.text.isNotEmpty &&
                         _phone.text.isNotEmpty &&
                         _password.text.isNotEmpty &&
@@ -125,6 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           gravity: ToastGravity.SNACKBAR,
                           backgroundColor: Colors.red,
                         );
+                        loadingController.updateLoading(false);
                       }
                     } else {
                       Fluttertoast.showToast(
@@ -132,40 +136,57 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         gravity: ToastGravity.SNACKBAR,
                         backgroundColor: Colors.red,
                       );
+                      loadingController.updateLoading(false);
                     }
                   },
                   child: Text(
                     S.of(context).signUp,
                     style: const TextStyle(color: Colors.white),
                   ),
-              ),
-              SizedBox(height: screenHeight(context) * .015),
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                    style: themeController
-                        .currentTheme.value.textTheme.displaySmall,
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: "${S.of(context).alreadyHaveAnAccountYet}  ",
-                      ),
-                      TextSpan(
+                ),
+                SizedBox(height: screenHeight(context) * .015),
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      style: themeController
+                          .currentTheme.value.textTheme.displaySmall,
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: "${S.of(context).alreadyHaveAnAccountYet}  ",
+                        ),
+                        TextSpan(
                           text: S.of(context).login,
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                             Get.to(()=> const LoginScreen());
+                              Get.to(()=> const LoginScreen());
                             },
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, color: buttonColor),
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
+        Obx(
+              () => loadingController.loading.value
+              ? Center(
+            child: Container(
+              height: screenHeight(context),
+              width: screenWidth(context),
+              color: Colors.black12,
+              child: LoadingAnimationWidget.threeArchedCircle(
+                color: primaryColor,
+                size: 50,
+              ),
+            ),
+          )
+              : const SizedBox(),
+        ),
+      ],),
     );
   }
 }

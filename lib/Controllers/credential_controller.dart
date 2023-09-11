@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:savo/screen/dashboard_screen.dart';
+import 'package:savo/screen/home/home_screen.dart';
 import 'package:savo/screen/onboard/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../screen/authentication/login_screen.dart';
 import 'global_controllers.dart';
 
 
@@ -42,4 +44,17 @@ class CredentialController extends GetxController{
     update();
   }
 
+  //
+  //
+  //
+  void refreshData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (id != null) {
+     Get.to(()=> const HomeScreen());
+    } else {
+      Get.to(() => const LoginScreen());
+    }
+  }
+
 }
+

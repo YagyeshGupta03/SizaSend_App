@@ -17,7 +17,7 @@ class _HistoryHomeScreenState extends State<HistoryHomeScreen> {
   @override
   void initState() {
     super.initState();
-   _quotationController.receiveQuotation();
+   _quotationController.receiveQuotationHistory();
   }
 
   @override
@@ -27,6 +27,7 @@ class _HistoryHomeScreenState extends State<HistoryHomeScreen> {
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: <Widget>[
+             SizedBox(height: 20),
             TransactionList(),
           ],
         ),

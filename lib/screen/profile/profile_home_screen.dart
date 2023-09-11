@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:savo/Controllers/global_controllers.dart';
+import 'package:savo/screen/NotificationScreen/notification_screen.dart';
 import 'package:savo/screen/authentication/login_screen.dart';
 import 'package:savo/screen/profile/BankAccount_screens/bankAc_listing.dart';
 import 'package:savo/screen/profile/GeneralSettings/general_settings.dart';
@@ -79,7 +80,12 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
             },
           ),
           ImageListTile(
-              image: Images.icLanguage, title: S.of(context).language),
+            image: Images.icLanguage,
+            title: 'Notification',
+            onTap: () {
+              Get.to(() => const NotificationScreen());
+            },
+          ),
           const SizedBox(height: 20),
           ImageListTile(
             image: Images.icSetting,
@@ -128,8 +134,7 @@ class _ImageListTileState extends State<ImageListTile> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: themeController
-          .currentTheme.value.cardColor,
+      color: themeController.currentTheme.value.cardColor,
       child: InkWell(
         onTap: () {
           widget.onTap!();

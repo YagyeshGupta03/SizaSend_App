@@ -25,6 +25,7 @@ class UserInfoController extends GetxController{
   String occupation = '';
   String employer = '';
   String email = '';
+  String balance = '';
 
 
   Future getUserInfo() async {
@@ -40,11 +41,13 @@ class UserInfoController extends GetxController{
     occupation = '';
     employer = '';
     email = '';
+    balance = '';
 
     if (reply['status'] == 1) {
      fullName = reply['data']['full_name'];
      phone = reply['data']['phone'];
      countryCode = reply['data']['country_code'];
+     balance = reply['data']['balance'];
      profileImage = reply['data']['profile_image']??'';
      employer = reply['data']['employer']??'';
      occupation = reply['data']['occupation_name']??'';
@@ -66,3 +69,7 @@ class LoadingController extends GetxController {
     update();
   }
 }
+//
+//
+//
+

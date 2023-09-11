@@ -32,8 +32,21 @@ const String showQuotationUrl = '${baseUrl}getOrderByUserId';
 const String deleteQuotationUrl = '${baseUrl}deleteOredrById';
 const String editQuotationUrl = '${baseUrl}updateOrdersByOrederId';
 const String searchUserUrl = '${baseUrl}get_searchByFullnamePhone';
-const String sendQuotationUrl = '${baseUrl}send_quotation';
-const String receiveQuotationUrl = '${baseUrl}getQuotationById';
-const String sendNotificationUrl = '${baseUrl}send_notification';
+const String receiveQuotationUrl = '${baseUrl}getAllOrders';
+const String sendNotificationUrl = '${baseUrl}send_orders_with_notification';
+const String receiveNotificationUrl = '${baseUrl}received_notification';
+const String notificationStatusUrl = '${baseUrl}notification_status_update';
+const String sendQuotationStatusUrl = '${baseUrl}order_status_change';
+
+
+//Wallet related apis
+const String addMoneyUrl = '${baseUrl}add_account_balance';
+const String withdrawMoneyUrl = '${baseUrl}minus_account_balance';
+const String quotationPayUrl = '${baseUrl}user_transaction';
+const String quotationPaidStatusUrl = '${baseUrl}paidStatusChange';
+
+//Other apis of project
+const String contactListUrl = '${baseUrl}get_data_from_contectlist';
+
 
 

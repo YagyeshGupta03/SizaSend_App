@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:savo/Controllers/global_controllers.dart';
 
 import '../../util/images.dart';
 
@@ -14,13 +15,13 @@ class HomeHeaderScreen extends StatelessWidget {
         SizedBox(
           height: s.height * .038,
         ),
-        const Text(
-          "Hello, Mao Lop 👋🏾 ",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+         Text(
+          "Hello, ${userInfoController.fullName} ",
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const Text(
           "These are today's news.",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
         ),
         SizedBox(
           height: s.height * .014,
@@ -40,12 +41,12 @@ class HomeHeaderScreen extends StatelessWidget {
                       ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                 Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
+                      const Row(
                         children: [
                           Icon(
                             Icons.monetization_on_outlined,
@@ -57,12 +58,15 @@ class HomeHeaderScreen extends StatelessWidget {
                           )
                         ],
                       ),
-                      Text(
-                        "\$290.00 USD",
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                          userInfoController.balance,
+                          style: const TextStyle(
+                              fontSize: 28,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),

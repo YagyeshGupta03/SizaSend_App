@@ -158,13 +158,14 @@ class ProfileController extends GetxController {
     });
 
     if (reply['status'] == 1) {
-     userInfoController.getUserInfo();
-     Get.to(()=> const AccountInfoScreen());
-     Fluttertoast.showToast(
-       msg: S.of(context).profileUpdatedSuccessfully,
-       gravity: ToastGravity.SNACKBAR,
-       backgroundColor: Colors.green,
-     );
+     userInfoController.getUserInfo().then((value) {
+       Get.to(()=> const AccountInfoScreen());
+       Fluttertoast.showToast(
+         msg: S.of(context).profileUpdatedSuccessfully,
+         gravity: ToastGravity.SNACKBAR,
+         backgroundColor: Colors.green,
+       );
+     });
     } else {
       print('Profile update failed');
     }

@@ -12,6 +12,7 @@ class LoginController extends GetxController {
   //
   //
   Future signUp(context, fullName, phone, password, countryCode) async {
+    await loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: signupURl);
 
     var reply = await networkHelper.postData({
@@ -19,10 +20,12 @@ class LoginController extends GetxController {
       "phone": phone,
       "password": password,
       "country_code": countryCode,
+      "balance": '0'
     });
     if (reply['status'] == 1) {
       await credentialController.setData(reply['data']['id']);
       userInfoController.getUserInfo().then((value) {
+        loadingController.updateLoading(false);
         Get.off(()=> const DashBoardScreen());
       });
       Fluttertoast.showToast(
@@ -32,6 +35,7 @@ class LoginController extends GetxController {
         // textColor: Colors.white,
       );
     } else {
+      loadingController.updateLoading(false);
       Fluttertoast.showToast(
         msg: "${reply['message']}",
         gravity: ToastGravity.SNACKBAR,
@@ -45,6 +49,7 @@ class LoginController extends GetxController {
   //
   //
   Future login (context, phone, password) async {
+    await loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: loginUrl);
     var reply = await networkHelper.postData({
       "phone": phone,
@@ -54,6 +59,7 @@ class LoginController extends GetxController {
     if (reply['status'] == 1) {
       await credentialController.setData(reply['data']['id']);
       userInfoController.getUserInfo().then((value) {
+        loadingController.updateLoading(false);
         Get.off(()=> const DashBoardScreen());
       });
     } else {
@@ -62,6 +68,7 @@ class LoginController extends GetxController {
         gravity: ToastGravity.SNACKBAR,
         backgroundColor: Colors.red,
       );
+      loadingController.updateLoading(false);
     }
   }
   //

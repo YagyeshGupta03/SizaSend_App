@@ -1,7 +1,7 @@
 class Images {
   static const String english = 'assets/images/english.png';
   static const String bgSplash = 'assets/images/bg_splash.png';
-  static const String icLogo = 'assets/icons/ic_logo.png';
+  static const String icLogo = 'assets/images/splash.png';
   static const String forgotImage = 'assets/images/forgot.png';
   static const String icScanner = 'assets/icons/ic_scanner.png';
   static const String icAccountInfo = 'assets/icons/ic_account_info.png';

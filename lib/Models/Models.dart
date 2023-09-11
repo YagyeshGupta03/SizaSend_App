@@ -42,7 +42,7 @@ class OccupationModel {
 
 class QuotationModel {
   QuotationModel({
-    required this.productID,
+    required this.id,
     required this.productName,
     required this.price,
     required this.store,
@@ -50,15 +50,18 @@ class QuotationModel {
     required this.weight,
     required this.width,
     required this.height,
+    required this.orderId,
     required this.description,
     required this.video,
+    required this.paid,
     this.senderId = '',
     this.receiverId = '',
     this.status = '',
   });
 
-  final String productID;
+  final String id;
   final String productName;
+  final String orderId;
   final String price;
   final String store;
   final String quantity;
@@ -70,4 +73,37 @@ class QuotationModel {
   final String senderId;
   final String receiverId;
   final String status;
+  final String paid;
+}
+
+class NotificationModel {
+  NotificationModel({
+    required this.orderId,
+    required this.senderId,
+    required this.receiverId,
+    required this.message,
+    required this.notificationId,
+    required this.status,
+    required this.date,
+  });
+
+  final String orderId;
+  final String senderId;
+  final String receiverId;
+  final String message;
+  final String notificationId;
+  final String status;
+  final DateTime date;
+}
+
+class ContactModel {
+  ContactModel({
+    required this.fullName,
+    required this.userId,
+    required this.image,
+  });
+
+  final String userId;
+  final String fullName;
+  final String image;
 }
