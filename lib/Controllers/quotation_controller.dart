@@ -11,8 +11,8 @@ class QuotationController extends GetxController {
   //
   //
   // Function to add quotation
-  void addQuotation(context, productName, storeLocation, quantity,
-      weight, width, height, description, video, receiverId) async {
+  void addQuotation(context, productName, storeLocation, quantity, weight,
+      width, height, description, video, receiverId) async {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: addQuotationUrl);
     var reply = await networkHelper.postMultiPartData({
@@ -211,13 +211,14 @@ class QuotationController extends GetxController {
     if (reply['status'] == 1) {
       getQuotationList.clear();
       for (int i = 0; i < reply['data'].length; i++) {
-        String receiverId = reply['data'][i]['receiver_id'] ?? '';
+        String receiverId = reply['data'][i]['receiver_id'];
         String senderUser = reply['data'][i]['user_id'];
         String status = reply['data'][i]['order_status'];
         if (senderUser == credentialController.id.toString() ||
             receiverId == credentialController.id.toString() &&
                 reply['data'][i]['status'] == 'accept') {
-          if(status == 'unpaid') {
+          if (status == 'complete' || status == 'refund') {
+          } else {
             getQuotationList.add(
               QuotationModel(
                 id: reply['data'][i]['id'],
@@ -331,12 +332,14 @@ class QuotationController extends GetxController {
   //
   //
   //To send status in order history table so that it should add in quotation list
-  void sendQuotationStatus(orderId) async {
+  void sendQuotationStatus(orderId, senderId, status) async {
     final NetworkHelper networkHelper =
         NetworkHelper(url: sendQuotationStatusUrl);
     var reply = await networkHelper.postData({
       'order_id': orderId,
       'receiver_id': credentialController.id,
+      'user_id': senderId,
+      'status': status
     });
 
     if (reply['status'] == 1) {
@@ -345,6 +348,7 @@ class QuotationController extends GetxController {
       print('Error in updating order status');
     }
   }
+
   //
   //
   //
@@ -361,8 +365,8 @@ class QuotationController extends GetxController {
         String senderUser = reply['data'][i]['user_id'];
         String status = reply['data'][i]['order_status'];
         if (senderUser == credentialController.id.toString() ||
-            receiverId == credentialController.id.toString()){
-          if(status == 'paid') {
+            receiverId == credentialController.id.toString()) {
+          if (status == 'complete') {
             getQuotationHistory.add(
               QuotationModel(
                 id: reply['data'][i]['id'],

@@ -4,7 +4,10 @@ import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/walllet_controller.dart';
+import 'package:savo/screen/dashboard_screen.dart';
+import 'package:savo/screen/home/home_screen.dart';
 import 'package:savo/screen/quotation/full_video_screen.dart';
+import 'package:savo/screen/quotation/track_screen.dart';
 import 'package:savo/util/widgets/login_button.dart';
 import 'package:video_player/video_player.dart';
 import '../../Constants/all_urls.dart';
@@ -180,10 +183,26 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                 textAlign: TextAlign.justify,
               ),
               const SizedBox(height: 35),
-              Text(
-                'Store Location',
-                style: themeController.currentTheme.value.textTheme.bodyLarge,
-                textAlign: TextAlign.justify,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Store Location',
+                    style:
+                        themeController.currentTheme.value.textTheme.bodyLarge,
+                    textAlign: TextAlign.justify,
+                  ),
+                  const SizedBox(width: 10),
+                  widget.status == 'reached'
+                      ? const Text(
+                          '[Delivered]',
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: primaryColor),
+                        )
+                      : const SizedBox()
+                ],
               ),
               const SizedBox(height: 8),
               Text(
@@ -234,18 +253,60 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                 ),
               ),
               const SizedBox(height: 40),
+              // to check if sender
               widget.senderId == credentialController.id
-                  ? widget.status == 'reject'
+                  //to check by sender if paid
+                  ? widget.status == 'unpaid'
                       ? const SizedBox()
-                      : LoginButton(
+                      // to check by sender to deliver
+                      : widget.status == 'dispatch'
+                          ? LoginButton(
+                              onTap: () {
+                                _walletController
+                                    .updatePaidStatus(widget.orderId, 'reached')
+                                    .then((value) =>
+                                        Get.to(() => const DashBoardScreen()));
+                              },
+                              title: 'Delivered',
+                              txtColor: Colors.white,
+                              btnColor: primaryColor)
+                          // to check by sender to deliver
+                          : widget.status == 'reached'
+                              ? const SizedBox()
+                              : LoginButton(
+                                  onTap: () {
+                                    _walletController
+                                        .updatePaidStatus(
+                                            widget.orderId, 'dispatch')
+                                        .then((value) => Get.to(
+                                            () => const DashBoardScreen()));
+                                  },
+                                  title: 'Dispatch',
+                                  txtColor: Colors.white,
+                                  btnColor: primaryColor)
+                  // to check by receiver to pay or track
+                  : widget.status == 'unpaid'
+                      ? LoginButton(
                           onTap: () {
-                            // _walletController.quotationPay(
-                            //     widget.price, widget.senderId, widget.orderId);
+                            _walletController.quotationPay(
+                                widget.price, widget.senderId, widget.orderId);
                           },
-                          title: 'Dispatch',
+                          title: 'Pay',
                           txtColor: Colors.white,
                           btnColor: primaryColor)
-                  : const SizedBox()
+                      // to check by receiver to accept or reject
+                      : widget.status == 'reached'
+                          ? CompleteOrderButtons(
+                              orderId: widget.orderId,
+                              senderId: widget.senderId)
+                          : LoginButton(
+                              onTap: () {
+                                Get.to(
+                                    () => TrackScreen(status: widget.status));
+                              },
+                              title: 'Track',
+                              txtColor: Colors.white,
+                              btnColor: primaryColor),
             ],
           ),
         ),
@@ -255,6 +316,43 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
 
   //
   //
+}
+
+class CompleteOrderButtons extends StatelessWidget {
+  const CompleteOrderButtons({
+    super.key,
+    required this.orderId,
+    required this.senderId,
+  });
+
+  final String orderId;
+  final String senderId;
+
+  @override
+  Widget build(BuildContext context) {
+    final WalletController _walletController = Get.put(WalletController());
+    return Column(
+      children: [
+        LoginButton(
+            onTap: () {
+              _walletController.completeOrderPayment(
+                  orderId, 'complete', senderId);
+            },
+            title: 'Accept',
+            txtColor: Colors.white,
+            btnColor: primaryColor),
+        const SizedBox(height: 5),
+        LoginButton(
+            onTap: () {
+              _walletController.completeOrderPayment(
+                  orderId, 'refund', senderId);
+            },
+            title: 'Reject',
+            txtColor: primaryColor,
+            btnColor: themeController.currentTheme.value.cardColor),
+      ],
+    );
+  }
 }
 
 //

@@ -44,6 +44,8 @@ const String addMoneyUrl = '${baseUrl}add_account_balance';
 const String withdrawMoneyUrl = '${baseUrl}minus_account_balance';
 const String quotationPayUrl = '${baseUrl}user_transaction';
 const String quotationPaidStatusUrl = '${baseUrl}paidStatusChange';
+const String completeOrderPaymentUrl = '${baseUrl}hold_transaction_add';
+
 
 //Other apis of project
 const String contactListUrl = '${baseUrl}get_data_from_contectlist';

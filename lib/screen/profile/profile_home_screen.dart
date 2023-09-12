@@ -105,6 +105,7 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
             image: Images.icLogout,
             title: S.of(context).logout,
             onTap: () async {
+              loadingController.updateLoading(false);
               await credentialController.deleteData();
               Get.off(() => const LoginScreen());
             },

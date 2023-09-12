@@ -95,7 +95,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                             .getNotificationList[index].orderId,
                                         _quotationController
                                             .getNotificationList[index]
-                                            .notificationId);
+                                            .notificationId,
+                                        _quotationController
+                                            .getNotificationList[index]
+                                            .senderId);
                                   }
                                 },
                                 child: Card(
@@ -142,8 +145,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 child: Text(
                                     getTimeAgo(_quotationController
                                         .getNotificationList[index].date),
-                                    style: themeController
-                                        .currentTheme.value.textTheme.bodySmall),
+                                    style: themeController.currentTheme.value
+                                        .textTheme.bodySmall),
                               ),
                             ],
                           );
@@ -158,7 +161,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   void _showPopupDialog(
-      BuildContext context, message, orderId, notificationId) {
+      BuildContext context, message, orderId, notificationId, senderId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -173,7 +176,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
               onPressed: () {
                 _quotationController.sendNotificationStatus(
                     notificationId, '1');
-                _quotationController.sendQuotationStatus(orderId);
+                _quotationController.sendQuotationStatus(
+                    orderId, senderId, 'accept');
                 Navigator.of(context).pop();
               },
               child: const Text(
@@ -188,6 +192,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
               onPressed: () {
                 _quotationController.sendNotificationStatus(
                     notificationId, '0');
+                _quotationController.sendQuotationStatus(
+                    orderId, senderId, 'reject');
                 Navigator.of(context).pop();
               },
               child: const Text(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:random_avatar/random_avatar.dart';
+import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/animation/exit_animation.dart';
 import 'package:savo/screen/history/history_home_screen.dart';
 import 'package:savo/screen/home/home_screen.dart';
@@ -19,12 +20,12 @@ class DashBoardScreen extends StatefulWidget {
 class _DashBoardScreenState extends State<DashBoardScreen> {
   int selectedIndex = 0;
 
-  List screenTitle = [
-    const Text("Home"),
-    const Text("Quotation"),
-    const Text("History"),
-    const Text("Profile"),
-  ];
+  // List screenTitle = [
+  //   Text("Home", style: themeController.currentTheme.value.textTheme.bodyLarge),
+  //   const Text("Quotation"),
+  //   const Text("History"),
+  //   const Text("Profile"),
+  // ];
   List screen = [
     const HomeScreen(),
     const QuotationHomeScreen(),
@@ -33,7 +34,22 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   ];
 
   List drawer = [
-    const Drawer(),
+    Drawer(
+      child: Column(
+        children: [
+          const SizedBox(height: 70),
+          Container(
+            height: 150,
+            width: double.infinity,
+            child: ListTile(
+              leading: Container(height: 80, width: 60, color: Colors.red),
+              title: Text('Name'),
+              subtitle: Text('Number'),
+            ),
+          )
+        ],
+      ),
+    ),
     const SizedBox(),
     const SizedBox(),
     const SizedBox(),
@@ -83,44 +99,46 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             )
           else
             ExitAnimationWidget(
-                widget: Padding(
-              padding: const EdgeInsets.only(right: 5),
-              child: Stack(
-                alignment: Alignment.topRight,
-                children: [
-                  Container(
-                    width: 45,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xffFFB01D),
-                            Color(0xff5BCE55),
-                          ]),
+              widget: Padding(
+                padding: const EdgeInsets.only(right: 5),
+                child: Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    Container(
+                      width: 45,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xffFFB01D),
+                              Color(0xff5BCE55),
+                            ]),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child:
+                                RandomAvatar('saytoonz', trBackground: true)),
+                      ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
+                    const CircleAvatar(
+                      radius: 4.5,
+                      backgroundColor: Colors.white,
                       child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: RandomAvatar('saytoonz', trBackground: true)),
-                    ),
-                  ),
-                  const CircleAvatar(
-                    radius: 4.5,
-                    backgroundColor: Colors.white,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.red,
-                      radius: 3.5,
-                    ),
-                  )
-                ],
+                        backgroundColor: Colors.red,
+                        radius: 3.5,
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ))
+            ),
         ],
-        title: screenTitle[selectedIndex],
+        // title: screenTitle[selectedIndex],
       ),
       drawer: drawer.elementAt(selectedIndex),
       floatingActionButton: FloatingActionButton(

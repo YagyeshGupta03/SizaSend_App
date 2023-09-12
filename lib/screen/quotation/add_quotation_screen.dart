@@ -21,6 +21,10 @@ class AddQuotationScreen extends StatefulWidget {
 }
 
 class _AddQuotationScreenState extends State<AddQuotationScreen> {
+  final QuotationController _quotationController =
+  Get.put(QuotationController());
+  final ContactController _contactController = Get.put(ContactController());
+
   final _productName = TextEditingController();
   final _storeLocation = TextEditingController();
   final _quantity = TextEditingController();
@@ -28,11 +32,10 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
   final _width = TextEditingController();
   final _height = TextEditingController();
   final _productDescription = TextEditingController();
-  final QuotationController _quotationController =
-      Get.put(QuotationController());
-  final ContactController _contactController = Get.put(ContactController());
   final _searchBar = TextEditingController();
   XFile? _video;
+
+  List<String> selectedItems = [];
 
   @override
   Widget build(BuildContext context) {

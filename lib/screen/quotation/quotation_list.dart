@@ -35,7 +35,7 @@ class _QuotationListState extends State<QuotationList> {
                             orderId: _quotationController
                                 .getQuotationList[index].orderId,
                           status: _quotationController
-                              .getQuotationList[index].status,
+                              .getQuotationList[index].paid,
                           productName: _quotationController
                               .getQuotationList[index].productName,
                           description: _quotationController
