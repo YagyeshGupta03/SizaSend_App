@@ -223,18 +223,20 @@ class CustomDrawer extends StatelessWidget {
               title: 'Home',
               icon: Icons.home,
               onTap: () {
-                Get.to(() => const DashBoardScreen());
+                Navigator.pop(context);
               }),
           DrawerCard(
               title: 'Profile',
               icon: Icons.person,
               onTap: () {
+                Navigator.pop(context);
                 Get.to(() => const AccountInfoScreen());
               }),
           DrawerCard(
               title: 'Notifications',
               icon: Icons.notifications,
               onTap: () {
+                Navigator.pop(context);
                 Get.to(() => const NotificationScreen());
               }),
           DrawerCard(
@@ -244,32 +246,31 @@ class CustomDrawer extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                  onPressed: () async {
-                    loadingController.updateLoading(false);
-                    await credentialController.deleteData();
-                    Get.off(() => const LoginScreen());
-                  },
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: primaryColor),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: SizedBox(
-                      width: 100,
-                      height: 20,
-                      child: Row(
-                        children: [
-                          Icon(Icons.power_settings_new_outlined,
-                              color: Colors.white),
-                          SizedBox(width: 5),
-                          Text('Log Out',
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
-                        ],
-                      ),
+                onPressed: () async {
+                  loadingController.updateLoading(false);
+                  await credentialController.deleteData();
+                  Get.off(() => const LoginScreen());
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: SizedBox(
+                    width: 100,
+                    height: 20,
+                    child: Row(
+                      children: [
+                        Icon(Icons.power_settings_new_outlined,
+                            color: Colors.white),
+                        SizedBox(width: 5),
+                        Text('Log Out',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                      ],
                     ),
                   ),
+                ),
               ),
             ],
           )
