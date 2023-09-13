@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:savo/Constants/all_urls.dart';
 import 'package:savo/screen/profile/UserAccountScreens/account_edit_screen.dart';
 import 'package:savo/util/widgets/edit_image_button.dart';
+import '../../../Constants/sizes.dart';
+import '../../../Constants/theme_data.dart';
 import '../../../Controllers/global_controllers.dart';
 import '../../../Controllers/profile_controller.dart';
 import '../../../generated/l10n.dart';
@@ -22,18 +25,19 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
     var s = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).account, style: themeController.currentTheme.value.textTheme.bodyMedium,),
+        title: Text(
+          S.of(context).account,
+          style: themeController.currentTheme.value.textTheme.bodyMedium,
+        ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              SizedBox(
-                height: s.height * 0.029,
-              ),
+              SizedBox(height: s.height * 0.029),
               Stack(
                 children: [
                   Center(
@@ -94,13 +98,13 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
               SizedBox(
                 height: s.height * 0.035,
               ),
-              Text(
-                S.of(context).contactInfo,
-                  style: themeController.currentTheme.value.textTheme.titleMedium
-              ),
+              Text(S.of(context).contactInfo,
+                  style:
+                      themeController.currentTheme.value.textTheme.titleMedium),
               ProfileListTile(
                 title: S.of(context).phoneNumber,
-                value: '${userInfoController.countryCode}${userInfoController.phone}',
+                value:
+                    '${userInfoController.countryCode}${userInfoController.phone}',
               ),
               ProfileListTile(
                 title: S.of(context).email,
@@ -133,8 +137,14 @@ class ProfileListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title, style: themeController.currentTheme.value.textTheme.bodyLarge,),
-      trailing: Text(value ?? "", style: themeController.currentTheme.value.textTheme.displayMedium,),
+      title: Text(
+        title,
+        style: themeController.currentTheme.value.textTheme.bodyLarge,
+      ),
+      trailing: Text(
+        value ?? "",
+        style: themeController.currentTheme.value.textTheme.displayMedium,
+      ),
     );
   }
 }

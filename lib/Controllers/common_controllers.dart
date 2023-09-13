@@ -63,11 +63,17 @@ class UserInfoController extends GetxController{
 //
 class LoadingController extends GetxController {
   RxBool loading = false.obs;
+  RxBool profileLoading = false.obs;
 
   updateLoading(val) {
     loading.value = val;
     update();
   }
+  updateProfileLoading(val) {
+    profileLoading.value = val;
+    update();
+  }
+
 }
 //
 //

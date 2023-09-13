@@ -206,8 +206,6 @@ class QuotationController extends GetxController {
       // 'user_id': credentialController.id,
     });
 
-    print(reply);
-    print(credentialController.id);
     if (reply['status'] == 1) {
       getQuotationList.clear();
       for (int i = 0; i < reply['data'].length; i++) {
@@ -236,6 +234,9 @@ class QuotationController extends GetxController {
                 video: reply['data'][i]['video'] ?? '',
               ),
             );
+            print('>>>>>>');
+            print(getQuotationList[i].video.toString());
+            print('<<<<<<');
           }
         }
         update();

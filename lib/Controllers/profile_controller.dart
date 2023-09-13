@@ -39,6 +39,7 @@ class BankController extends GetxController {
       );
     }
   }
+
   //
   //
   //  Get bank account list
@@ -65,6 +66,7 @@ class BankController extends GetxController {
       print('Error in getting bank details');
     }
   }
+
   //
   //
   //  Delete bank account
@@ -97,9 +99,9 @@ class BankController extends GetxController {
 //
 //
 class ProfileController extends GetxController {
-
   //  Image updates
   Future profileImageUpdate(context, image) async {
+    await loadingController.updateProfileLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: profileImageUrl);
     var reply = await networkHelper.postMultiPartData(
         {"user_id": credentialController.id.toString()},
@@ -107,7 +109,9 @@ class ProfileController extends GetxController {
         "profile_image");
 
     if (reply['status'] == 1) {
-      userInfoController.getUserInfo();
+      userInfoController
+          .getUserInfo()
+          .then((value) => loadingController.updateProfileLoading(false));
       Fluttertoast.showToast(
         msg: S.of(context).imageUpdatedSuccessfully,
         gravity: ToastGravity.SNACKBAR,
@@ -117,6 +121,7 @@ class ProfileController extends GetxController {
       print('Error in uploading image');
     }
   }
+
   //
   //
   //
@@ -142,11 +147,13 @@ class ProfileController extends GetxController {
       print('Error in getting occupation list');
     }
   }
+
   //
   //
   //
   //  Update Profile
-  void updateProfile(context, fullName, employer, occupation, phone, email) async {
+  void updateProfile(
+      context, fullName, employer, occupation, phone, email) async {
     final NetworkHelper networkHelper = NetworkHelper(url: updateProfileUrl);
     var reply = await networkHelper.postData({
       'user_id': credentialController.id,
@@ -158,14 +165,14 @@ class ProfileController extends GetxController {
     });
 
     if (reply['status'] == 1) {
-     userInfoController.getUserInfo().then((value) {
-       Get.to(()=> const AccountInfoScreen());
-       Fluttertoast.showToast(
-         msg: S.of(context).profileUpdatedSuccessfully,
-         gravity: ToastGravity.SNACKBAR,
-         backgroundColor: Colors.green,
-       );
-     });
+      userInfoController.getUserInfo().then((value) {
+        Get.to(() => const AccountInfoScreen());
+        Fluttertoast.showToast(
+          msg: S.of(context).profileUpdatedSuccessfully,
+          gravity: ToastGravity.SNACKBAR,
+          backgroundColor: Colors.green,
+        );
+      });
     } else {
       print('Profile update failed');
     }

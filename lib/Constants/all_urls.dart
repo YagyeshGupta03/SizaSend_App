@@ -12,6 +12,7 @@ const String signupURl = '${baseUrl}signup';
 const String loginUrl = '${baseUrl}login';
 const String termsUrl = '${baseUrl}get_terms_and_conditions';
 
+
 //User profile apis
 const String userInfoUrl = '${baseUrl}getUserProfileById';
 const String changePasswordUrl = '${baseUrl}changePassword';
