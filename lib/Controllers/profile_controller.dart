@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:savo/Constants/all_urls.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Models/Models.dart';
+import 'package:savo/screen/dashboard_screen.dart';
 import 'package:savo/screen/profile/BankAccount_screens/bankAc_listing.dart';
 import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
 import '../Helper/http_helper.dart';
@@ -101,7 +102,6 @@ class BankController extends GetxController {
 class ProfileController extends GetxController {
   //  Image updates
   Future profileImageUpdate(context, image) async {
-    await loadingController.updateProfileLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: profileImageUrl);
     var reply = await networkHelper.postMultiPartData(
         {"user_id": credentialController.id.toString()},
@@ -110,8 +110,7 @@ class ProfileController extends GetxController {
 
     if (reply['status'] == 1) {
       userInfoController
-          .getUserInfo()
-          .then((value) => loadingController.updateProfileLoading(false));
+          .getUserInfo();
       Fluttertoast.showToast(
         msg: S.of(context).imageUpdatedSuccessfully,
         gravity: ToastGravity.SNACKBAR,
@@ -141,7 +140,6 @@ class ProfileController extends GetxController {
           ),
         );
         update();
-        print(occupationList.length);
       }
     } else {
       print('Error in getting occupation list');

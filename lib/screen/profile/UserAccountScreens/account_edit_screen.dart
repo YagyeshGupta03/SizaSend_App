@@ -75,7 +75,7 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
                 items: [
                   const DropdownMenuItem(
                     value: '0',
-                    child: Text(''),
+                    child: Text('Select Occupation'),
                   ),
                   for (int index = 0;
                       index < _profileController.occupationList.length;

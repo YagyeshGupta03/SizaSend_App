@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:savo/Controllers/quotation_controller.dart';
+import 'package:video_compress/video_compress.dart';
 import '../../Constants/all_urls.dart';
 import '../../Constants/sizes.dart';
 import '../../Constants/theme_data.dart';
@@ -11,7 +14,6 @@ import '../../Controllers/contact_controllers.dart';
 import '../../Controllers/global_controllers.dart';
 import '../../generated/l10n.dart';
 import '../../util/widgets/text_field.dart';
-import '../dashboard_screen.dart';
 
 class AddQuotationScreen extends StatefulWidget {
   const AddQuotationScreen({Key? key}) : super(key: key);
@@ -73,7 +75,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                         final videoBytes = await pickedFile.readAsBytes();
                         final videoSizeInBytes = videoBytes.length;
                         final videoSizeInMB = videoSizeInBytes /
-                            (1024 * 1024); // Convert bytes to MB
+                            (10240 * 10240); // Convert bytes to MB
 
                         if (videoSizeInMB <= 3) {
                           setState(() {
@@ -196,7 +198,6 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                           _height.text.isNotEmpty &&
                           _productDescription.text.isNotEmpty &&
                           _video != null) {
-                        // loadingController.updateLoading(true);
                         _contactController.askPermissions();
                         _showBottomSheet(context);
                       } else {

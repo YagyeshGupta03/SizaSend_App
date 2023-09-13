@@ -533,14 +533,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   nm:
     dependency: transitive
     description:
@@ -677,14 +669,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.3"
-  provider:
-    dependency: "direct main"
-    description:
-      name: provider
-      sha256: cdbe7530b12ecd9eb455bdaa2fcb8d4dad22e80b8afb4798b41479d5ce26847f
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.5"
   quiver:
     dependency: transitive
     description:
@@ -866,6 +850,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  video_compress:
+    dependency: "direct main"
+    description:
+      name: video_compress
+      sha256: "407693726e674a1e1958801deb2d9daf5a5297707ba6d03375007012dae7389a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.2"
   video_player:
     dependency: "direct main"
     description:

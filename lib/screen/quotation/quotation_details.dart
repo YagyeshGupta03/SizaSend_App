@@ -5,7 +5,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/walllet_controller.dart';
 import 'package:savo/screen/dashboard_screen.dart';
-import 'package:savo/screen/home/home_screen.dart';
 import 'package:savo/screen/quotation/full_video_screen.dart';
 import 'package:savo/screen/quotation/track_screen.dart';
 import 'package:savo/util/widgets/login_button.dart';

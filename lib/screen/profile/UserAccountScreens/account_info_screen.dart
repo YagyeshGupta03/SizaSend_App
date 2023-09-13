@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:savo/Constants/all_urls.dart';
 import 'package:savo/screen/profile/UserAccountScreens/account_edit_screen.dart';
 import 'package:savo/util/widgets/edit_image_button.dart';
-import '../../../Constants/sizes.dart';
-import '../../../Constants/theme_data.dart';
 import '../../../Controllers/global_controllers.dart';
 import '../../../Controllers/profile_controller.dart';
 import '../../../generated/l10n.dart';
