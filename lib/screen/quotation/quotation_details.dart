@@ -317,6 +317,13 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
   //
 }
 
+
+
+
+
+
+
+
 class CompleteOrderButtons extends StatelessWidget {
   const CompleteOrderButtons({
     super.key,

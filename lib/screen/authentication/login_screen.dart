@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -24,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool rememberMe = false;
   final _phone = TextEditingController();
   final _password = TextEditingController();
-
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,10 +102,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: screenHeight(context) * .033),
                 ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if(_phone.text.isNotEmpty && _password.text.isNotEmpty){
                         connectivityController.connectedLogin(context);
-                        _loginController.login(context, _phone.text, _password.text);
+                        String? fcmToken = await _firebaseMessaging.getToken() ?? '';
+                        _loginController.login(context, _phone.text, _password.text, fcmToken.toString());
                       } else {
                         Fluttertoast.showToast(
                           msg: "Fill all the fields",

@@ -16,8 +16,7 @@ class WithdrawMoneyScreen extends StatefulWidget {
 
 class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
   final _amount = TextEditingController();
-  final WalletController _walletController =
-  Get.put(WalletController());
+  final WalletController _walletController = Get.put(WalletController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +25,17 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text('Available balance',
+                  style:
+                      themeController.currentTheme.value.textTheme.bodyLarge),
+              Text(userInfoController.balance,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: primaryColor)),
+              const SizedBox(height: 25),
               CustomTextField(
                   cont: _amount,
                   title: 'Amount',
@@ -38,7 +47,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
               const SizedBox(height: 25),
               LoginButton(
                   onTap: () {
-                    if(_amount.text.isNotEmpty){
+                    if (_amount.text.isNotEmpty) {
                       _walletController.withdrawMoney(_amount.text);
                     } else {
                       Fluttertoast.showToast(
@@ -58,5 +67,3 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
     );
   }
 }
-
-

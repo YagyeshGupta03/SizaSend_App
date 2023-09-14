@@ -38,6 +38,7 @@ const String sendNotificationUrl = '${baseUrl}send_orders_with_notification';
 const String receiveNotificationUrl = '${baseUrl}received_notification';
 const String notificationStatusUrl = '${baseUrl}notification_status_update';
 const String sendQuotationStatusUrl = '${baseUrl}order_status_change';
+const String getQuotationDetailsByIdUrl = '${baseUrl}Order_details_by_order_id';
 
 
 //Wallet related apis

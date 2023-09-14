@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/screen/quotation/quotation_details.dart';
 import '../../Controllers/quotation_controller.dart';
@@ -31,30 +32,31 @@ class _QuotationListState extends State<QuotationList> {
                 return InkWell(
                   onTap: () {
                     Get.to(
-                          () => QuotationDetailScreen(
-                            orderId: _quotationController
-                                .getQuotationList[index].orderId,
-                          status: _quotationController
-                              .getQuotationList[index].paid,
+                      () => QuotationDetailScreen(
+                          orderId: _quotationController
+                              .getQuotationList[index].orderId,
+                          status:
+                              _quotationController.getQuotationList[index].paid,
                           productName: _quotationController
                               .getQuotationList[index].productName,
                           description: _quotationController
                               .getQuotationList[index].description,
-                          store:
-                          _quotationController.getQuotationList[index].store,
-                          weight:
-                          _quotationController.getQuotationList[index].weight,
-                          height:
-                          _quotationController.getQuotationList[index].height,
-                          width:
-                          _quotationController.getQuotationList[index].width,
-                          price:
-                          _quotationController.getQuotationList[index].price,
+                          store: _quotationController
+                              .getQuotationList[index].store,
+                          weight: _quotationController
+                              .getQuotationList[index].weight,
+                          height: _quotationController
+                              .getQuotationList[index].height,
+                          width: _quotationController
+                              .getQuotationList[index].width,
+                          price: _quotationController
+                              .getQuotationList[index].price,
                           quantity: _quotationController
                               .getQuotationList[index].quantity,
-                          video:
-                          _quotationController.getQuotationList[index].video,
-                          senderId: _quotationController.getQuotationList[index].senderId),
+                          video: _quotationController
+                              .getQuotationList[index].video,
+                          senderId: _quotationController
+                              .getQuotationList[index].senderId),
                     );
                   },
                   child: Card(
@@ -148,7 +150,7 @@ class _QuotationListState extends State<QuotationList> {
                             crossAxisCount: 3,
                             shrinkWrap: true,
                             childAspectRatio: 2,
-                            crossAxisSpacing: 15,
+                            crossAxisSpacing: 10,
                             physics: const ClampingScrollPhysics(),
                             children: [
                               Column(
@@ -197,25 +199,57 @@ class _QuotationListState extends State<QuotationList> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  const Text(
-                                    "Price",
-                                    style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        "Price",
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      const SizedBox(width: 7),
+                                      _quotationController
+                                                  .getQuotationList[index]
+                                                  .paid ==
+                                              'paid'
+                                          ? const Card(
+                                              color: primaryColor,
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 6, vertical: 1),
+                                                child: Text(
+                                                  'Paid',
+                                                  style: TextStyle(
+                                                      fontSize: 8,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            )
+                                          : const SizedBox(),
+                                    ],
                                   ),
-                                  Text(
-                                    _quotationController
-                                        .getQuotationList[index].price,
-                                    style: const TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                  Row(
+                                    children: [
+                                      Text(
+                                        _quotationController
+                                            .getQuotationList[index].price,
+                                        style: const TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.bold),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -226,4 +260,3 @@ class _QuotationListState extends State<QuotationList> {
     );
   }
 }
-

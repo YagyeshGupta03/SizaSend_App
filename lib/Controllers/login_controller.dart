@@ -48,12 +48,13 @@ class LoginController extends GetxController {
   //
   //
   //
-  Future login (context, phone, password) async {
+  Future login (context, phone, password, token) async {
     await loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: loginUrl);
     var reply = await networkHelper.postData({
       "phone": phone,
       "password": password,
+      'token': token,
     });
     
     if (reply['status'] == 1) {

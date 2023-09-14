@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,28 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  void requestNotificationPermissions() async {
+    final settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      // User granted permission
+    } else {
+      // User denied permission
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    requestNotificationPermissions();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

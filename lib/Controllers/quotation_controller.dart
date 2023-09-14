@@ -4,8 +4,10 @@ import 'package:get/get.dart';
 import 'package:savo/Constants/all_urls.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Models/Models.dart';
+import 'package:savo/screen/quotation/quotation_details.dart';
 import '../Helper/http_helper.dart';
 import '../screen/dashboard_screen.dart';
+import '../screen/quotation/quotationDetail_for_notification.dart';
 
 class QuotationController extends GetxController {
   //
@@ -31,7 +33,7 @@ class QuotationController extends GetxController {
     if (reply['status'] == 1) {
       sendNotification(reply['data']['id'], receiverId);
       receiveQuotation();
-      Get.to(()=> const DashBoardScreen());
+      Get.to(() => const DashBoardScreen());
       loadingController.updateLoading(false);
     } else {
       Fluttertoast.showToast(
@@ -306,12 +308,16 @@ class QuotationController extends GetxController {
   //
   //
   // To send status on notification so accordingly, a popup of accept/reject should appear or not
-  void sendNotificationStatus(notificationId, status) async {
+  void sendNotificationStatus(
+      notificationId, status, senderId, receiverId, orderId) async {
     final NetworkHelper networkHelper =
         NetworkHelper(url: notificationStatusUrl);
     var reply = await networkHelper.postData({
       'notification_id': notificationId,
       'status': status,
+      'sender_id': senderId,
+      'receiver_id': receiverId,
+      'order_id': orderId,
     });
 
     if (reply['status'] == 1) {
@@ -344,7 +350,9 @@ class QuotationController extends GetxController {
     });
 
     if (reply['status'] == 1) {
-      print('Order status updated');
+      // getQuotationByOrderId(orderId).then(
+      //   (value) => Get.to(() => const QuotationDetailForNotification()),
+      // );
     } else {
       print('Error in updating order status');
     }
@@ -367,7 +375,7 @@ class QuotationController extends GetxController {
         String status = reply['data'][i]['order_status'];
         if (senderUser == credentialController.id.toString() ||
             receiverId == credentialController.id.toString()) {
-          if (status == 'complete') {
+          if (status == 'complete' || status == 'refund') {
             getQuotationHistory.add(
               QuotationModel(
                 id: reply['data'][i]['id'],
@@ -391,6 +399,48 @@ class QuotationController extends GetxController {
       }
     } else {
       print('Error in getting quotation history list');
+    }
+  }
+
+  //
+  //
+  //
+  //Function to get quotation details by order id
+  String id = '';
+  String orderId = '';
+  String productName = '';
+  String price = '';
+  String store = '';
+  String quantity = '';
+  String weight = '';
+  String width = '';
+  String height = '';
+  String paid = '';
+  String description = '';
+  String senderId = '';
+  String video = '';
+  Future<bool> getQuotationByOrderId(ordrId) async {
+    final NetworkHelper networkHelper = NetworkHelper(url: receiveQuotationUrl);
+    var reply = await networkHelper.postData({'order_id': ordrId});
+
+    if (reply['status'] == 1) {
+      id = reply['data']['id'];
+      orderId = reply['data']['order_id'];
+      productName = reply['data']['name'];
+      price = reply['data']['price'];
+      store = reply['data']['store_name'];
+      quantity = reply['data']['quantity'];
+      weight = reply['data']['weight'];
+      width = reply['data']['width'];
+      height = reply['data']['height'];
+      paid = reply['data']['order_status'];
+      description = reply['data']['description'];
+      senderId = reply['data']['user_id'];
+      video = reply['data']['video'] ?? '';
+      return true;
+    } else {
+      print('Error in getting quotation history list');
+      return false;
     }
   }
 }

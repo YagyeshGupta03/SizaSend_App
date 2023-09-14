@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:savo/Controllers/global_controllers.dart';
+import 'package:savo/screen/WalletScreens/add_money_screen.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import '../Constants/all_urls.dart';
 import '../Helper/http_helper.dart';
@@ -20,6 +21,35 @@ class WalletController extends GetxController {
     if (reply['status'] == 1) {
       userInfoController.getUserInfo().then((value) {
         Get.to(() => const DashBoardScreen());
+        Fluttertoast.showToast(
+          msg: 'Transaction completed',
+          gravity: ToastGravity.SNACKBAR,
+          backgroundColor: Colors.green,
+        );
+        loadingController.updateLoading(false);
+      });
+    } else {
+      Fluttertoast.showToast(
+        msg: reply['message'],
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      loadingController.updateLoading(false);
+    }
+  }
+  //
+  //
+  void quotationAddMoney(amount) async {
+    loadingController.updateLoading(true);
+    final NetworkHelper networkHelper = NetworkHelper(url: addMoneyUrl);
+    var reply = await networkHelper.postData({
+      'user_id': credentialController.id,
+      'add_amount': amount,
+    });
+
+    if (reply['status'] == 1) {
+      userInfoController.getUserInfo().then((value) {
+        Get.back();
         Fluttertoast.showToast(
           msg: 'Transaction completed',
           gravity: ToastGravity.SNACKBAR,
@@ -92,6 +122,14 @@ class WalletController extends GetxController {
         );
         loadingController.updateLoading(false);
       });
+    } else if (reply['status'] == 2) {
+      Fluttertoast.showToast(
+        msg: reply['message'],
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      Get.to(() => const AddMoneyScreen());
+      loadingController.updateLoading(false);
     } else {
       Fluttertoast.showToast(
         msg: reply['message'],
@@ -139,8 +177,10 @@ class WalletController extends GetxController {
     });
 
     if (reply['status'] == 1) {
-      updatePaidStatus(orderId, status)
-          .then((value) => Get.to(() => const DashBoardScreen()));
+      updatePaidStatus(orderId, status).then((value) async {
+        await userInfoController.getUserInfo();
+        Get.to(() => const DashBoardScreen());
+      });
     } else {
       print('Could not update order payment');
     }

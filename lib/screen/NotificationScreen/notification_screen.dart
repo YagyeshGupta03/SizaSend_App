@@ -98,7 +98,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                             .notificationId,
                                         _quotationController
                                             .getNotificationList[index]
-                                            .senderId);
+                                            .senderId,
+                                      _quotationController
+                                          .getNotificationList[index]
+                                          .receiverId,
+                                    );
                                   }
                                 },
                                 child: Card(
@@ -161,7 +165,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   void _showPopupDialog(
-      BuildContext context, message, orderId, notificationId, senderId) {
+      BuildContext context, message, orderId, notificationId, senderId, receiverId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -175,10 +179,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
             TextButton(
               onPressed: () {
                 _quotationController.sendNotificationStatus(
-                    notificationId, '1');
+                    notificationId, '1',senderId, receiverId, orderId);
                 _quotationController.sendQuotationStatus(
                     orderId, senderId, 'accept');
-                Navigator.of(context).pop();
               },
               child: const Text(
                 "Accept",
@@ -191,7 +194,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             TextButton(
               onPressed: () {
                 _quotationController.sendNotificationStatus(
-                    notificationId, '0');
+                    notificationId, '0', senderId, receiverId, orderId);
                 _quotationController.sendQuotationStatus(
                     orderId, senderId, 'reject');
                 Navigator.of(context).pop();
