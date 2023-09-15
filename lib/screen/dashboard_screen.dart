@@ -176,7 +176,7 @@ class CustomDrawer extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             height: 150,
             width: double.infinity,
             child: Row(
@@ -247,6 +247,8 @@ class CustomDrawer extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () async {
+                  loadingController.updateVideoCompressionLoading(false);
+                  loadingController.updateProfileLoading(false);
                   loadingController.updateLoading(false);
                   await credentialController.deleteData();
                   Get.off(() => const LoginScreen());

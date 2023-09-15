@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:savo/Constants/sizes.dart';
+import 'package:savo/screen/dashboard_screen.dart';
+import 'package:savo/screen/quotation/quotationDetail_for_notification.dart';
 import '../../Controllers/global_controllers.dart';
 import '../../Controllers/quotation_controller.dart';
 
@@ -164,8 +166,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  void _showPopupDialog(
-      BuildContext context, message, orderId, notificationId, senderId, receiverId) {
+  void _showPopupDialog(BuildContext context, message, orderId, notificationId,
+      senderId, receiverId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -178,8 +180,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                _quotationController.sendNotificationStatus(
-                    notificationId, '1',senderId, receiverId, orderId);
+                _quotationController.sendNotificationStatus(context,
+                    notificationId, '1', senderId, receiverId, orderId);
                 _quotationController.sendQuotationStatus(
                     orderId, senderId, 'accept');
               },
@@ -193,7 +195,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
             TextButton(
               onPressed: () {
-                _quotationController.sendNotificationStatus(
+                _quotationController.sendNotificationStatus(context,
                     notificationId, '0', senderId, receiverId, orderId);
                 _quotationController.sendQuotationStatus(
                     orderId, senderId, 'reject');

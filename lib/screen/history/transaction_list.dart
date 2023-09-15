@@ -33,33 +33,12 @@ class _TransactionListState extends State<TransactionList> {
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
                   onTap: () {
-                    Get.to(
-                      () => QuotationDetailScreen(
-                          orderId: _quotationController
-                              .getQuotationHistory[index].orderId,
-                          status: _quotationController
-                              .getQuotationHistory[index].status,
-                          productName: _quotationController
-                              .getQuotationHistory[index].productName,
-                          description: _quotationController
-                              .getQuotationHistory[index].description,
-                          store: _quotationController
-                              .getQuotationHistory[index].store,
-                          weight: _quotationController
-                              .getQuotationHistory[index].weight,
-                          height: _quotationController
-                              .getQuotationHistory[index].height,
-                          width: _quotationController
-                              .getQuotationHistory[index].width,
-                          price: _quotationController
-                              .getQuotationHistory[index].price,
-                          quantity: _quotationController
-                              .getQuotationHistory[index].quantity,
-                          video: _quotationController
-                              .getQuotationHistory[index].video,
-                          senderId: _quotationController
-                              .getQuotationHistory[index].senderId),
-                    );
+                    _quotationController
+                        .getQuotationByOrderId(_quotationController
+                            .getQuotationHistory[index].orderId)
+                        .whenComplete(() => Get.to(
+                              () => const QuotationDetailScreen(),
+                            ));
                   },
                   child: Card(
                     color: Colors.white,

@@ -7,7 +7,6 @@ import '../Constants/all_urls.dart';
 import '../Helper/http_helper.dart';
 
 class LoginController extends GetxController {
-
   //
   //
   //
@@ -26,7 +25,7 @@ class LoginController extends GetxController {
       await credentialController.setData(reply['data']['id']);
       userInfoController.getUserInfo().then((value) {
         loadingController.updateLoading(false);
-        Get.off(()=> const DashBoardScreen());
+        Get.off(() => const DashBoardScreen());
       });
       Fluttertoast.showToast(
         msg: "${reply['message']}",
@@ -44,11 +43,12 @@ class LoginController extends GetxController {
       );
     }
   }
+
   //
   //
   //
   //
-  Future login (context, phone, password, token) async {
+  Future login(context, phone, password, token) async {
     await loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: loginUrl);
     var reply = await networkHelper.postData({
@@ -56,12 +56,12 @@ class LoginController extends GetxController {
       "password": password,
       'token': token,
     });
-    
+
     if (reply['status'] == 1) {
       await credentialController.setData(reply['data']['id']);
       userInfoController.getUserInfo().then((value) {
         loadingController.updateLoading(false);
-        Get.off(()=> const DashBoardScreen());
+        Get.off(() => const DashBoardScreen());
       });
     } else {
       Fluttertoast.showToast(
@@ -72,11 +72,30 @@ class LoginController extends GetxController {
       loadingController.updateLoading(false);
     }
   }
+
+  //
+  //
+  //
+  Future<bool> logout(token) async {
+    await loadingController.updateLoading(true);
+    final NetworkHelper networkHelper = NetworkHelper(url: logoutUrl);
+    var reply = await networkHelper.postData({
+      "token": token,
+      "user_id": credentialController.id,
+    });
+
+    if (reply['status'] == 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   //
   //
   //
   //
-  Future changePassword (context, oldPass, newPass, confirmPass) async {
+  Future changePassword(context, oldPass, newPass, confirmPass) async {
     final NetworkHelper networkHelper = NetworkHelper(url: changePasswordUrl);
     var reply = await networkHelper.postData({
       "user_id": credentialController.id,
@@ -91,7 +110,7 @@ class LoginController extends GetxController {
         gravity: ToastGravity.SNACKBAR,
         backgroundColor: Colors.green,
       );
-       Navigator.pop(context);
+      Navigator.pop(context);
     } else {
       Fluttertoast.showToast(
         msg: "${reply['message']}",
@@ -100,13 +119,14 @@ class LoginController extends GetxController {
       );
     }
   }
+
   //
   //
   //
   //
   String title = '';
   String description = '';
-  Future termsAndConditions () async {
+  Future termsAndConditions() async {
     final NetworkHelper networkHelper = NetworkHelper(url: termsUrl);
     var reply = await networkHelper.postData({});
 
@@ -116,7 +136,7 @@ class LoginController extends GetxController {
 
       // Navigator.pop(context);
     } else {
-     print('error in getting terms and conditons');
+      print('error in getting terms and conditons');
     }
   }
 }

@@ -24,7 +24,7 @@ class AddQuotationScreen extends StatefulWidget {
 
 class _AddQuotationScreenState extends State<AddQuotationScreen> {
   final QuotationController _quotationController =
-  Get.put(QuotationController());
+      Get.put(QuotationController());
   final ContactController _contactController = Get.put(ContactController());
 
   final _productName = TextEditingController();
@@ -71,25 +71,53 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                       final picker = ImagePicker();
                       final pickedFile =
                           await picker.pickVideo(source: ImageSource.gallery);
-                      if (pickedFile != null) {
-                        final videoBytes = await pickedFile.readAsBytes();
-                        final videoSizeInBytes = videoBytes.length;
-                        final videoSizeInMB = videoSizeInBytes /
-                            (10240 * 10240); // Convert bytes to MB
 
-                        if (videoSizeInMB <= 3) {
+                      if (pickedFile != null) {
+                        final videoFile = File(pickedFile.path);
+                        final videoSizeInBytes = await videoFile.length();
+                        final videoSizeInMB = videoSizeInBytes /
+                            (1024 * 1024); // Convert bytes to MB
+
+                        if (videoSizeInMB <= 10) {
+                          loadingController.updateVideoCompressionLoading(true);
                           setState(() {
                             _video = pickedFile;
                           });
                         } else {
-                          setState(() {
-                            _video.isBlank;
-                          });
                           Fluttertoast.showToast(
                             msg: 'Video is greater than 10 MB',
                             gravity: ToastGravity.SNACKBAR,
                             backgroundColor: Colors.red,
                           );
+                          return; // Do not proceed with compression if the video is too large
+                        }
+
+                        // Compress the video if needed
+                        if (videoSizeInMB > 2) {
+                          final info = await VideoCompress.compressVideo(
+                            pickedFile.path,
+                            quality: VideoQuality
+                                .Res640x480Quality, // You can adjust the quality
+                          );
+
+                          if (info != null) {
+                            final compressedFilePath = info.path;
+                            if (compressedFilePath != null) {
+                              final compressedFile = File(compressedFilePath);
+                              final compressedFileSizeInBytes =
+                                  await compressedFile.length();
+
+                              if (compressedFileSizeInBytes <
+                                  videoSizeInBytes) {
+                                loadingController.updateVideoCompressionLoading(false);
+                                // Compression was successful
+                                setState(() {
+                                  _video = XFile(compressedFilePath);
+                                  print('video compression successful');
+                                });
+                              }
+                            }
+                          }
                         }
                       }
                     },
@@ -227,6 +255,31 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                       child: LoadingAnimationWidget.threeArchedCircle(
                         color: primaryColor,
                         size: 50,
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
+          ),
+          Obx(
+            () => loadingController.videoCompressionLoad.value
+                ? Center(
+                    child: Container(
+                      height: screenHeight(context),
+                      width: screenWidth(context),
+                      color: Colors.black12,
+                      child: Column( mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          LoadingAnimationWidget.threeArchedCircle(
+                            color: primaryColor,
+                            size: 50,
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Compressing video',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold, color: primaryColor),
+                          )
+                        ],
                       ),
                     ),
                   )

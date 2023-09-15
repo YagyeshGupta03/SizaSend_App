@@ -64,6 +64,7 @@ class UserInfoController extends GetxController{
 class LoadingController extends GetxController {
   RxBool loading = false.obs;
   RxBool profileLoading = false.obs;
+  RxBool videoCompressionLoad = false.obs;
 
   updateLoading(val) {
     loading.value = val;
@@ -71,6 +72,10 @@ class LoadingController extends GetxController {
   }
   updateProfileLoading(val) {
     profileLoading.value = val;
+    update();
+  }
+  updateVideoCompressionLoading(val) {
+    videoCompressionLoad.value = val;
     update();
   }
 

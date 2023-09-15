@@ -31,33 +31,12 @@ class _QuotationListState extends State<QuotationList> {
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
                   onTap: () {
-                    Get.to(
-                      () => QuotationDetailScreen(
-                          orderId: _quotationController
-                              .getQuotationList[index].orderId,
-                          status:
-                              _quotationController.getQuotationList[index].paid,
-                          productName: _quotationController
-                              .getQuotationList[index].productName,
-                          description: _quotationController
-                              .getQuotationList[index].description,
-                          store: _quotationController
-                              .getQuotationList[index].store,
-                          weight: _quotationController
-                              .getQuotationList[index].weight,
-                          height: _quotationController
-                              .getQuotationList[index].height,
-                          width: _quotationController
-                              .getQuotationList[index].width,
-                          price: _quotationController
-                              .getQuotationList[index].price,
-                          quantity: _quotationController
-                              .getQuotationList[index].quantity,
-                          video: _quotationController
-                              .getQuotationList[index].video,
-                          senderId: _quotationController
-                              .getQuotationList[index].senderId),
-                    );
+                    _quotationController
+                        .getQuotationByOrderId(_quotationController
+                        .getQuotationList[index].orderId)
+                        .whenComplete(() => Get.to(
+                              () => const QuotationDetailScreen(),
+                            ));
                   },
                   child: Card(
                     color: Colors.white,

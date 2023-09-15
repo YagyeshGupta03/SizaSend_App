@@ -8,6 +8,7 @@ import 'package:savo/screen/profile/GeneralSettings/general_settings.dart';
 import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
 import 'package:savo/screen/profile/change_password_screen.dart';
 import '../../Constants/all_urls.dart';
+import '../../Controllers/login_controller.dart';
 import '../../generated/l10n.dart';
 import '../../util/images.dart';
 
@@ -19,6 +20,8 @@ class ProfileHomeScreen extends StatefulWidget {
 }
 
 class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
+  final LoginController _loginController = Get.put(LoginController());
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -105,8 +108,11 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
             image: Images.icLogout,
             title: S.of(context).logout,
             onTap: () async {
+              loadingController.updateVideoCompressionLoading(false);
+              loadingController.updateProfileLoading(false);
               loadingController.updateLoading(false);
               await credentialController.deleteData();
+              // _loginController.logout(token);
               Get.off(() => const LoginScreen());
             },
           ),

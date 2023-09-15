@@ -10,6 +10,7 @@ const String videoUrl = 'https://server24.in/sizasend/uploads/order_video/';
 //Intro apis
 const String signupURl = '${baseUrl}signup';
 const String loginUrl = '${baseUrl}login';
+const String logoutUrl = '${baseUrl}tokenDeleteById';
 const String termsUrl = '${baseUrl}get_terms_and_conditions';
 
 
@@ -39,6 +40,8 @@ const String receiveNotificationUrl = '${baseUrl}received_notification';
 const String notificationStatusUrl = '${baseUrl}notification_status_update';
 const String sendQuotationStatusUrl = '${baseUrl}order_status_change';
 const String getQuotationDetailsByIdUrl = '${baseUrl}Order_details_by_order_id';
+const String sendDispatchImageUrl = '${baseUrl}order_send_img';
+const String sendDeliveredImageUrl = '${baseUrl}order_receive_img';
 
 
 //Wallet related apis

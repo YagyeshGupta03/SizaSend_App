@@ -128,7 +128,7 @@ class WalletController extends GetxController {
         gravity: ToastGravity.SNACKBAR,
         backgroundColor: Colors.red,
       );
-      Get.to(() => const AddMoneyScreen());
+      Get.to(() => const QuotationMoneyAdd());
       loadingController.updateLoading(false);
     } else {
       Fluttertoast.showToast(

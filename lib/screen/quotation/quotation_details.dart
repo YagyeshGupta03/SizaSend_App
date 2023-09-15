@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:savo/Constants/sizes.dart';
+import 'package:savo/Controllers/quotation_controller.dart';
 import 'package:savo/Controllers/walllet_controller.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import 'package:savo/screen/quotation/full_video_screen.dart';
-import 'package:savo/screen/quotation/track_screen.dart';
 import 'package:savo/util/widgets/login_button.dart';
 import 'package:video_player/video_player.dart';
 import '../../Constants/all_urls.dart';
@@ -14,33 +15,7 @@ import '../../Constants/theme_data.dart';
 import '../../Controllers/global_controllers.dart';
 
 class QuotationDetailScreen extends StatefulWidget {
-  const QuotationDetailScreen(
-      {super.key,
-      required this.productName,
-      required this.orderId,
-      required this.description,
-      required this.store,
-      required this.weight,
-      required this.height,
-      required this.width,
-      required this.status,
-      required this.price,
-      required this.senderId,
-      required this.quantity,
-      required this.video});
-
-  final String productName;
-  final String orderId;
-  final String description;
-  final String store;
-  final String weight;
-  final String status;
-  final String height;
-  final String width;
-  final String price;
-  final String quantity;
-  final String senderId;
-  final String video;
+  const QuotationDetailScreen({super.key});
 
   @override
   State<QuotationDetailScreen> createState() => _QuotationDetailScreenState();
@@ -48,16 +23,22 @@ class QuotationDetailScreen extends StatefulWidget {
 
 class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
   final WalletController _walletController = Get.put(WalletController());
+  final QuotationController _quotationController =
+      Get.put(QuotationController());
+
+  XFile? _senderImage;
+  XFile? _receiverImage;
   late VideoPlayerController _controller;
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network('$videoUrl${widget.video}')
-      ..initialize().then((_) {
-        setState(() {});
-      });
+    _controller =
+        VideoPlayerController.network('$videoUrl${_quotationController.video}')
+          ..initialize().then((_) {
+            setState(() {});
+          });
   }
 
   @override
@@ -125,8 +106,8 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                 child: Center(
                                   child: IconButton(
                                     onPressed: () {
-                                      Get.to(
-                                          () => VideoApp(video: widget.video));
+                                      Get.to(() => VideoApp(
+                                          video: _quotationController.video));
                                     },
                                     icon: Icon(
                                       Icons.play_circle,
@@ -158,7 +139,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    widget.productName,
+                    _quotationController.productName,
                     style:
                         themeController.currentTheme.value.textTheme.bodyMedium,
                     maxLines: 2,
@@ -166,7 +147,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                     textAlign: TextAlign.justify,
                   ),
                   Text(
-                    '${widget.price} USD',
+                    '${_quotationController.price} USD',
                     style: const TextStyle(fontSize: 15, color: primaryColor),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -176,7 +157,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                widget.description,
+                _quotationController.description,
                 style:
                     themeController.currentTheme.value.textTheme.displayMedium,
                 textAlign: TextAlign.justify,
@@ -191,21 +172,11 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                         themeController.currentTheme.value.textTheme.bodyLarge,
                     textAlign: TextAlign.justify,
                   ),
-                  const SizedBox(width: 10),
-                  widget.status == 'reached'
-                      ? const Text(
-                          '[Delivered]',
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                              color: primaryColor),
-                        )
-                      : const SizedBox()
                 ],
               ),
               const SizedBox(height: 8),
               Text(
-                widget.store,
+                _quotationController.store,
                 style:
                     themeController.currentTheme.value.textTheme.displayMedium,
                 textAlign: TextAlign.justify,
@@ -233,8 +204,11 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    InfoColumn(title: 'Quantity', value: widget.quantity),
-                    InfoColumn(title: 'Price', value: widget.price),
+                    InfoColumn(
+                        title: 'Quantity',
+                        value: _quotationController.quantity),
+                    InfoColumn(
+                        title: 'Price', value: _quotationController.price),
                   ],
                 ),
               ),
@@ -244,85 +218,84 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    InfoColumn(title: 'Weight', value: widget.weight),
+                    InfoColumn(
+                        title: 'Weight', value: _quotationController.weight),
                     InfoColumn(
                         title: 'Size',
-                        value: '${widget.height} cm x ${widget.width} cm'),
+                        value:
+                            '${_quotationController.height} cm x ${_quotationController.width} cm'),
                   ],
                 ),
               ),
               const SizedBox(height: 40),
               // to check if sender
-              widget.senderId == credentialController.id
+              _quotationController.senderId == credentialController.id
                   //to check by sender if paid
-                  ? widget.status == 'unpaid'
+                  ? _quotationController.orderStatus == 'unpaid'
                       ? const SizedBox()
-                      // to check by sender to deliver
-                      : widget.status == 'dispatch'
-                          ? LoginButton(
-                              onTap: () {
-                                _walletController
-                                    .updatePaidStatus(widget.orderId, 'reached')
-                                    .then((value) =>
-                                        Get.to(() => const DashBoardScreen()));
+                      : _quotationController.orderStatus == 'dispatch'
+                          ? const SizedBox()
+                          : LoginButton(
+                              onTap: () async {
+                                final picker = ImagePicker();
+                                final pickedFile = await picker.pickImage(
+                                    source: ImageSource.camera);
+                                setState(() {
+                                  _senderImage = pickedFile;
+                                });
+                                _quotationController.sendDispatchImage(
+                                    _senderImage, _quotationController.orderId);
                               },
-                              title: 'Delivered',
+                              title: 'Dispatch',
                               txtColor: Colors.white,
                               btnColor: primaryColor)
-                          // to check by sender to deliver
-                          : widget.status == 'reached'
-                              ? const SizedBox()
-                              : LoginButton(
+                  // to check by receiver to pay or track
+                  : _quotationController.status == ''
+                      ? CompleteOrderButtons(
+                          orderId: _quotationController.orderId,
+                          senderId: _quotationController.senderId)
+                      : _quotationController.status == 'reject'
+                          ? const SizedBox()
+                          : _quotationController.orderStatus == 'unpaid'
+                              ? LoginButton(
                                   onTap: () {
-                                    _walletController
-                                        .updatePaidStatus(
-                                            widget.orderId, 'dispatch')
-                                        .then((value) => Get.to(
-                                            () => const DashBoardScreen()));
+                                    _walletController.quotationPay(
+                                        _quotationController.price,
+                                        _quotationController.senderId,
+                                        _quotationController.orderId);
                                   },
-                                  title: 'Dispatch',
+                                  title: 'Pay',
                                   txtColor: Colors.white,
                                   btnColor: primaryColor)
-                  // to check by receiver to pay or track
-                  : widget.status == 'unpaid'
-                      ? LoginButton(
-                          onTap: () {
-                            _walletController.quotationPay(
-                                widget.price, widget.senderId, widget.orderId);
-                          },
-                          title: 'Pay',
-                          txtColor: Colors.white,
-                          btnColor: primaryColor)
-                      // to check by receiver to accept or reject
-                      : widget.status == 'reached'
-                          ? CompleteOrderButtons(
-                              orderId: widget.orderId,
-                              senderId: widget.senderId)
-                          : LoginButton(
-                              onTap: () {
-                                Get.to(
-                                    () => TrackScreen(status: widget.status));
-                              },
-                              title: 'Track',
-                              txtColor: Colors.white,
-                              btnColor: primaryColor),
+                              // to check by receiver to accept or reject
+                              : _quotationController.orderStatus == 'dispatch'
+                                  ? LoginButton(
+                                      onTap: () async {
+                                        final picker = ImagePicker();
+                                        final pickedFile =
+                                            await picker.pickImage(
+                                                source: ImageSource.camera);
+                                        setState(() {
+                                          _receiverImage = pickedFile;
+                                          _quotationController
+                                              .sendDeliveredImage(
+                                                  _receiverImage,
+                                                  _quotationController.orderId,
+                                                  _quotationController
+                                                      .senderId);
+                                        });
+                                      },
+                                      title: 'Delivered',
+                                      txtColor: Colors.white,
+                                      btnColor: primaryColor)
+                                  : const SizedBox(),
             ],
           ),
         ),
       ),
     );
   }
-
-  //
-  //
 }
-
-
-
-
-
-
-
 
 class CompleteOrderButtons extends StatelessWidget {
   const CompleteOrderButtons({
@@ -336,22 +309,28 @@ class CompleteOrderButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final WalletController _walletController = Get.put(WalletController());
+    final QuotationController _quotationController =
+        Get.put(QuotationController());
+
     return Column(
       children: [
         LoginButton(
-            onTap: () {
-              _walletController.completeOrderPayment(
-                  orderId, 'complete', senderId);
+            onTap: () async {
+               await _quotationController.sendQuotationStatus(
+                  orderId, senderId, 'accept');
+               _quotationController.getQuotationByOrderId(orderId).whenComplete(
+                       () => Get.to(() => const QuotationDetailScreen()));
             },
             title: 'Accept',
             txtColor: Colors.white,
             btnColor: primaryColor),
         const SizedBox(height: 5),
         LoginButton(
-            onTap: () {
-              _walletController.completeOrderPayment(
-                  orderId, 'refund', senderId);
+            onTap: ()async{
+              await _quotationController.sendQuotationStatus(
+                  orderId, senderId, 'reject');
+              _quotationController.getQuotationByOrderId(orderId).whenComplete(
+                      () => Get.to(() => const QuotationDetailScreen()));
             },
             title: 'Reject',
             txtColor: primaryColor,
