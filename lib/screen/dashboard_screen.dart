@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:random_avatar/random_avatar.dart';
 import 'package:savo/Controllers/global_controllers.dart';
+import 'package:savo/Controllers/login_controller.dart';
 import 'package:savo/animation/exit_animation.dart';
 import 'package:savo/screen/NotificationScreen/notification_screen.dart';
 import 'package:savo/screen/history/history_home_screen.dart';
@@ -76,14 +77,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                           child: RandomAvatar('saytoonz', trBackground: true)),
                     ),
                   ),
-                  const CircleAvatar(
-                    radius: 4.5,
-                    backgroundColor: Colors.white,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.red,
-                      radius: 3.5,
-                    ),
-                  )
                 ],
               ),
             )
@@ -91,39 +84,25 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             ExitAnimationWidget(
               widget: Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Container(
-                      width: 45,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              Color(0xffFFB01D),
-                              Color(0xff5BCE55),
-                            ]),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child:
-                                RandomAvatar('saytoonz', trBackground: true)),
-                      ),
-                    ),
-                    const CircleAvatar(
-                      radius: 4.5,
-                      backgroundColor: Colors.white,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.red,
-                        radius: 3.5,
-                      ),
-                    )
-                  ],
+                child: Container(
+                  width: 45,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xffFFB01D),
+                          Color(0xff5BCE55),
+                        ]),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: RandomAvatar('saytoonz', trBackground: true)),
+                  ),
                 ),
               ),
             ),
@@ -172,6 +151,7 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LoginController _loginController = Get.put(LoginController());
     return Drawer(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -250,6 +230,7 @@ class CustomDrawer extends StatelessWidget {
                   loadingController.updateVideoCompressionLoading(false);
                   loadingController.updateProfileLoading(false);
                   loadingController.updateLoading(false);
+                  await _loginController.logout();
                   await credentialController.deleteData();
                   Get.off(() => const LoginScreen());
                 },

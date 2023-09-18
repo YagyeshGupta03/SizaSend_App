@@ -10,7 +10,7 @@ class LoginController extends GetxController {
   //
   //
   //
-  Future signUp(context, fullName, phone, password, countryCode) async {
+  Future signUp(context, fullName, phone, password, countryCode, token) async {
     await loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: signupURl);
 
@@ -22,11 +22,12 @@ class LoginController extends GetxController {
       "balance": '0'
     });
     if (reply['status'] == 1) {
-      await credentialController.setData(reply['data']['id']);
-      userInfoController.getUserInfo().then((value) {
-        loadingController.updateLoading(false);
-        Get.off(() => const DashBoardScreen());
-      });
+      login(context, phone, password, token);
+      // await credentialController.setData(reply['data']['id'], token);
+      // userInfoController.getUserInfo().then((value) {
+      //   loadingController.updateLoading(false);
+      //   Get.off(() => const DashBoardScreen());
+      // });
       Fluttertoast.showToast(
         msg: "${reply['message']}",
         gravity: ToastGravity.SNACKBAR,
@@ -58,7 +59,7 @@ class LoginController extends GetxController {
     });
 
     if (reply['status'] == 1) {
-      await credentialController.setData(reply['data']['id']);
+      await credentialController.setData(reply['data']['id'], token);
       userInfoController.getUserInfo().then((value) {
         loadingController.updateLoading(false);
         Get.off(() => const DashBoardScreen());
@@ -76,11 +77,10 @@ class LoginController extends GetxController {
   //
   //
   //
-  Future<bool> logout(token) async {
-    await loadingController.updateLoading(true);
+  Future<bool> logout() async {
     final NetworkHelper networkHelper = NetworkHelper(url: logoutUrl);
     var reply = await networkHelper.postData({
-      "token": token,
+      "token": credentialController.fcmToken,
       "user_id": credentialController.id,
     });
 

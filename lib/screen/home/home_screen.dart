@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/notifications_controller.dart';
 import 'package:savo/screen/home/home_header.dart';
 import 'package:savo/screen/home/home_operations.dart';
-import 'package:savo/screen/home/home_top_buyers.dart';
 import 'package:savo/screen/home/home_transaction_list.dart';
 import '../../Controllers/quotation_controller.dart';
 
@@ -20,7 +20,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _quotationController.receiveQuotation();
     _quotationController.receiveQuotationHistory();
+    loadingController.updateDispatchLoading(false);
+    loadingController.updateProfileLoading(false);
+    loadingController.updateVideoCompressionLoading(false);
+    loadingController.updateLoading(false);
+    userInfoController.getUserInfo();
     FCM().setNotifications(context);
   }
 
@@ -33,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             HomeHeaderScreen(),
             HomeOperations(),
-            HomeTopBuyersScreen(),
+            // HomeTopBuyersScreen(),
             HomeTransactionList()
           ],
         ),

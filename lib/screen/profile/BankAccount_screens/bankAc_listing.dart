@@ -1,6 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
@@ -29,7 +32,7 @@ class _BankListingScreenState extends State<BankListingScreen> {
       appBar: AppBar(
         title: Text(
           S.of(context).bankAccount,
-          style: themeController.currentTheme.value.textTheme.displaySmall,
+          style: themeController.currentTheme.value.textTheme.bodyMedium,
         ),
         centerTitle: true,
       ),
@@ -39,11 +42,14 @@ class _BankListingScreenState extends State<BankListingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                S.of(context).yourBankAccount,
-                style: themeController.currentTheme.value.textTheme.bodyMedium,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  S.of(context).yourBankAccount,
+                  style: themeController.currentTheme.value.textTheme.bodyLarge,
+                ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 50),
               Obx(
                 () => _bankController.bankList.length.isEqual(0)
                     ? Center(
@@ -60,8 +66,36 @@ class _BankListingScreenState extends State<BankListingScreen> {
                             key: Key(_bankController.bankList[index].bankId),
                             direction: DismissDirection.endToStart,
                             onDismissed: (direction) {
-                              _bankController.deleteBankAc(context,
-                                  _bankController.bankList[index].bankId);
+                              Dialogs.materialDialog(
+                                  msg: 'Are you sure ? you can\'t undo this',
+                                  title: "Delete",
+                                  color: Colors.white,
+                                  context: context,
+                                  actions: [
+                                    IconsOutlineButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      text: 'Cancel',
+                                      iconData: Icons.cancel_outlined,
+                                      textStyle:
+                                          const TextStyle(color: Colors.grey),
+                                      iconColor: Colors.grey,
+                                    ),
+                                    IconsButton(
+                                      onPressed: () {
+                                        _bankController.deleteBankAc(
+                                            context,
+                                            _bankController
+                                                .bankList[index].bankId);
+                                      },
+                                      text: 'Delete',
+                                      iconData: Icons.delete,
+                                      color: Colors.red,
+                                      textStyle: const TextStyle(color: Colors.white),
+                                      iconColor: Colors.white,
+                                    ),
+                                  ]);
                             },
                             background: Container(
                               width: screenWidth(context),
@@ -80,7 +114,10 @@ class _BankListingScreenState extends State<BankListingScreen> {
                                 ],
                               ),
                             ),
-                            child: BankCard(bankController: _bankController, index: index,),
+                            child: BankCard(
+                              bankController: _bankController,
+                              index: index,
+                            ),
                           );
                         },
                       ),
@@ -88,7 +125,7 @@ class _BankListingScreenState extends State<BankListingScreen> {
               const SizedBox(height: 25),
               InkWell(
                 onTap: () {
-                  Get.to(()=> const AddBankScreen());
+                  Get.to(() => const AddBankScreen());
                 },
                 child: Card(
                   elevation: 0,
@@ -119,6 +156,7 @@ class _BankListingScreenState extends State<BankListingScreen> {
     );
   }
 }
+
 //
 //
 //
@@ -126,7 +164,8 @@ class _BankListingScreenState extends State<BankListingScreen> {
 class BankCard extends StatelessWidget {
   const BankCard({
     super.key,
-    required BankController bankController, required this.index,
+    required BankController bankController,
+    required this.index,
   }) : _bankController = bankController;
 
   final BankController _bankController;
@@ -139,20 +178,16 @@ class BankCard extends StatelessWidget {
       child: Card(
         elevation: 1, // Adjust the elevation as needed
         child: Container(
-          color: themeController
-              .currentTheme.value.cardColor,
-          padding:
-              const EdgeInsets.symmetric(vertical: 5),
+          color: themeController.currentTheme.value.cardColor,
+          padding: const EdgeInsets.symmetric(vertical: 5),
           child: ListTile(
             title: Text(
               _bankController.bankList[index].bankName,
-              style: themeController.currentTheme.value
-                  .textTheme.bodyLarge,
+              style: themeController.currentTheme.value.textTheme.bodyLarge,
             ),
             subtitle: Text(
               _bankController.bankList[index].account,
-              style: themeController.currentTheme.value
-                  .textTheme.displayMedium,
+              style: themeController.currentTheme.value.textTheme.displayMedium,
             ),
             leading: CircleAvatar(
               radius: 30,

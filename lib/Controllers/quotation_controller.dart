@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:savo/Constants/all_urls.dart';
+import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/walllet_controller.dart';
 import 'package:savo/Models/Models.dart';
@@ -192,7 +195,9 @@ class QuotationController extends GetxController {
         );
         update();
       }
-      loadingController.updateLoading(false);
+      Future.delayed(const Duration(seconds: 3)).then((value) {
+        loadingController.updateLoading(false);
+      });
     } else {
       loadingController.updateLoading(false);
     }
@@ -202,6 +207,7 @@ class QuotationController extends GetxController {
   //
   //
   //Function to show quotation
+  RxList<QuotationModel> getReceivedQuotationList = <QuotationModel>[].obs;
   RxList<QuotationModel> getQuotationList = <QuotationModel>[].obs;
   void receiveQuotation() async {
     final NetworkHelper networkHelper = NetworkHelper(url: receiveQuotationUrl);
@@ -210,6 +216,7 @@ class QuotationController extends GetxController {
     });
 
     getQuotationList.clear();
+    getReceivedQuotationList.clear();
     if (reply['status'] == 1) {
       for (int i = 0; i < reply['data'].length; i++) {
         String receiverId = reply['data'][i]['receiver_id'];
@@ -233,7 +240,30 @@ class QuotationController extends GetxController {
                 paid: reply['data'][i]['order_status'],
                 description: reply['data'][i]['description'],
                 senderId: reply['data'][i]['user_id'],
-                status: reply['data'][i]['status']??'',
+                status: reply['data'][i]['status'] ?? '',
+                video: reply['data'][i]['video'] ?? '',
+              ),
+            );
+          }
+        }
+        if (receiverId == credentialController.id.toString()) {
+          if (status == 'complete' || status == 'refund') {
+          } else {
+            getReceivedQuotationList.add(
+              QuotationModel(
+                id: reply['data'][i]['id'],
+                orderId: reply['data'][i]['order_id'],
+                productName: reply['data'][i]['name'],
+                price: reply['data'][i]['total_price'],
+                store: reply['data'][i]['store_name'],
+                quantity: reply['data'][i]['quantity'],
+                weight: reply['data'][i]['weight'],
+                width: reply['data'][i]['width'],
+                height: reply['data'][i]['height'],
+                paid: reply['data'][i]['order_status'],
+                description: reply['data'][i]['description'],
+                senderId: reply['data'][i]['user_id'],
+                status: reply['data'][i]['status'] ?? '',
                 video: reply['data'][i]['video'] ?? '',
               ),
             );
@@ -288,11 +318,11 @@ class QuotationController extends GetxController {
         final createdAt = DateTime.parse(createdAtString);
         getNotificationList.add(
           NotificationModel(
-              orderId: reply['data'][i]['order_id'],
+              orderId: reply['data'][i]['order_id']??'',
               notificationId: reply['data'][i]['id'],
               status: reply['data'][i]['status'] ?? '',
-              senderId: reply['data'][i]['sender_id'],
-              receiverId: reply['data'][i]['receiver_id'],
+              senderId: reply['data'][i]['sender_id']??'',
+              receiverId: reply['data'][i]['receiver_id']??'',
               date: createdAt,
               message: reply['data'][i]['message']),
         );
@@ -441,7 +471,7 @@ class QuotationController extends GetxController {
       height = reply['data']['height'];
       description = reply['data']['description'];
       orderStatus = reply['data']['order_status'];
-      status = reply['data']['status']??'';
+      status = reply['data']['status'] ?? '';
       senderId = reply['data']['user_id'];
       video = reply['data']['video'] ?? '';
       return true;
@@ -455,7 +485,8 @@ class QuotationController extends GetxController {
   //
   //
   final WalletController _walletController = Get.put(WalletController());
-  void sendDispatchImage(image, orderId) async {
+  void sendDispatchImage(context, image, orderId) async {
+    await loadingController.updateDispatchLoading(true);
     final NetworkHelper networkHelper =
         NetworkHelper(url: sendDispatchImageUrl);
     var reply = await networkHelper.postMultiPartData(
@@ -464,18 +495,22 @@ class QuotationController extends GetxController {
         "image");
 
     if (reply['status'] == 1) {
-      _walletController
-          .updatePaidStatus(orderId, 'dispatch')
-          .then((value) => Get.to(() => const DashBoardScreen()));
+      _walletController.updatePaidStatus(orderId, 'dispatch').then((value) {
+        Get.to(() => const DashBoardScreen());
+        loadingController.updateDispatchLoading(false);
+      });
     } else {
+      loadingController.updateDispatchLoading(false);
       print('Error in dispatching image');
     }
+    loadingController.updateDispatchLoading(false);
   }
 
   //
   //
   //
-  void sendDeliveredImage(image, orderId, senderID) async {
+  void sendDeliveredImage(context, image, orderId, senderID) async {
+    await loadingController.updateDispatchLoading(true);
     final NetworkHelper networkHelper =
         NetworkHelper(url: sendDeliveredImageUrl);
     var reply = await networkHelper.postMultiPartData({
@@ -486,9 +521,26 @@ class QuotationController extends GetxController {
     ], "image");
 
     if (reply['status'] == 1) {
-      _walletController.completeOrderPayment(orderId, 'complete', senderID);
+      await _walletController.completeOrderPayment(
+          orderId, 'complete', senderID);
+      Dialogs.materialDialog(
+          msg: 'Your order is Delivered',
+          title: 'Delivered',
+          context: context,
+          actions: [
+            IconsButton(
+              onPressed: () {},
+              text: 'Close',
+              color: primaryColor,
+              textStyle: const TextStyle(color: Colors.white),
+              iconColor: Colors.white,
+            ),
+          ]);
+      loadingController.updateDispatchLoading(false);
     } else {
+      await loadingController.updateDispatchLoading(false);
       print('Error in dispatching image');
     }
+    loadingController.updateDispatchLoading(false);
   }
 }

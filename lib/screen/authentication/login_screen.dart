@@ -22,6 +22,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
+String fcmToken = '';
 class _LoginScreenState extends State<LoginScreen> {
   final LoginController _loginController = Get.put(LoginController());
   bool rememberMe = false;
@@ -60,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 20),
                 CustomTextFormField(
                   topTitle: S.of(context).phoneNo,
+                  fieldLabel: 'Number',
                   cont: _phone,
                   suffixWidget: const SizedBox(),
                   prefixWidget: Icon(
@@ -71,6 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: screenHeight(context) * .015),
                 CustomTextFormField(
                   topTitle: S.of(context).password,
+                  fieldLabel: 'password',
                   cont: _password,
                   suffixWidget: const SizedBox(),
                   prefixWidget: Icon(
@@ -105,7 +108,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () async {
                       if(_phone.text.isNotEmpty && _password.text.isNotEmpty){
                         connectivityController.connectedLogin(context);
-                        String? fcmToken = await _firebaseMessaging.getToken() ?? '';
+                        fcmToken = await _firebaseMessaging.getToken() ?? '';
+                        print(fcmToken);
                         _loginController.login(context, _phone.text, _password.text, fcmToken.toString());
                       } else {
                         Fluttertoast.showToast(

@@ -111,6 +111,7 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
               loadingController.updateVideoCompressionLoading(false);
               loadingController.updateProfileLoading(false);
               loadingController.updateLoading(false);
+              await _loginController.logout();
               await credentialController.deleteData();
               // _loginController.logout(token);
               Get.off(() => const LoginScreen());

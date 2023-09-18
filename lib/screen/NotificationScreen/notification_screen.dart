@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import 'package:savo/screen/quotation/quotationDetail_for_notification.dart';
+import 'package:savo/screen/quotation/quotation_details.dart';
 import '../../Controllers/global_controllers.dart';
+import '../../Controllers/notifications_controller.dart';
 import '../../Controllers/quotation_controller.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -18,6 +20,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   void initState() {
     super.initState();
     _quotationController.receiveNotification();
+    FCM().setNotifications(context);
   }
 
   String getTimeAgo(DateTime createdAt) {
@@ -87,25 +90,38 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               InkWell(
                                 onTap: () {
                                   if (_quotationController
-                                          .getNotificationList[index].status ==
+                                          .getNotificationList[index].orderId !=
                                       '') {
-                                    _showPopupDialog(
-                                        context,
-                                        _quotationController
-                                            .getNotificationList[index].message,
-                                        _quotationController
-                                            .getNotificationList[index].orderId,
-                                        _quotationController
-                                            .getNotificationList[index]
-                                            .notificationId,
-                                        _quotationController
-                                            .getNotificationList[index]
-                                            .senderId,
-                                      _quotationController
-                                          .getNotificationList[index]
-                                          .receiverId,
-                                    );
+                                    _quotationController
+                                        .getQuotationByOrderId(
+                                            _quotationController
+                                                .getNotificationList[index]
+                                                .orderId)
+                                        .whenComplete(() => Get.to(
+                                              () =>
+                                                  const QuotationDetailScreen(),
+                                            ));
                                   }
+                                  // if (_quotationController
+                                  //         .getNotificationList[index].status ==
+                                  //     '') {
+                                  //   _showPopupDialog(
+                                  //       context,
+                                  //       _quotationController
+                                  //           .getNotificationList[index].message,
+                                  //       _quotationController
+                                  //           .getNotificationList[index].orderId,
+                                  //       _quotationController
+                                  //           .getNotificationList[index]
+                                  //           .notificationId,
+                                  //       _quotationController
+                                  //           .getNotificationList[index]
+                                  //           .senderId,
+                                  //     _quotationController
+                                  //         .getNotificationList[index]
+                                  //         .receiverId,
+                                  //   );
+                                  // }
                                 },
                                 child: Card(
                                   color: Colors.white,

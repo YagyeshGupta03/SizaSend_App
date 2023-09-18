@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/screen/quotation/quotation_details.dart';
@@ -33,7 +36,7 @@ class _QuotationListState extends State<QuotationList> {
                   onTap: () {
                     _quotationController
                         .getQuotationByOrderId(_quotationController
-                        .getQuotationList[index].orderId)
+                            .getQuotationList[index].orderId)
                         .whenComplete(() => Get.to(
                               () => const QuotationDetailScreen(),
                             ));
@@ -103,24 +106,64 @@ class _QuotationListState extends State<QuotationList> {
                                             ),
                                     ],
                                   ),
-                                  // trailing: _quotationController
-                                  //     .getQuotationList[index]
-                                  //     .senderId ==
-                                  //     credentialController.id
-                                  //     ?  IconButton(
-                                  //   onPressed: () {
-                                  //     _quotationController.deleteQuotation(
-                                  //         context,
-                                  //         _quotationController
-                                  //             .getQuotationList[index]
-                                  //             .orderId);
-                                  //   },
-                                  //   icon: const Icon(
-                                  //     Icons.delete,
-                                  //     color: Colors.red,
-                                  //   ),
-                                  // )
-                                  // : const SizedBox(),
+                                  trailing: _quotationController
+                                              .getQuotationList[index]
+                                              .senderId ==
+                                          credentialController.id
+                                      ? _quotationController
+                                                  .getQuotationList[index]
+                                                  .paid ==
+                                              'unpaid'
+                                          ? IconButton(
+                                              onPressed: () {
+                                                Dialogs.materialDialog(
+                                                    msg:
+                                                        'Are you sure ? you can\'t undo this',
+                                                    title: "Delete",
+                                                    color: Colors.white,
+                                                    context: context,
+                                                    actions: [
+                                                      IconsOutlineButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        text: 'Cancel',
+                                                        iconData: Icons
+                                                            .cancel_outlined,
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                color: Colors
+                                                                    .grey),
+                                                        iconColor: Colors.grey,
+                                                      ),
+                                                      IconsButton(
+                                                        onPressed: () {
+                                                          _quotationController
+                                                              .deleteQuotation(
+                                                                  context,
+                                                                  _quotationController
+                                                                      .getQuotationList[
+                                                                          index]
+                                                                      .orderId);
+                                                        },
+                                                        text: 'Delete',
+                                                        iconData: Icons.delete,
+                                                        color: Colors.red,
+                                                        textStyle: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                        iconColor: Colors.white,
+                                                      ),
+                                                    ]);
+                                              },
+                                              icon: const Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
+                                              ),
+                                            )
+                                          : const SizedBox()
+                                      : const SizedBox(),
                                 ),
                               ),
                             ],
@@ -188,9 +231,13 @@ class _QuotationListState extends State<QuotationList> {
                                       ),
                                       const SizedBox(width: 7),
                                       _quotationController
-                                                  .getQuotationList[index]
-                                                  .paid ==
-                                              'paid'
+                                                      .getQuotationList[index]
+                                                      .paid ==
+                                                  'paid' ||
+                                              _quotationController
+                                                      .getQuotationList[index]
+                                                      .paid ==
+                                                  'dispatch'
                                           ? const Card(
                                               color: primaryColor,
                                               child: Padding(

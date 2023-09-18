@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:savo/screen/WalletScreens/Payment_successful_screen.dart';
 import 'package:savo/screen/WalletScreens/add_money_screen.dart';
 import 'package:savo/screen/WalletScreens/withdraw_money_screen.dart';
 import 'package:savo/screen/quotation/add_quotation_screen.dart';
+import 'package:savo/screen/quotation/quotations_received.dart';
+import '../../Controllers/global_controllers.dart';
+import '../../Controllers/quotation_controller.dart';
 import '../../util/images.dart';
 
 class HomeOperations extends StatelessWidget {
@@ -10,6 +14,8 @@ class HomeOperations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final QuotationController _quotationController =
+    Get.put(QuotationController());
     return GridView.count(
       shrinkWrap: true,
       physics: const ClampingScrollPhysics(),
@@ -19,13 +25,19 @@ class HomeOperations extends StatelessWidget {
           image: Images.icArrowUp,
           title: "Send\nQuotation",
           onTap: (){
+            loadingController.updateDispatchLoading(false);
+            loadingController.updateProfileLoading(false);
+            loadingController.updateVideoCompressionLoading(false);
+            loadingController.updateLoading(false);
             Get.to(()=> const AddQuotationScreen());
           },
         ),
         OperationButton(
           image: Images.icArrowDown,
           title: "Quotation\nreceived",
-          onTap: (){},
+          onTap: (){
+            Get.to(()=> const ReceivedQuotationList());
+          },
         ),
         OperationButton(
           image: Images.icAdd,

@@ -47,6 +47,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
               ),
               CustomTextFormField(
                 topTitle: S.of(context).phoneNo,
+                fieldLabel: 'Number',
                 cont: _phone,
                 suffixWidget: const SizedBox(),
                 prefixWidget: const SizedBox(),

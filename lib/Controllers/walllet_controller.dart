@@ -6,6 +6,7 @@ import 'package:savo/screen/WalletScreens/add_money_screen.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import '../Constants/all_urls.dart';
 import '../Helper/http_helper.dart';
+import '../screen/WalletScreens/Payment_successful_screen.dart';
 
 class WalletController extends GetxController {
   //
@@ -37,6 +38,7 @@ class WalletController extends GetxController {
       loadingController.updateLoading(false);
     }
   }
+
   //
   //
   void quotationAddMoney(amount) async {
@@ -101,7 +103,7 @@ class WalletController extends GetxController {
   //
   //
   //
-  void quotationPay(amount, senderId, orderId) async {
+  Future<bool> quotationPay(amount, senderId, orderId, orderName) async {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: quotationPayUrl);
     var reply = await networkHelper.postData({
@@ -114,7 +116,8 @@ class WalletController extends GetxController {
     if (reply['status'] == 1) {
       userInfoController.getUserInfo().then((value) {
         updatePaidStatus(orderId, 'paid');
-        Get.to(() => const DashBoardScreen());
+        Get.to(() => PaymentSuccessfulScreen(
+            orderId: orderId, orderName: orderName, amount: amount));
         Fluttertoast.showToast(
           msg: 'Transaction completed',
           gravity: ToastGravity.SNACKBAR,
@@ -122,6 +125,7 @@ class WalletController extends GetxController {
         );
         loadingController.updateLoading(false);
       });
+      return true;
     } else if (reply['status'] == 2) {
       Fluttertoast.showToast(
         msg: reply['message'],
@@ -130,6 +134,7 @@ class WalletController extends GetxController {
       );
       Get.to(() => const QuotationMoneyAdd());
       loadingController.updateLoading(false);
+      return false;
     } else {
       Fluttertoast.showToast(
         msg: reply['message'],
@@ -137,6 +142,7 @@ class WalletController extends GetxController {
         backgroundColor: Colors.red,
       );
       loadingController.updateLoading(false);
+      return false;
     }
   }
 
@@ -166,7 +172,7 @@ class WalletController extends GetxController {
   //
   //
   //
-  void completeOrderPayment(orderId, status, senderId) async {
+  Future<bool> completeOrderPayment(orderId, status, senderId) async {
     final NetworkHelper networkHelper =
         NetworkHelper(url: completeOrderPaymentUrl);
     var reply = await networkHelper.postData({
@@ -179,9 +185,10 @@ class WalletController extends GetxController {
     if (reply['status'] == 1) {
       updatePaidStatus(orderId, status).then((value) async {
         await userInfoController.getUserInfo();
-        Get.to(() => const DashBoardScreen());
       });
+      return true;
     } else {
+      return false;
       print('Could not update order payment');
     }
   }

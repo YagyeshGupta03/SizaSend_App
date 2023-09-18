@@ -6,41 +6,50 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../screen/authentication/login_screen.dart';
 import 'global_controllers.dart';
 
-
-class CredentialController extends GetxController{
-
+class CredentialController extends GetxController {
   String? id;
-
+  String? fcmToken;
 
   //Login credentials
-  setData(userID) async {
+  setData(userID, token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('user_id', userID);
+    await prefs.setString('fcm_token', token);
     id = prefs.getString('user_id');
+    fcmToken = prefs.getString('fcm_token');
     update();
   }
+
   //
   //
   //
-   getData(context) async {
+  getData(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     id = prefs.getString('user_id') ?? "";
+    fcmToken = prefs.getString('fcm_token') ?? '';
+    loadingController.updateDispatchLoading(false);
+    loadingController.updateProfileLoading(false);
+    loadingController.updateVideoCompressionLoading(false);
+    loadingController.updateLoading(false);
 
-    if(id == ""){
-      Get.off(()=> const OnBoardingScreen());
+    if (id == "") {
+      Get.off(() => const OnBoardingScreen());
     } else {
       userInfoController.getUserInfo().then((value) {
-        Get.off(()=> const DashBoardScreen());
+        Get.off(() => const DashBoardScreen());
       });
     }
   }
+
   //
   //
   //
-   deleteData() async {
+  deleteData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('user_id', '');
-    id = prefs.getString('id')?? "";
+    await prefs.setString('fcm_token', '');
+    id = prefs.getString('id') ?? "";
+    fcmToken = prefs.getString('fcm_token') ?? "";
     update();
   }
 
@@ -50,11 +59,9 @@ class CredentialController extends GetxController{
   void refreshData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (id != null) {
-     Get.to(()=> const HomeScreen());
+      Get.to(() => const HomeScreen());
     } else {
       Get.to(() => const LoginScreen());
     }
   }
-
 }
-

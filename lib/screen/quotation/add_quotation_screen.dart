@@ -109,7 +109,8 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
 
                               if (compressedFileSizeInBytes <
                                   videoSizeInBytes) {
-                                loadingController.updateVideoCompressionLoading(false);
+                                loadingController
+                                    .updateVideoCompressionLoading(false);
                                 // Compression was successful
                                 setState(() {
                                   _video = XFile(compressedFilePath);
@@ -267,7 +268,8 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                       height: screenHeight(context),
                       width: screenWidth(context),
                       color: Colors.black12,
-                      child: Column( mainAxisAlignment: MainAxisAlignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           LoadingAnimationWidget.threeArchedCircle(
                             color: primaryColor,
@@ -277,7 +279,9 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                           const Text(
                             'Compressing video',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold, color: primaryColor),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor),
                           )
                         ],
                       ),
@@ -296,6 +300,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
       isScrollControlled: true,
       builder: (context) {
         return DraggableScrollableSheet(
+          initialChildSize: 0.8,
           expand: false,
           builder: (context, scrollController) {
             return Stack(
@@ -314,7 +319,6 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                           style: themeController
                               .currentTheme.value.textTheme.displaySmall,
                           onFieldSubmitted: (val) {
-                            loadingController.updateLoading(true);
                             _quotationController.getSearchData(val);
                           },
                           decoration: InputDecoration(

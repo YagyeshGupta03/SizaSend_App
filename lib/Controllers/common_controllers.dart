@@ -65,9 +65,15 @@ class LoadingController extends GetxController {
   RxBool loading = false.obs;
   RxBool profileLoading = false.obs;
   RxBool videoCompressionLoad = false.obs;
+  RxBool dispatchLoad = false.obs;
 
   updateLoading(val) {
     loading.value = val;
+    update();
+  }
+
+  updateDispatchLoading(val) {
+    dispatchLoad.value = val;
     update();
   }
   updateProfileLoading(val) {

@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,6 +24,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final LoginController _loginController = Get.put(LoginController());
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final _fullName = TextEditingController();
   final _phone = TextEditingController();
   final _password = TextEditingController();
@@ -58,6 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 CustomTextFormField(
                   topTitle: S.of(context).fullName,
                   keyboardType: TextInputType.name,
+                  fieldLabel: 'Name',
                   cont: _fullName,
                   suffixWidget: const SizedBox(),
                   prefixWidget: Icon(
@@ -68,6 +73,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: screenHeight(context) * .015),
                 CustomTextFormField(
                   topTitle: S.of(context).phoneNo,
+                  fieldLabel: 'Number',
                   keyboardType: TextInputType.phone,
                   cont: _phone,
                   prefixWidget: SizedBox(
@@ -92,6 +98,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: screenHeight(context) * .015),
                 CustomTextFormField(
                   topTitle: S.of(context).password,
+                  fieldLabel: 'password',
                   keyboardType: TextInputType.visiblePassword,
                   cont: _password,
                   prefixWidget: Icon(
@@ -104,6 +111,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 CustomTextFormField(
                   topTitle: S.of(context).confirmPassword,
                   keyboardType: TextInputType.visiblePassword,
+                  fieldLabel: 'password',
                   cont: _confirmPassword,
                   prefixWidget: Icon(
                     Icons.lock_outline,
@@ -113,15 +121,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight(context) * .033),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     loadingController.updateLoading(true);
                     if (_fullName.text.isNotEmpty &&
                         _phone.text.isNotEmpty &&
                         _password.text.isNotEmpty &&
                         _confirmPassword.text.isNotEmpty) {
                       if (_password.text == _confirmPassword.text) {
+                        fcmToken = await _firebaseMessaging.getToken() ?? '';
                         _loginController.signUp(context, _fullName.text, _phone.text,
-                            _password.text, codeOfCountry);
+                            _password.text, codeOfCountry, fcmToken);
                       } else {
                         Fluttertoast.showToast(
                           msg: S.of(context).confirmPasswordDoesNotMatch,

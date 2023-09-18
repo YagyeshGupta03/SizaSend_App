@@ -20,7 +20,7 @@ class HomeHeaderScreen extends StatelessWidget {
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const Text(
-          "These are today's news.",
+          "These are today's updates.",
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
         ),
         SizedBox(

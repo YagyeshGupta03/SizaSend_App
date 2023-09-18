@@ -13,10 +13,11 @@ class CustomTextFormField extends StatefulWidget {
       required this.keyboardType,
       required this.prefixWidget,
       required this.suffixWidget,
-      required this.cont})
+      required this.cont, required this.fieldLabel})
       : super(key: key);
 
   final String topTitle;
+  final String fieldLabel;
   final TextInputType keyboardType;
   final Widget prefixWidget;
   final Widget suffixWidget;
@@ -42,6 +43,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         TextFormField(
           controller: widget.cont,
           keyboardType: widget.keyboardType,
+          validator: (value) => validateField(value!, widget.fieldLabel, context),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           style: themeController.currentTheme.value.textTheme.displayMedium,
           decoration: InputDecoration(
               fillColor: themeController.currentTheme.value.cardColor,

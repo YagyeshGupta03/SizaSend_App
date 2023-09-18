@@ -127,7 +127,7 @@ class _QuotationDetailForNotificationState
                   _walletController.quotationPay(
                       _quotationController.price,
                       _quotationController.senderId,
-                      _quotationController.orderId);
+                      _quotationController.orderId, _quotationController.productName);
                 },
                 title: 'Pay',
                 txtColor: Colors.white,
