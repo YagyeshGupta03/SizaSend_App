@@ -1,7 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:savo/Controllers/global_controllers.dart';
+import 'package:savo/WebPage/add_money_web_page.dart';
 import 'package:savo/screen/WalletScreens/add_money_screen.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import '../Constants/all_urls.dart';
@@ -9,6 +11,7 @@ import '../Helper/http_helper.dart';
 import '../screen/WalletScreens/Payment_successful_screen.dart';
 
 class WalletController extends GetxController {
+  //
   //
   //
   void addMoney(amount) async {
@@ -39,6 +42,7 @@ class WalletController extends GetxController {
     }
   }
 
+  //
   //
   //
   void quotationAddMoney(amount) async {
@@ -104,7 +108,7 @@ class WalletController extends GetxController {
   //
   //
   Future<bool> quotationPay(amount, senderId, orderId, orderName) async {
-    loadingController.updateLoading(true);
+    await loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: quotationPayUrl);
     var reply = await networkHelper.postData({
       'receiver_id': senderId,
@@ -190,6 +194,34 @@ class WalletController extends GetxController {
     } else {
       return false;
       print('Could not update order payment');
+    }
+  }
+
+  //
+  //
+  //
+  void webOpen(amount) async {
+    loadingController.updateLoading(true);
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if(connectivityResult == ConnectivityResult.none) {
+      loadingController.updateLoading(false);
+    }
+    final NetworkHelper networkHelper = NetworkHelper(url: redirectWebUrl);
+    var reply = await networkHelper.postData({
+      'user_id': credentialController.id,
+      'amount': amount,
+    });
+
+    if (reply['status'] == 1) {
+      Get.to(() => WebPage(link: reply['link']));
+      loadingController.updateLoading(false);
+    } else {
+      Fluttertoast.showToast(
+        msg: reply['message'],
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      loadingController.updateLoading(false);
     }
   }
 }

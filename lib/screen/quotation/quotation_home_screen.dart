@@ -23,7 +23,7 @@ class _QuotationHomeScreenState extends State<QuotationHomeScreen> {
   Widget build(BuildContext context) {
     return const SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Column( crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
              QuotationList(),

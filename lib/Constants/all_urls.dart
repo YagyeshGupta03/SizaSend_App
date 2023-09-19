@@ -4,6 +4,7 @@
 //Base apis
 const String baseUrl = 'https://server24.in/sizasend/Api/';
 const String imageUrl = 'https://server24.in/sizasend/uploads/profile_pic/';
+const String orderImageUrl = 'https://server24.in/sizasend/uploads/order_pic/';
 const String videoUrl = 'https://server24.in/sizasend/uploads/order_video/';
 
 
@@ -46,6 +47,7 @@ const String sendDeliveredImageUrl = '${baseUrl}order_receive_img';
 
 //Wallet related apis
 const String addMoneyUrl = '${baseUrl}add_account_balance';
+const String redirectWebUrl = '${baseUrl}redirect_url';
 const String withdrawMoneyUrl = '${baseUrl}minus_account_balance';
 const String quotationPayUrl = '${baseUrl}user_transaction';
 const String quotationPaidStatusUrl = '${baseUrl}paidStatusChange';

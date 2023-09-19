@@ -37,7 +37,6 @@ class QuotationController extends GetxController {
     if (reply['status'] == 1) {
       sendNotification(reply['data']['id'], receiverId);
       receiveQuotation();
-      Get.to(() => const DashBoardScreen());
       loadingController.updateLoading(false);
     } else {
       Fluttertoast.showToast(
@@ -451,6 +450,7 @@ class QuotationController extends GetxController {
   String description = '';
   String senderId = '';
   String video = '';
+  String image = '';
   String orderStatus = '';
   String status = '';
 
@@ -474,6 +474,7 @@ class QuotationController extends GetxController {
       status = reply['data']['status'] ?? '';
       senderId = reply['data']['user_id'];
       video = reply['data']['video'] ?? '';
+      image = reply['data']['image'] ?? '';
       return true;
     } else {
       print('Error in getting quotation history list');

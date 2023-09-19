@@ -7,11 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/quotation_controller.dart';
 import 'package:savo/Controllers/walllet_controller.dart';
-import 'package:savo/screen/dashboard_screen.dart';
 import 'package:savo/screen/quotation/full_video_screen.dart';
 import 'package:savo/screen/quotation/quotation_detail_screen_for_pay.dart';
 import 'package:savo/util/widgets/login_button.dart';
@@ -242,6 +240,26 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                         ],
                       ),
                     ),
+                    _quotationController.image == ''
+                        ? Column(
+                            children: [
+                              const SizedBox(height: 35),
+                              Text('Order Dispatched',
+                                  style: themeController
+                                      .currentTheme.value.textTheme.bodyLarge),
+                              const SizedBox(height: 15),
+                              Container(
+                                width: screenWidth(context),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10)),
+                                height: 150,
+                                child: Image.network(
+                                    '$orderImageUrl${_quotationController.image}',
+                                    fit: BoxFit.fill),
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
                     const SizedBox(height: 40),
                     // to check if sender
                     _quotationController.senderId == credentialController.id
@@ -253,8 +271,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                 : LoginButton(
                                     onTap: () async {
                                       Dialogs.materialDialog(
-                                          msg:
-                                          'Take a picture of parcel',
+                                          msg: 'Take a picture of parcel',
                                           title: "Dispatch",
                                           titleAlign: TextAlign.center,
                                           color: Colors.white,
@@ -263,22 +280,27 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                             IconsButton(
                                               onPressed: () async {
                                                 final picker = ImagePicker();
-                                                final pickedFile = await picker.pickImage(
-                                                    source: ImageSource.camera);
+                                                final pickedFile =
+                                                    await picker.pickImage(
+                                                        source:
+                                                            ImageSource.camera);
                                                 setState(() {
                                                   _senderImage = pickedFile;
                                                 });
-                                                _quotationController.sendDispatchImage(context,
-                                                    _senderImage,
-                                                    _quotationController.orderId);
+                                                _quotationController
+                                                    .sendDispatchImage(
+                                                        context,
+                                                        _senderImage,
+                                                        _quotationController
+                                                            .orderId);
                                                 Navigator.pop(context);
                                               },
                                               text: 'Camera',
-                                              iconData: Icons.camera_alt_outlined,
+                                              iconData:
+                                                  Icons.camera_alt_outlined,
                                               color: primaryColor,
                                               textStyle: const TextStyle(
-                                                  color:
-                                                  Colors.white),
+                                                  color: Colors.white),
                                               iconColor: Colors.white,
                                             ),
                                           ]);
@@ -312,7 +334,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                             onTap: () async {
                                               Dialogs.materialDialog(
                                                   msg:
-                                                  'Take a picture of parcel',
+                                                      'Take a picture of parcel',
                                                   title: "Delivered",
                                                   color: Colors.white,
                                                   titleAlign: TextAlign.center,
@@ -320,29 +342,35 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                                   actions: [
                                                     IconsButton(
                                                       onPressed: () async {
-                                                        final picker = ImagePicker();
+                                                        final picker =
+                                                            ImagePicker();
                                                         final pickedFile =
                                                             await picker.pickImage(
-                                                            source:
-                                                            ImageSource.camera);
+                                                                source:
+                                                                    ImageSource
+                                                                        .camera);
                                                         setState(() {
-                                                          _receiverImage = pickedFile;
+                                                          _receiverImage =
+                                                              pickedFile;
                                                           _quotationController
-                                                              .sendDeliveredImage(context,
-                                                              _receiverImage,
-                                                              _quotationController
-                                                                  .orderId,
-                                                              _quotationController
-                                                                  .senderId);
+                                                              .sendDeliveredImage(
+                                                                  context,
+                                                                  _receiverImage,
+                                                                  _quotationController
+                                                                      .orderId,
+                                                                  _quotationController
+                                                                      .senderId);
                                                         });
                                                         Navigator.pop(context);
                                                       },
                                                       text: 'Camera',
-                                                      iconData: Icons.camera_alt_outlined,
+                                                      iconData: Icons
+                                                          .camera_alt_outlined,
                                                       color: primaryColor,
-                                                      textStyle: const TextStyle(
-                                                          color:
-                                                          Colors.white),
+                                                      textStyle:
+                                                          const TextStyle(
+                                                              color:
+                                                                  Colors.white),
                                                       iconColor: Colors.white,
                                                     ),
                                                   ]);
@@ -355,21 +383,37 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                 ),
               ),
             ),
-            Obx(
-              () => loadingController.dispatchLoad.value
-                  ? Center(
-                      child: Container(
-                        height: screenHeight(context),
-                        width: screenWidth(context),
-                        color: Colors.black12,
-                        child: LoadingAnimationWidget.threeArchedCircle(
-                          color: primaryColor,
-                          size: 50,
-                        ),
-                      ),
-                    )
-                  : const SizedBox(),
-            ),
+            _quotationController.orderStatus == 'unpaid'
+                ? Obx(
+                    () => loadingController.loading.value
+                        ? Center(
+                            child: Container(
+                              height: screenHeight(context),
+                              width: screenWidth(context),
+                              color: Colors.black12,
+                              child: LoadingAnimationWidget.threeArchedCircle(
+                                color: primaryColor,
+                                size: 50,
+                              ),
+                            ),
+                          )
+                        : const SizedBox(),
+                  )
+                : Obx(
+                    () => loadingController.dispatchLoad.value
+                        ? Center(
+                            child: Container(
+                              height: screenHeight(context),
+                              width: screenWidth(context),
+                              color: Colors.black12,
+                              child: LoadingAnimationWidget.threeArchedCircle(
+                                color: primaryColor,
+                                size: 50,
+                              ),
+                            ),
+                          )
+                        : const SizedBox(),
+                  ),
           ],
         ));
   }

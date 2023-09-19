@@ -24,7 +24,7 @@ class _HistoryHomeScreenState extends State<HistoryHomeScreen> {
   Widget build(BuildContext context) {
     return const SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           children: <Widget>[
              SizedBox(height: 20),

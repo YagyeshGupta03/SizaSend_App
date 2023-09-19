@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:savo/Controllers/quotation_controller.dart';
+import 'package:savo/screen/dashboard_screen.dart';
 import 'package:video_compress/video_compress.dart';
 import '../../Constants/all_urls.dart';
 import '../../Constants/sizes.dart';
@@ -43,6 +44,12 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Get.to(const DashBoardScreen());
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
         backgroundColor: Colors.transparent,
         toolbarHeight: 50,
       ),
