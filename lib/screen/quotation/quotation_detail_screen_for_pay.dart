@@ -251,6 +251,26 @@ class _QuotationDetailScreenForPayState
                         ],
                       ),
                     ),
+                    _quotationController.image != ''
+                        ? Column(
+                      children: [
+                        const SizedBox(height: 35),
+                        Text('Order Dispatched',
+                            style: themeController
+                                .currentTheme.value.textTheme.bodyLarge),
+                        const SizedBox(height: 15),
+                        Container(
+                          width: screenWidth(context),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10)),
+                          height: 150,
+                          child: Image.network(
+                              '$orderImageUrl${_quotationController.image}',
+                              fit: BoxFit.fill),
+                        ),
+                      ],
+                    )
+                        : const SizedBox(),
                     const SizedBox(height: 40),
                     // to check if sender
                     _quotationController.senderId == credentialController.id

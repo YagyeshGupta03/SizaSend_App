@@ -240,7 +240,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                         ],
                       ),
                     ),
-                    _quotationController.image == ''
+                    _quotationController.image != ''
                         ? Column(
                             children: [
                               const SizedBox(height: 35),
