@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import 'package:savo/screen/quotation/quotationDetail_for_notification.dart';
 import 'package:savo/screen/quotation/quotation_details.dart';
+import '../../Constants/theme_data.dart';
 import '../../Controllers/global_controllers.dart';
 import '../../Controllers/notifications_controller.dart';
 import '../../Controllers/quotation_controller.dart';
@@ -60,12 +63,54 @@ class _NotificationScreenState extends State<NotificationScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 15),
-                child: Text(
-                  'Today',
-                  style: themeController.currentTheme.value.textTheme.bodyLarge,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: Text(
+                      'Recent',
+                      style: themeController
+                          .currentTheme.value.textTheme.bodyLarge,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Dialogs.materialDialog(
+                          msg: 'Do you want to delete all notifications?',
+                          title: 'Delete',
+                          context: context,
+                          actions: [
+                            IconsButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              text: 'Cancel',
+                              color:
+                                  themeController.currentTheme.value.cardColor,
+                              textStyle: const TextStyle(color: primaryColor),
+                              iconColor: Colors.white,
+                            ),
+                            IconsButton(
+                              onPressed: () {
+                                _quotationController
+                                    .notificationsDeleteAll(context);
+                              },
+                              text: 'Delete',
+                              iconData: Icons.delete,
+                              color: primaryColor,
+                              textStyle: const TextStyle(color: Colors.white),
+                              iconColor: Colors.white,
+                            ),
+                          ]);
+                    },
+                    child: const Text('Delete all',
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14)),
+                  )
+                ],
               ),
               const SizedBox(height: 10),
               Obx(
@@ -122,6 +167,43 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   //         .receiverId,
                                   //   );
                                   // }
+                                },
+                                onLongPress: () {
+                                  Dialogs.materialDialog(
+                                      msg:
+                                          'Do you want to delete this notification?',
+                                      title: 'Delete',
+                                      context: context,
+                                      actions: [
+                                        IconsButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          text: 'Cancel',
+                                          color: themeController
+                                              .currentTheme.value.cardColor,
+                                          textStyle: const TextStyle(
+                                              color: primaryColor),
+                                          iconColor: Colors.white,
+                                        ),
+                                        IconsButton(
+                                          onPressed: () {
+                                            _quotationController
+                                                .notificationsDelete(
+                                                    context,
+                                                    _quotationController
+                                                        .getNotificationList[
+                                                            index]
+                                                        .notificationId);
+                                          },
+                                          text: 'Delete',
+                                          iconData: Icons.delete,
+                                          color: primaryColor,
+                                          textStyle: const TextStyle(
+                                              color: Colors.white),
+                                          iconColor: Colors.white,
+                                        ),
+                                      ]);
                                 },
                                 child: Card(
                                   color: Colors.white,

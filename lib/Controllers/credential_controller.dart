@@ -9,6 +9,7 @@ import 'global_controllers.dart';
 class CredentialController extends GetxController {
   String? id;
   String? fcmToken;
+  String? onBoard;
 
   //Login credentials
   setData(userID, token) async {
@@ -23,17 +24,32 @@ class CredentialController extends GetxController {
   //
   //
   //
+  setOnBoard(onboard) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('onboard', onboard);
+    onBoard = prefs.getString('onboard');
+    update();
+  }
+
+  //
+  //
+  //
   getData(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     id = prefs.getString('user_id') ?? "";
     fcmToken = prefs.getString('fcm_token') ?? '';
+    onBoard = prefs.getString('onboard') ?? '';
     loadingController.updateDispatchLoading(false);
     loadingController.updateProfileLoading(false);
     loadingController.updateVideoCompressionLoading(false);
     loadingController.updateLoading(false);
 
     if (id == "") {
-      Get.off(() => const OnBoardingScreen());
+      if (onBoard == '') {
+        Get.off(() => const OnBoardingScreen());
+      } else {
+        Get.off(() => const LoginScreen());
+      }
     } else {
       userInfoController.getUserInfo().then((value) {
         Get.off(() => const DashBoardScreen());

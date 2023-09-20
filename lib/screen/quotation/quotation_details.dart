@@ -241,7 +241,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                       ),
                     ),
                     _quotationController.image != ''
-                        ? Column(
+                        ? Column( crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 35),
                               Text('Order Dispatched',
@@ -416,26 +416,6 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                   ),
           ],
         ));
-  }
-
-  void _showAlertBox(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Payment Successful'),
-          content: Text('This is a simple dialog box.'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }
 

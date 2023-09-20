@@ -1,10 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:savo/Controllers/global_controllers.dart';
+import 'package:savo/screen/authentication/success_screen.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import '../Constants/all_urls.dart';
+import '../Constants/theme_data.dart';
 import '../Helper/http_helper.dart';
+import '../screen/authentication/otp_screen.dart';
 
 class LoginController extends GetxController {
   //
@@ -137,6 +143,148 @@ class LoginController extends GetxController {
       // Navigator.pop(context);
     } else {
       print('error in getting terms and conditons');
+    }
+  }
+
+  //
+  //
+  //
+  //
+  String userrId = '';
+  String password = '';
+  Future forgotPassword(context, contactsToSend, codeOfCountry) async {
+    await loadingController.updateLoading(true);
+    final NetworkHelper networkHelper = NetworkHelper(url: contactListUrl);
+    var reply = await networkHelper.postData({
+      'contect_list': contactsToSend,
+    });
+
+    if (reply['status'] == 1) {
+      userrId = reply['data'][0]['id'];
+      password = reply['data'][0]['password'];
+      await FirebaseAuth.instance
+          .verifyPhoneNumber(
+            phoneNumber: codeOfCountry.toString() + contactsToSend,
+            verificationCompleted: (PhoneAuthCredential credential) {},
+            verificationFailed: (FirebaseAuthException e) {
+              Fluttertoast.showToast(
+                msg: 'Your daily limit exceeded',
+                gravity: ToastGravity.SNACKBAR,
+                backgroundColor: Colors.red,
+              );
+            },
+            codeSent: (String verificationId, int? resendToken) {
+              Get.to(() => OtpScreen(
+                  verifyId: verificationId,
+                  password: password,
+                  userId: userrId));
+            },
+            codeAutoRetrievalTimeout: (String verificationId) {},
+          )
+          .then((value) => loadingController.updateLoading(false));
+    } else {
+      userrId = '';
+      password = '';
+      Fluttertoast.showToast(
+        msg: "Phone number is not registered",
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      loadingController.updateLoading(false);
+    }
+  }
+
+  //
+  //
+  //
+  //
+  Future forgotChangePassword(context, oldPass, newPass, userId) async {
+    final NetworkHelper networkHelper = NetworkHelper(url: changePasswordUrl);
+    var reply = await networkHelper.postData({
+      "user_id": userId,
+      "password": oldPass,
+      "new_password": newPass,
+      "confirm_password": newPass,
+    });
+
+    if (reply['status'] == 1) {
+      Get.to(() => const SuccessScreen());
+    } else {
+      Fluttertoast.showToast(
+        msg: "${reply['message']}",
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  //
+  //
+  //
+  //
+  Future adminEnquiry(context, subject, description) async {
+    loadingController.updateLoading(true);
+    final NetworkHelper networkHelper = NetworkHelper(url: adminEnquiryUrl);
+    var reply = await networkHelper.postData({
+      "user_id": credentialController.id,
+      "subject": subject,
+      "comments": description,
+    });
+
+    if (reply['status'] == 1) {
+      Fluttertoast.showToast(
+        msg: "Enquiry submitted successfully",
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.green,
+      );
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            title: const Text(
+              'Enquiry submitted successfully',
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+            content: const Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Text(
+                'You will shortly receive a reply on your registered e-mail',
+                 style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Home',
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red)),
+                onPressed: () {
+                  Get.to(() => const DashBoardScreen());
+                },
+              ),
+            ],
+          );
+        },
+      );
+      loadingController.updateLoading(false);
+    } else {
+      Fluttertoast.showToast(
+        msg: "${reply['message']}",
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      loadingController.updateLoading(false);
     }
   }
 }

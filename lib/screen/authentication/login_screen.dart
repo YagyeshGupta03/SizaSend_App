@@ -29,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _phone = TextEditingController();
   final _password = TextEditingController();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,18 +85,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(
                   height: screenHeight(context) * .02),
-                Row(
+                Row( mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Checkbox(
-                        value: rememberMe,
-                        onChanged: (value) {
-                          rememberMe = value!;
-                          setState(() {});
-                        }),
-                    Text(S.of(context).rememberMe,
-                        style: themeController
-                            .currentTheme.value.textTheme.displayMedium),
-                    const Spacer(),
+                    // Checkbox(
+                    //     value: rememberMe,
+                    //     onChanged: (value) {
+                    //       rememberMe = value!;
+                    //       setState(() {});
+                    //     }),
+                    // Text(S.of(context).rememberMe,
+                    //     style: themeController
+                    //         .currentTheme.value.textTheme.displayMedium),
+                    // const Spacer(),
                     TextButton(
                         onPressed: () {
                           Get.to(()=> const ForgotScreen());

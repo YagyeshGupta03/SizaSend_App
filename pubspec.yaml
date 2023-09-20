@@ -41,6 +41,7 @@ dependencies:
   flutter_local_notifications: ^15.1.1
   material_dialogs: ^1.1.4
   webview_flutter: ^4.2.4
+  firebase_auth: ^4.10.0
 
 dependency_overrides:
   intl: ^0.18.0

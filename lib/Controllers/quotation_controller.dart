@@ -310,8 +310,8 @@ class QuotationController extends GetxController {
       'receiver_id': credentialController.id.toString(),
     });
 
+    getNotificationList.clear();
     if (reply['status'] == 1) {
-      getNotificationList.clear();
       for (int i = 0; i < reply['data'].length; i++) {
         final createdAtString = reply['data'][i]['created_at'] ?? '';
         final createdAt = DateTime.parse(createdAtString);
@@ -525,12 +525,14 @@ class QuotationController extends GetxController {
       await _walletController.completeOrderPayment(
           orderId, 'complete', senderID);
       Dialogs.materialDialog(
-          msg: 'Your order is Delivered',
+          msg: 'Your order is delivered',
           title: 'Delivered',
           context: context,
           actions: [
             IconsButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.to(()=> const DashBoardScreen());
+              },
               text: 'Close',
               color: primaryColor,
               textStyle: const TextStyle(color: Colors.white),
@@ -543,5 +545,49 @@ class QuotationController extends GetxController {
       print('Error in dispatching image');
     }
     loadingController.updateDispatchLoading(false);
+  }
+  //
+  //
+  //
+  void notificationsDelete(context, notificationId) async {
+    final NetworkHelper networkHelper =
+    NetworkHelper(url: notificationsDeleteUrl);
+    var reply = await networkHelper.postData({
+      "notification_id": notificationId,
+    });
+
+    if (reply['status'] == 1) {
+      receiveNotification();
+      Get.back();
+      Fluttertoast.showToast(
+        msg: 'Notification deleted',
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.green,
+      );
+    } else {
+      print('Error in deleting notification');
+    }
+  }
+  //
+  //
+  //
+  void notificationsDeleteAll(context) async {
+    final NetworkHelper networkHelper =
+    NetworkHelper(url: notificationsDeleteUrl);
+    var reply = await networkHelper.postData({
+      "receiver_id": credentialController.id,
+    });
+
+    if (reply['status'] == 1) {
+      receiveNotification();
+      Get.back();
+      Fluttertoast.showToast(
+        msg: 'Notifications deleted',
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.green,
+      );
+    } else {
+      print('Error in deleting notification');
+    }
   }
 }

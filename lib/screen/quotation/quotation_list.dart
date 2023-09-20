@@ -150,9 +150,10 @@ class _QuotationListState extends State<QuotationList> {
                                                         text: 'Delete',
                                                         iconData: Icons.delete,
                                                         color: Colors.red,
-                                                        textStyle: TextStyle(
-                                                            color:
-                                                                Colors.white),
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                color: Colors
+                                                                    .white),
                                                         iconColor: Colors.white,
                                                       ),
                                                     ]);
@@ -256,7 +257,31 @@ class _QuotationListState extends State<QuotationList> {
                                                 ),
                                               ),
                                             )
-                                          : const SizedBox(),
+                                          : _quotationController
+                                                      .getQuotationList[index]
+                                                      .status ==
+                                                  'reject'
+                                              ? const Card(
+                                                  color: primaryColor,
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 6,
+                                                            vertical: 1),
+                                                    child: Text(
+                                                      'Reject',
+                                                      style: TextStyle(
+                                                          fontSize: 8,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.white),
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                )
+                                              : const SizedBox(),
                                     ],
                                   ),
                                   Row(

@@ -125,15 +125,12 @@ class ContactController extends GetxController {
       }
       contactsToSend =
           contactsList.toString().replaceAll(']', '').replaceAll('[', '').removeAllWhitespace;
-      print(contactsToSend);
 
       final NetworkHelper networkHelper = NetworkHelper(url: contactListUrl);
       var reply = await networkHelper.postData({
         'contect_list': contactsToSend,
       });
 
-      print(reply);
-      print('????????????');
       if (reply['status'] == 1) {
         for (int i = 0; i < reply['data'].length; i++) {
           if (reply['data'][i].toString() != "null") {

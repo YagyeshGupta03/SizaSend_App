@@ -72,7 +72,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             ),
             ElevatedButton(
                 onPressed: () {
-                 Get.off(()=> const LoginScreen());
+                  credentialController.setOnBoard('1');
+                  Get.off(() => const LoginScreen());
                 },
                 child: Text(
                   S.of(context).getStarted,
@@ -84,19 +85,21 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             Center(
               child: RichText(
                 text: TextSpan(
-                  style: themeController.currentTheme.value.textTheme.displayMedium,
+                  style: themeController
+                      .currentTheme.value.textTheme.displayMedium,
                   children: <TextSpan>[
                     TextSpan(
                       text: "${S.of(context).dontHaveAnAccount}  ",
                     ),
                     TextSpan(
                         text: S.of(context).signUp,
-                        recognizer: TapGestureRecognizer()..onTap = (){
-                          Get.to(()=> const SignUpScreen());
-                        },
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            credentialController.setOnBoard('1');
+                            Get.to(() => const SignUpScreen());
+                          },
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: buttonColor)),
+                            fontWeight: FontWeight.bold, color: buttonColor)),
                   ],
                 ),
               ),

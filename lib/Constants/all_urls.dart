@@ -31,9 +31,8 @@ const String deleteBankAcUrl = '${baseUrl}deleteBankByBankId';
 
 //Quotation related apis
 const String addQuotationUrl = '${baseUrl}add_order';
-const String showQuotationUrl = '${baseUrl}getOrderByUserId';
 const String deleteQuotationUrl = '${baseUrl}deleteOredrById';
-const String editQuotationUrl = '${baseUrl}updateOrdersByOrederId';
+// const String editQuotationUrl = '${baseUrl}updateOrdersByOrederId';
 const String searchUserUrl = '${baseUrl}get_searchByFullnamePhone';
 const String receiveQuotationUrl = '${baseUrl}getAllOrders';
 const String sendNotificationUrl = '${baseUrl}send_orders_with_notification';
@@ -43,6 +42,7 @@ const String sendQuotationStatusUrl = '${baseUrl}order_status_change';
 const String getQuotationDetailsByIdUrl = '${baseUrl}Order_details_by_order_id';
 const String sendDispatchImageUrl = '${baseUrl}order_send_img';
 const String sendDeliveredImageUrl = '${baseUrl}order_receive_img';
+const String notificationsDeleteUrl = '${baseUrl}deleteNotificationById';
 
 
 //Wallet related apis
@@ -56,6 +56,7 @@ const String completeOrderPaymentUrl = '${baseUrl}hold_transaction_add';
 
 //Other apis of project
 const String contactListUrl = '${baseUrl}get_data_from_contectlist';
+const String adminEnquiryUrl = '${baseUrl}add_contect_inquiry';
 
 
 

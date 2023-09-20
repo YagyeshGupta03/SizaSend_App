@@ -5,6 +5,7 @@ import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/login_controller.dart';
 import 'package:savo/animation/exit_animation.dart';
 import 'package:savo/screen/NotificationScreen/notification_screen.dart';
+import 'package:savo/screen/contact_us_screen.dart';
 import 'package:savo/screen/history/history_home_screen.dart';
 import 'package:savo/screen/home/home_screen.dart';
 import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
@@ -220,7 +221,9 @@ class CustomDrawer extends StatelessWidget {
                 Get.to(() => const NotificationScreen());
               }),
           DrawerCard(
-              title: 'Contact us', icon: Icons.support_agent, onTap: () {}),
+              title: 'Contact us', icon: Icons.support_agent, onTap: () {
+                Get.to(()=> const AdminEnquiryScreen());
+          }),
           const SizedBox(height: 50),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
