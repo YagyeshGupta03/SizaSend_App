@@ -46,6 +46,9 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
+            loadingController.updateLoading(false);
+            loadingController.updateVideoCompressionLoading(false);
+            loadingController.updateDispatchLoading(false);
             Get.to(const DashBoardScreen());
           },
           icon: const Icon(Icons.arrow_back),

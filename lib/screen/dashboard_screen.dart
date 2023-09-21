@@ -11,6 +11,7 @@ import 'package:savo/screen/home/home_screen.dart';
 import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
 import 'package:savo/screen/profile/profile_home_screen.dart';
 import 'package:savo/screen/quotation/quotation_home_screen.dart';
+import 'package:savo/screen/timeout_screen.dart';
 import 'package:savo/util/images.dart';
 import '../Constants/all_urls.dart';
 import '../Constants/theme_data.dart';

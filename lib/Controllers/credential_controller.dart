@@ -73,7 +73,6 @@ class CredentialController extends GetxController {
   //
   //
   void refreshData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (id != null) {
       Get.to(() => const HomeScreen());
     } else {

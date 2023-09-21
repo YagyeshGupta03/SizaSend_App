@@ -6,7 +6,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:savo/screen/authentication/login_screen.dart';
 import 'package:savo/screen/authentication/new_password_screen.dart';
-import 'package:savo/screen/authentication/success_screen.dart';
 import '../../Constants/sizes.dart';
 import '../../Constants/theme_data.dart';
 import '../../Controllers/global_controllers.dart';

@@ -94,7 +94,7 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
             image: Images.icSetting,
             title: S.of(context).generalSetting,
             onTap: () {
-              Get.to(const GeneralSettings());
+              Get.to(()=> const GeneralSettings());
             },
           ),
           ImageListTile(
@@ -113,7 +113,6 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
               loadingController.updateLoading(false);
               await _loginController.logout();
               await credentialController.deleteData();
-              // _loginController.logout(token);
               Get.off(() => const LoginScreen());
             },
           ),

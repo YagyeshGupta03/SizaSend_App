@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:savo/Controllers/global_controllers.dart';
+import 'package:savo/Constants/theme_data.dart';
 import '../Constants/sizes.dart';
+import '../Controllers/global_controllers.dart';
 
-class NoConnectionScreen extends StatelessWidget {
-  const NoConnectionScreen({Key? key}) : super(key: key);
 
+
+class TimeoutScreen extends StatefulWidget {
+  const TimeoutScreen({super.key});
+
+  @override
+  State<TimeoutScreen> createState() => _TimeoutScreenState();
+}
+
+class _TimeoutScreenState extends State<TimeoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,10 +23,12 @@ class NoConnectionScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const Icon(Icons.watch_later_outlined, size: 60, color: primaryColor),
+            const SizedBox(height: 20),
             Center(
               child: Text(
-                'No Internet',
-                style: themeController.currentTheme.value.textTheme.titleSmall,
+                'Oops! Time out',
+                style: themeController.currentTheme.value.textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
             ),
@@ -35,7 +45,10 @@ class NoConnectionScreen extends StatelessWidget {
                 onPressed: () {
                   credentialController.getData(context);
                 },
-                child: const Text('Refresh', style: TextStyle(color: Colors.white),)),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text('Try again', style: TextStyle(color: Colors.white),),
+                )),
           ],
         ),
       ),

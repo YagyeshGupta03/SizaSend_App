@@ -31,7 +31,7 @@ class UserInfoController extends GetxController{
   Future getUserInfo() async {
     final NetworkHelper networkHelper = NetworkHelper(url: userInfoUrl);
     var reply = await networkHelper.postData({
-      "user_id": credentialController.id,
+      "user_id": credentialController.id.toString(),
     });
 
     fullName = '';

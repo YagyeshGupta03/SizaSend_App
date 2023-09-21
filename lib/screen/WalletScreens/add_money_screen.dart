@@ -45,7 +45,8 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
               LoginButton(
                   onTap: () {
                     if (_amount.text.isNotEmpty) {
-                      _walletController.webOpen(_amount.text);
+                      // _walletController.webOpen(_amount.text);
+                      _walletController.addMoney(_amount.text);
                     } else {
                       Fluttertoast.showToast(
                         msg: 'Enter the amount',

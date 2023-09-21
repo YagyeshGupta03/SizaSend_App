@@ -18,7 +18,7 @@ class WalletController extends GetxController {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: addMoneyUrl);
     var reply = await networkHelper.postData({
-      'user_id': credentialController.id,
+      'user_id': credentialController.id.toString(),
       'add_amount': amount,
     });
 
@@ -49,7 +49,7 @@ class WalletController extends GetxController {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: addMoneyUrl);
     var reply = await networkHelper.postData({
-      'user_id': credentialController.id,
+      'user_id': credentialController.id.toString(),
       'add_amount': amount,
     });
 
@@ -80,7 +80,7 @@ class WalletController extends GetxController {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: withdrawMoneyUrl);
     var reply = await networkHelper.postData({
-      'user_id': credentialController.id,
+      'user_id': credentialController.id.toString(),
       'minus_amount': amount,
     });
 
@@ -112,7 +112,7 @@ class WalletController extends GetxController {
     final NetworkHelper networkHelper = NetworkHelper(url: quotationPayUrl);
     var reply = await networkHelper.postData({
       'receiver_id': senderId,
-      'sender_id': credentialController.id,
+      'sender_id': credentialController.id.toString(),
       'amount': amount,
       'order_id': orderId,
     });
@@ -193,7 +193,6 @@ class WalletController extends GetxController {
       return true;
     } else {
       return false;
-      print('Could not update order payment');
     }
   }
 
@@ -208,7 +207,7 @@ class WalletController extends GetxController {
     }
     final NetworkHelper networkHelper = NetworkHelper(url: redirectWebUrl);
     var reply = await networkHelper.postData({
-      'user_id': credentialController.id,
+      'user_id': credentialController.id.toString(),
       'amount': amount,
     });
 

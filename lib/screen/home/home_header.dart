@@ -72,16 +72,16 @@ class HomeHeaderScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 15,),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Icon(Icons.more_horiz , color: Colors.white,),
-                      Text("6753" , style: TextStyle(color: Colors.white),)
-                    ],
-                  ),
-                )
+                // const Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 20),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.end,
+                //     children: [
+                //       Icon(Icons.more_horiz , color: Colors.white,),
+                //       Text("6753" , style: TextStyle(color: Colors.white),)
+                //     ],
+                //   ),
+                // )
               ],
             )
           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/login_controller.dart';
 import 'package:savo/screen/profile/GeneralSettings/terms_and_conditions.dart';
@@ -25,7 +26,7 @@ class _GeneralSettingsState extends State<GeneralSettings> {
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
         child: SingleChildScrollView(
-          child: Column(
+          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const ProfileListTile(
                 title: 'Language',
@@ -35,14 +36,33 @@ class _GeneralSettingsState extends State<GeneralSettings> {
                 title: 'Currency',
                 value: 'USD',
               ),
+              const SizedBox(height: 20),
               InkWell(
-                  onTap: () {
-                    _loginController.termsAndConditions();
-                    Get.to(()=> const TermsAndConditonsScreen());
-                  },
-                  child: const ProfileListTile(
-                    title: 'Terms and Conditions',
-                  ),
+                onTap: () {
+                  _loginController.termsAndConditions();
+                  Get.to(() => const TermsAndConditionsScreen());
+                },
+                child: const Text(
+                  'Terms and Conditions',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: primaryColor),
+                ),
+              ),
+              const SizedBox(height: 20),
+              InkWell(
+                onTap: () {
+                  _loginController.termsAndConditions();
+                  Get.to(() => const PrivacyPolicy());
+                },
+                child: const Text(
+                  'Privacy Policies',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: primaryColor),
+                ),
               ),
             ],
           ),

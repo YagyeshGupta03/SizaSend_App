@@ -2,13 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:material_dialogs/dialogs.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/screen/authentication/success_screen.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import '../Constants/all_urls.dart';
-import '../Constants/theme_data.dart';
 import '../Helper/http_helper.dart';
 import '../screen/authentication/otp_screen.dart';
 
@@ -86,8 +83,8 @@ class LoginController extends GetxController {
   Future<bool> logout() async {
     final NetworkHelper networkHelper = NetworkHelper(url: logoutUrl);
     var reply = await networkHelper.postData({
-      "token": credentialController.fcmToken,
-      "user_id": credentialController.id,
+      "token": credentialController.fcmToken.toString(),
+      "user_id": credentialController.id.toString(),
     });
 
     if (reply['status'] == 1) {
@@ -104,7 +101,7 @@ class LoginController extends GetxController {
   Future changePassword(context, oldPass, newPass, confirmPass) async {
     final NetworkHelper networkHelper = NetworkHelper(url: changePasswordUrl);
     var reply = await networkHelper.postData({
-      "user_id": credentialController.id,
+      "user_id": credentialController.id.toString(),
       "password": oldPass,
       "new_password": newPass,
       "confirm_password": confirmPass,
@@ -134,6 +131,25 @@ class LoginController extends GetxController {
   String description = '';
   Future termsAndConditions() async {
     final NetworkHelper networkHelper = NetworkHelper(url: termsUrl);
+    var reply = await networkHelper.postData({});
+
+    if (reply['status'] == 1) {
+      title = reply['data']['title'];
+      description = reply['data']['description'];
+
+      // Navigator.pop(context);
+    } else {
+      print('error in getting terms and conditons');
+    }
+  }
+  //
+  //
+  //
+  //
+  String privacyTitle = '';
+  String privacyDescription = '';
+  Future privacyPolicy() async {
+    final NetworkHelper networkHelper = NetworkHelper(url: privacyUrl);
     var reply = await networkHelper.postData({});
 
     if (reply['status'] == 1) {
@@ -226,7 +242,7 @@ class LoginController extends GetxController {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: adminEnquiryUrl);
     var reply = await networkHelper.postData({
-      "user_id": credentialController.id,
+      "user_id": credentialController.id.toString(),
       "subject": subject,
       "comments": description,
     });

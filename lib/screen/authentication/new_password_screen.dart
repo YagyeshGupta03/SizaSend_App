@@ -5,7 +5,6 @@ import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/util/widgets/login_button.dart';
 import '../../Controllers/global_controllers.dart';
 import '../../Controllers/login_controller.dart';
-import '../../generated/l10n.dart';
 import '../../util/widgets/text_field.dart';
 import 'login_screen.dart';
 

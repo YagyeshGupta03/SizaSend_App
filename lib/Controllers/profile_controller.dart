@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:savo/Constants/all_urls.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Models/Models.dart';
-import 'package:savo/screen/dashboard_screen.dart';
 import 'package:savo/screen/profile/BankAccount_screens/bankAc_listing.dart';
 import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
 import '../Helper/http_helper.dart';
@@ -17,7 +16,7 @@ class BankController extends GetxController {
   void addBankAc(context, fullName, bankName, ifsc, account) async {
     final NetworkHelper networkHelper = NetworkHelper(url: addBankAcUrl);
     var reply = await networkHelper.postData({
-      "user_id": credentialController.id,
+      "user_id": credentialController.id.toString(),
       "full_name": fullName,
       "bank_name": bankName,
       "ifsc_code": ifsc,
@@ -48,7 +47,7 @@ class BankController extends GetxController {
   void showBankAc() async {
     final NetworkHelper networkHelper = NetworkHelper(url: getBankAcUrl);
     var reply = await networkHelper.postData({
-      "user_id": credentialController.id,
+      "user_id": credentialController.id.toString(),
     });
 
     if (reply['status'] == 1) {
@@ -154,7 +153,7 @@ class ProfileController extends GetxController {
       context, fullName, employer, occupation, phone, email) async {
     final NetworkHelper networkHelper = NetworkHelper(url: updateProfileUrl);
     var reply = await networkHelper.postData({
-      'user_id': credentialController.id,
+      'user_id': credentialController.id.toString(),
       'full_name': fullName,
       'email': email,
       'phone': phone,

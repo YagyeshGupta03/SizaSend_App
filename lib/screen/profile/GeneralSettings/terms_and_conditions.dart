@@ -6,8 +6,8 @@ import '../../../Controllers/global_controllers.dart';
 import '../../../Controllers/login_controller.dart';
 import '../../../generated/l10n.dart';
 
-class TermsAndConditonsScreen extends StatelessWidget {
-  const TermsAndConditonsScreen({Key? key}) : super(key: key);
+class TermsAndConditionsScreen extends StatelessWidget {
+  const TermsAndConditionsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +36,51 @@ class TermsAndConditonsScreen extends StatelessWidget {
               const SizedBox(height: 20),
               Html(
                 data: _loginController.description,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class PrivacyPolicy extends StatefulWidget {
+  const PrivacyPolicy({super.key});
+
+  @override
+  State<PrivacyPolicy> createState() => _PrivacyPolicyState();
+}
+
+class _PrivacyPolicyState extends State<PrivacyPolicy> {
+  @override
+  Widget build(BuildContext context) {
+    final LoginController _loginController = Get.put(LoginController());
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: primaryColor.withOpacity(0.25),
+        title: Text('Privacy policy',
+            style: themeController.currentTheme.value.textTheme.bodyMedium),
+        centerTitle: true,
+      ),
+      body: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                S.of(context).ourPolicy,
+                style: const TextStyle(
+                    fontSize: 16,
+                    color: primaryColor,
+                    fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              Html(
+                data: _loginController.privacyDescription,
               ),
             ],
           ),

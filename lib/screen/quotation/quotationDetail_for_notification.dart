@@ -131,7 +131,7 @@ class _QuotationDetailForNotificationState
                         ],
                       ),
                     ),
-                    _quotationController.image != ''
+                    _quotationController.sendImage != ''
                         ? Column(
                             children: [
                               const SizedBox(height: 35),
@@ -145,11 +145,32 @@ class _QuotationDetailForNotificationState
                                     borderRadius: BorderRadius.circular(10)),
                                 height: 150,
                                 child: Image.network(
-                                    '$orderImageUrl${_quotationController.image}',
+                                    '$orderImageUrl${_quotationController.sendImage}',
                                     fit: BoxFit.fill),
                               ),
                             ],
                           )
+                        : const SizedBox(),
+                    const SizedBox(height: 20),
+                    _quotationController.receiveImage != ''
+                        ? Column(
+                      children: [
+                        const SizedBox(height: 35),
+                        Text('Order Delivered',
+                            style: themeController
+                                .currentTheme.value.textTheme.bodyLarge),
+                        const SizedBox(height: 15),
+                        Container(
+                          width: screenWidth(context),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10)),
+                          height: 150,
+                          child: Image.network(
+                              '$orderImageUrl${_quotationController.receiveImage}',
+                              fit: BoxFit.fill),
+                        ),
+                      ],
+                    )
                         : const SizedBox(),
                     const SizedBox(height: 40),
                     LoginButton(

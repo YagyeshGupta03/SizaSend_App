@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:savo/Controllers/global_controllers.dart';
-import 'Controllers/common_controllers.dart';
 import 'generated/l10n.dart';
 import 'screen/splash_screen.dart';
 
@@ -20,7 +19,6 @@ Future<void> main() async {
   // badge: true,
   // sound: true,
   // );
-  final ThemeController themeController = ThemeController();
   runApp(
     const MyApp(),
   );

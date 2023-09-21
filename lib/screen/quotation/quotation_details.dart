@@ -1,15 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/quotation_controller.dart';
 import 'package:savo/Controllers/walllet_controller.dart';
+import 'package:savo/screen/qr_code_scanner.dart';
 import 'package:savo/screen/quotation/full_video_screen.dart';
 import 'package:savo/screen/quotation/quotation_detail_screen_for_pay.dart';
 import 'package:savo/util/widgets/login_button.dart';
@@ -17,6 +18,7 @@ import 'package:video_player/video_player.dart';
 import '../../Constants/all_urls.dart';
 import '../../Constants/theme_data.dart';
 import '../../Controllers/global_controllers.dart';
+import '../dashboard_screen.dart';
 
 class QuotationDetailScreen extends StatefulWidget {
   const QuotationDetailScreen({super.key});
@@ -30,10 +32,9 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
   final QuotationController _quotationController =
       Get.put(QuotationController());
 
-  XFile? _senderImage;
-  XFile? _receiverImage;
+  String dispatchCode = '';
+  String deliverCode = '';
   late VideoPlayerController _controller;
-  Timer? _timer;
 
   @override
   void initState() {
@@ -55,6 +56,19 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              loadingController.updateDispatchLoading(false);
+              loadingController.updateVideoCompressionLoading(false);
+              loadingController.updateLoading(false);
+              loadingController.updateProfileLoading(false);
+              Get.to(() => const DashBoardScreen());
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: themeController.currentTheme.value.iconTheme.color,
+            ),
+          ),
           title: Text(
             'Quotation Details',
             style: themeController.currentTheme.value.textTheme.bodyLarge,
@@ -240,8 +254,9 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                         ],
                       ),
                     ),
-                    _quotationController.image != ''
-                        ? Column( crossAxisAlignment: CrossAxisAlignment.start,
+                    _quotationController.sendImage != ''
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 35),
                               Text('Order Dispatched',
@@ -254,12 +269,35 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                     borderRadius: BorderRadius.circular(10)),
                                 height: 150,
                                 child: Image.network(
-                                    '$orderImageUrl${_quotationController.image}',
+                                    '$orderImageUrl${_quotationController.sendImage}',
                                     fit: BoxFit.fill),
                               ),
                             ],
                           )
                         : const SizedBox(),
+                    const SizedBox(height: 20),
+                    _quotationController.receiveImage != ''
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 35),
+                              Text('Order Delivered',
+                                  style: themeController
+                                      .currentTheme.value.textTheme.bodyLarge),
+                              const SizedBox(height: 15),
+                              Container(
+                                width: screenWidth(context),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10)),
+                                height: 150,
+                                child: Image.network(
+                                    '$orderImageUrl${_quotationController.receiveImage}',
+                                    fit: BoxFit.fill),
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
+
                     const SizedBox(height: 40),
                     // to check if sender
                     _quotationController.senderId == credentialController.id
@@ -271,7 +309,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                 : LoginButton(
                                     onTap: () async {
                                       Dialogs.materialDialog(
-                                          msg: 'Take a picture of parcel',
+                                          msg: 'Scan the barcode',
                                           title: "Dispatch",
                                           titleAlign: TextAlign.center,
                                           color: Colors.white,
@@ -279,25 +317,28 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                           actions: [
                                             IconsButton(
                                               onPressed: () async {
-                                                final picker = ImagePicker();
-                                                final pickedFile =
-                                                    await picker.pickImage(
-                                                        source:
-                                                            ImageSource.camera);
-                                                setState(() {
-                                                  _senderImage = pickedFile;
-                                                });
-                                                _quotationController
-                                                    .sendDispatchImage(
-                                                        context,
-                                                        _senderImage,
-                                                        _quotationController
-                                                            .orderId);
-                                                Navigator.pop(context);
+                                                // FlutterBarcodeScanner.getBarcodeStreamReceiver(
+                                                //     '#ff6666', 'Cancel', true, ScanMode.BARCODE)!.listen((event) {
+                                                //       print(event);
+                                                // });
+                                                Get.to(()=> QRCodeScannerScreen());
+
+                                               //  final result = await FlutterBarcodeScanner.scanBarcode(
+                                               //      '#ff6666', 'Cancel', true, ScanMode.BARCODE );
+                                               // setState(() {
+                                               //    dispatchCode = result.toString();
+                                               //  });
+                                               // print(dispatchCode);
+                                                // _quotationController
+                                                //     .sendDispatchCode(
+                                                //         context,
+                                                //         result.toString(),
+                                                //         _quotationController
+                                                //             .orderId);
+                                                // Navigator.pop(context);
                                               },
-                                              text: 'Camera',
-                                              iconData:
-                                                  Icons.camera_alt_outlined,
+                                              text: 'Scan',
+                                              iconData: Icons.document_scanner,
                                               color: primaryColor,
                                               textStyle: const TextStyle(
                                                   color: Colors.white),
@@ -334,7 +375,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                             onTap: () async {
                                               Dialogs.materialDialog(
                                                   msg:
-                                                      'Take a picture of parcel',
+                                                      'Scan the barcode',
                                                   title: "Delivered",
                                                   color: Colors.white,
                                                   titleAlign: TextAlign.center,
@@ -342,30 +383,24 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                                   actions: [
                                                     IconsButton(
                                                       onPressed: () async {
-                                                        final picker =
-                                                            ImagePicker();
-                                                        final pickedFile =
-                                                            await picker.pickImage(
-                                                                source:
-                                                                    ImageSource
-                                                                        .camera);
+                                                        final deliver = await FlutterBarcodeScanner.scanBarcode(
+                                                            '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+
                                                         setState(() {
-                                                          _receiverImage =
-                                                              pickedFile;
-                                                          _quotationController
-                                                              .sendDeliveredImage(
-                                                                  context,
-                                                                  _receiverImage,
-                                                                  _quotationController
-                                                                      .orderId,
-                                                                  _quotationController
-                                                                      .senderId);
+                                                          deliverCode = deliver.toString();
                                                         });
+                                                        _quotationController
+                                                            .sendDeliveredCode(
+                                                            context,
+                                                            deliver.toString(),
+                                                            _quotationController
+                                                                .orderId,
+                                                            _quotationController
+                                                                .senderId);
                                                         Navigator.pop(context);
                                                       },
-                                                      text: 'Camera',
-                                                      iconData: Icons
-                                                          .camera_alt_outlined,
+                                                      text: 'Scan',
+                                                      iconData: Icons.document_scanner,
                                                       color: primaryColor,
                                                       textStyle:
                                                           const TextStyle(

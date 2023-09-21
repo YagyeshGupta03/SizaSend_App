@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/global_controllers.dart';
-
 import '../../Constants/theme_data.dart';
 import '../../Helper/validate_helper.dart';
-import '../../generated/l10n.dart';
+
 
 class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField(

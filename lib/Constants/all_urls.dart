@@ -13,6 +13,7 @@ const String signupURl = '${baseUrl}signup';
 const String loginUrl = '${baseUrl}login';
 const String logoutUrl = '${baseUrl}tokenDeleteById';
 const String termsUrl = '${baseUrl}get_terms_and_conditions';
+const String privacyUrl = '${baseUrl}get_privacy_policy';
 
 
 //User profile apis

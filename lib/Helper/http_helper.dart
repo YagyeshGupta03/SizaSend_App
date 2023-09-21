@@ -1,7 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
-import 'package:http/http.dart'as http;
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-
+import 'package:savo/screen/timeout_screen.dart';
 
 class NetworkHelper {
   NetworkHelper({
@@ -10,16 +15,56 @@ class NetworkHelper {
 
   final String url;
 
-  Future postData(Object bodyData) async {
-    http.Response response = await http.post(Uri.parse(url), body: bodyData);
-    print(response.statusCode);
-    print(response.body);
-    if (response.statusCode == 200) {
-      var responseData = jsonDecode(response.body);
-      return responseData;
-    } else {
-      var responseData = jsonDecode(response.body);
-      return responseData;
+  Future postData(Map<String, String> bodyData) async {
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.fields.addAll(bodyData);
+      http.StreamedResponse response =
+          await request.send().timeout(const Duration(seconds: 30));
+      if (response.statusCode == 200) {
+        final res = await response.stream.bytesToString();
+        print(res);
+        var responseData = json.decode(res);
+        return responseData;
+      } else {
+        final res = await response.stream.bytesToString();
+        print(res);
+        var responseData = jsonDecode(res);
+        return responseData;
+      }
+    } on SocketException {
+      Fluttertoast.showToast(
+        msg: 'No internet connection',
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      return null;
+    } on HttpException {
+      return null;
+    } on FormatException {
+      Fluttertoast.showToast(
+        msg: 'Internal server error',
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      return null;
+    } on TimeoutException {
+      Get.to(() => const TimeoutScreen());
+      return null;
+    } on Exception {
+      Fluttertoast.showToast(
+        msg: 'Internal server error',
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      return null;
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: 'Exception',
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      return null;
     }
   }
 
@@ -45,23 +90,23 @@ class NetworkHelper {
     }
   }
 
-  //
-  // Future postMultiPartDataDifferentKey(
-  //     Map<String, String> data, Map<String, XFile> images) async {
-  //   var request = http.MultipartRequest('POST', Uri.parse(url));
-  //   request.fields.addAll(data);
-  //   images.forEach((key, value) async {
-  //     request.files
-  //         .add(await http.MultipartFile.fromPath(key, value.path));
-  //   });
-  //
-  //   http.StreamedResponse response = await request.send();
-  //
-  //   if (response.statusCode == 200) {
-  //     print(await response.stream.bytesToString());
-  //     return response.statusCode;
-  //   } else {
-  //     print(response.reasonPhrase);
-  //   }
-  // }
+//
+// Future postMultiPartDataDifferentKey(
+//     Map<String, String> data, Map<String, XFile> images) async {
+//   var request = http.MultipartRequest('POST', Uri.parse(url));
+//   request.fields.addAll(data);
+//   images.forEach((key, value) async {
+//     request.files
+//         .add(await http.MultipartFile.fromPath(key, value.path));
+//   });
+//
+//   http.StreamedResponse response = await request.send();
+//
+//   if (response.statusCode == 200) {
+//     print(await response.stream.bytesToString());
+//     return response.statusCode;
+//   } else {
+//     print(response.reasonPhrase);
+//   }
+// }
 }

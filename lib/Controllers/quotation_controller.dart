@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:material_dialogs/dialogs.dart';
@@ -8,7 +9,6 @@ import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/walllet_controller.dart';
 import 'package:savo/Models/Models.dart';
-import 'package:savo/screen/quotation/quotation_details.dart';
 import '../Helper/http_helper.dart';
 import '../screen/dashboard_screen.dart';
 import '../screen/quotation/quotationDetail_for_notification.dart';
@@ -282,7 +282,7 @@ class QuotationController extends GetxController {
   void sendNotification(orderId, receiverId) async {
     final NetworkHelper networkHelper = NetworkHelper(url: sendNotificationUrl);
     var reply = await networkHelper.postData({
-      'user_id': credentialController.id,
+      'user_id': credentialController.id.toString(),
       'order_id': orderId,
       'receiver_id': receiverId,
     });
@@ -317,11 +317,11 @@ class QuotationController extends GetxController {
         final createdAt = DateTime.parse(createdAtString);
         getNotificationList.add(
           NotificationModel(
-              orderId: reply['data'][i]['order_id']??'',
+              orderId: reply['data'][i]['order_id'] ?? '',
               notificationId: reply['data'][i]['id'],
               status: reply['data'][i]['status'] ?? '',
-              senderId: reply['data'][i]['sender_id']??'',
-              receiverId: reply['data'][i]['receiver_id']??'',
+              senderId: reply['data'][i]['sender_id'] ?? '',
+              receiverId: reply['data'][i]['receiver_id'] ?? '',
               date: createdAt,
               message: reply['data'][i]['message']),
         );
@@ -379,7 +379,7 @@ class QuotationController extends GetxController {
         NetworkHelper(url: sendQuotationStatusUrl);
     var reply = await networkHelper.postData({
       'order_id': orderId,
-      'receiver_id': credentialController.id,
+      'receiver_id': credentialController.id.toString(),
       'user_id': senderId,
       'status': status
     });
@@ -450,7 +450,8 @@ class QuotationController extends GetxController {
   String description = '';
   String senderId = '';
   String video = '';
-  String image = '';
+  String sendImage = '';
+  String receiveImage = '';
   String orderStatus = '';
   String status = '';
 
@@ -474,7 +475,8 @@ class QuotationController extends GetxController {
       status = reply['data']['status'] ?? '';
       senderId = reply['data']['user_id'];
       video = reply['data']['video'] ?? '';
-      image = reply['data']['image'] ?? '';
+      sendImage = reply['data']['send_image'] ?? '';
+      receiveImage = reply['data']['receive_image'] ?? '';
       return true;
     } else {
       print('Error in getting quotation history list');
@@ -486,18 +488,33 @@ class QuotationController extends GetxController {
   //
   //
   final WalletController _walletController = Get.put(WalletController());
-  void sendDispatchImage(context, image, orderId) async {
+  void sendDispatchCode(context, code, orderId) async {
     await loadingController.updateDispatchLoading(true);
     final NetworkHelper networkHelper =
         NetworkHelper(url: sendDispatchImageUrl);
-    var reply = await networkHelper.postMultiPartData(
-        {"sender_id": credentialController.id.toString(), "order_id": orderId},
-        [image],
-        "image");
+    var reply = await networkHelper.postData({
+      "sender_id": credentialController.id.toString(),
+      "order_id": orderId,
+      "dispatch": code,
+    });
 
     if (reply['status'] == 1) {
       _walletController.updatePaidStatus(orderId, 'dispatch').then((value) {
-        Get.to(() => const DashBoardScreen());
+        Dialogs.materialDialog(
+            msg: 'Your order is dispatched',
+            title: 'Dispatched',
+            context: context,
+            actions: [
+              IconsButton(
+                onPressed: () {
+                  Get.to(() => const DashBoardScreen());
+                },
+                text: 'Close',
+                color: primaryColor,
+                textStyle: const TextStyle(color: Colors.white),
+                iconColor: Colors.white,
+              ),
+            ]);
         loadingController.updateDispatchLoading(false);
       });
     } else {
@@ -510,17 +527,15 @@ class QuotationController extends GetxController {
   //
   //
   //
-  void sendDeliveredImage(context, image, orderId, senderID) async {
+  void sendDeliveredCode(context, code, orderId, senderID) async {
     await loadingController.updateDispatchLoading(true);
     final NetworkHelper networkHelper =
         NetworkHelper(url: sendDeliveredImageUrl);
-    var reply = await networkHelper.postMultiPartData({
-      "receiver_id": credentialController.id.toString(),
-      "order_id": orderId
-    }, [
-      image
-    ], "image");
-
+    var reply = await networkHelper.postData({
+      "user_id": senderId,
+      "order_id": orderId,
+      "deliver": code.toString(),
+    });
     if (reply['status'] == 1) {
       await _walletController.completeOrderPayment(
           orderId, 'complete', senderID);
@@ -531,7 +546,7 @@ class QuotationController extends GetxController {
           actions: [
             IconsButton(
               onPressed: () {
-                Get.to(()=> const DashBoardScreen());
+                Get.to(() => const DashBoardScreen());
               },
               text: 'Close',
               color: primaryColor,
@@ -541,17 +556,37 @@ class QuotationController extends GetxController {
           ]);
       loadingController.updateDispatchLoading(false);
     } else {
+      Dialogs.materialDialog(
+          msg: 'Bar code does not match',
+          title: 'Fail',
+          context: context,
+          actions: [
+            IconsButton(
+              onPressed: () async {
+                final result = await FlutterBarcodeScanner.scanBarcode(
+                    '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+                sendDeliveredCode(
+                    context, result.toString(), orderId, senderId);
+                Navigator.pop(context);
+              },
+              text: 'Scan again',
+              color: primaryColor,
+              textStyle: const TextStyle(color: Colors.white),
+              iconColor: Colors.white,
+            ),
+          ]);
       await loadingController.updateDispatchLoading(false);
       print('Error in dispatching image');
     }
     loadingController.updateDispatchLoading(false);
   }
+
   //
   //
   //
   void notificationsDelete(context, notificationId) async {
     final NetworkHelper networkHelper =
-    NetworkHelper(url: notificationsDeleteUrl);
+        NetworkHelper(url: notificationsDeleteUrl);
     var reply = await networkHelper.postData({
       "notification_id": notificationId,
     });
@@ -568,14 +603,15 @@ class QuotationController extends GetxController {
       print('Error in deleting notification');
     }
   }
+
   //
   //
   //
   void notificationsDeleteAll(context) async {
     final NetworkHelper networkHelper =
-    NetworkHelper(url: notificationsDeleteUrl);
+        NetworkHelper(url: notificationsDeleteUrl);
     var reply = await networkHelper.postData({
-      "receiver_id": credentialController.id,
+      "receiver_id": credentialController.id.toString(),
     });
 
     if (reply['status'] == 1) {

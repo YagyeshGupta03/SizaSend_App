@@ -29,7 +29,7 @@ class LoginButton extends StatelessWidget {
           ),
           backgroundColor: btnColor),
       child: SizedBox(
-        height: 20,
+        height: 30,
         width: double.infinity,
         child: Center(
           child: Text(

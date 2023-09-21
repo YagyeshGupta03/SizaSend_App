@@ -102,6 +102,5 @@ class _AdminEnquiryScreenState extends State<AdminEnquiryScreen> {
         ],
       ),
     );
-    ;
   }
 }
