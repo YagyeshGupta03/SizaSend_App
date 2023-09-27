@@ -300,7 +300,7 @@ class WalletController extends GetxController {
       }
       update();
     } else {
-      print('Error in getting quotation history list');
+      print('Error in getting wallet history list');
     }
   }
 }
