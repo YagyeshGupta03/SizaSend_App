@@ -85,7 +85,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
                       alignLeft: false,
                     ),
                   ),
-                  suffixWidget: const SizedBox(),
+                  suffixWidget: false,
                 ),
                 SizedBox(
                   height: s.height * .02,

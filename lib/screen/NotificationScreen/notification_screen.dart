@@ -262,52 +262,52 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  void _showPopupDialog(BuildContext context, message, orderId, notificationId,
-      senderId, receiverId) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: themeController.currentTheme.value.cardColor,
-          title: Text("Notification",
-              style: themeController.currentTheme.value.textTheme.bodyLarge),
-          content: Text(message,
-              style: themeController.currentTheme.value.textTheme.titleSmall),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                _quotationController.sendNotificationStatus(context,
-                    notificationId, '1', senderId, receiverId, orderId);
-                _quotationController.sendQuotationStatus(
-                    orderId, senderId, 'accept');
-              },
-              child: const Text(
-                "Accept",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                _quotationController.sendNotificationStatus(context,
-                    notificationId, '0', senderId, receiverId, orderId);
-                _quotationController.sendQuotationStatus(
-                    orderId, senderId, 'reject');
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                "Reject",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _showPopupDialog(BuildContext context, message, orderId, notificationId,
+  //     senderId, receiverId) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         backgroundColor: themeController.currentTheme.value.cardColor,
+  //         title: Text("Notification",
+  //             style: themeController.currentTheme.value.textTheme.bodyLarge),
+  //         content: Text(message,
+  //             style: themeController.currentTheme.value.textTheme.titleSmall),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             onPressed: () {
+  //               _quotationController.sendNotificationStatus(context,
+  //                   notificationId, '1', senderId, receiverId, orderId);
+  //               _quotationController.sendQuotationStatus(
+  //                   orderId, senderId, 'accept');
+  //             },
+  //             child: const Text(
+  //               "Accept",
+  //               style: TextStyle(
+  //                   fontSize: 14,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: Colors.green),
+  //             ),
+  //           ),
+  //           TextButton(
+  //             onPressed: () {
+  //               _quotationController.sendNotificationStatus(context,
+  //                   notificationId, '0', senderId, receiverId, orderId);
+  //               _quotationController.sendQuotationStatus(
+  //                   orderId, senderId, 'reject');
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: const Text(
+  //               "Reject",
+  //               style: TextStyle(
+  //                   fontSize: 14,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: Colors.red),
+  //             ),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }

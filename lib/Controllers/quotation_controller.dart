@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:material_dialogs/dialogs.dart';
@@ -11,7 +10,6 @@ import 'package:savo/Controllers/walllet_controller.dart';
 import 'package:savo/Models/Models.dart';
 import '../Helper/http_helper.dart';
 import '../screen/dashboard_screen.dart';
-import '../screen/quotation/quotationDetail_for_notification.dart';
 
 class QuotationController extends GetxController {
   //
@@ -25,6 +23,7 @@ class QuotationController extends GetxController {
       'user_id': credentialController.id.toString(),
       'name': productName,
       'store_name': storeLocation,
+      'receiver_id': receiverId,
       'quantity': quantity,
       'weight': weight,
       'width': width,
@@ -194,7 +193,7 @@ class QuotationController extends GetxController {
         );
         update();
       }
-      Future.delayed(const Duration(seconds: 3)).then((value) {
+      Future.delayed(const Duration(seconds: 4)).then((value) {
         loadingController.updateLoading(false);
       });
     } else {
@@ -336,39 +335,39 @@ class QuotationController extends GetxController {
   //
   // To send status on notification so accordingly, a popup of accept/reject should appear or not
 
-  void sendNotificationStatus(
-      context, notificationId, status, senderId, receiverId, orderId) async {
-    final NetworkHelper networkHelper =
-        NetworkHelper(url: notificationStatusUrl);
-    var reply = await networkHelper.postData({
-      'notification_id': notificationId,
-      'status': status,
-      'sender_id': senderId,
-      'receiver_id': receiverId,
-      'order_id': orderId,
-    });
-
-    if (reply['status'] == 1) {
-      Navigator.pop(context);
-      if (status == '0') {
-        Fluttertoast.showToast(
-          msg: 'Quotation rejected',
-          gravity: ToastGravity.SNACKBAR,
-          backgroundColor: Colors.red,
-        );
-      } else if (status == '1') {
-        getQuotationByOrderId(orderId).whenComplete(() {
-          Future.delayed(const Duration(seconds: 1)).then((value) {
-            Get.to(() => const QuotationDetailForNotification());
-          });
-        });
-      }
-      receiveNotification();
-      print('Notification status updated');
-    } else {
-      print('Error in updating notification status');
-    }
-  }
+  // void sendNotificationStatus(
+  //     context, notificationId, status, senderId, receiverId, orderId) async {
+  //   final NetworkHelper networkHelper =
+  //       NetworkHelper(url: notificationStatusUrl);
+  //   var reply = await networkHelper.postData({
+  //     'notification_id': notificationId,
+  //     'status': status,
+  //     'sender_id': senderId,
+  //     'receiver_id': receiverId,
+  //     'order_id': orderId,
+  //   });
+  //
+  //   if (reply['status'] == 1) {
+  //     Navigator.pop(context);
+  //     if (status == '0') {
+  //       Fluttertoast.showToast(
+  //         msg: 'Quotation rejected',
+  //         gravity: ToastGravity.SNACKBAR,
+  //         backgroundColor: Colors.red,
+  //       );
+  //     } else if (status == '1') {
+  //       getQuotationByOrderId(orderId).whenComplete(() {
+  //         Future.delayed(const Duration(seconds: 1)).then((value) {
+  //           Get.to(() => const QuotationDetailForNotification());
+  //         });
+  //       });
+  //     }
+  //     receiveNotification();
+  //     print('Notification status updated');
+  //   } else {
+  //     print('Error in updating notification status');
+  //   }
+  // }
 
   //
   //
@@ -557,16 +556,12 @@ class QuotationController extends GetxController {
       loadingController.updateDispatchLoading(false);
     } else {
       Dialogs.materialDialog(
-          msg: 'Bar code does not match',
-          title: 'Fail',
+          msg: 'Order does not exist',
+          title: 'Failed',
           context: context,
           actions: [
             IconsButton(
               onPressed: () async {
-                final result = await FlutterBarcodeScanner.scanBarcode(
-                    '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-                sendDeliveredCode(
-                    context, result.toString(), orderId, senderId);
                 Navigator.pop(context);
               },
               text: 'Scan again',

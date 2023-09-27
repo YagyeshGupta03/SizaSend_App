@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/screen/NotificationScreen/notification_screen.dart';
 import 'package:savo/screen/authentication/login_screen.dart';
@@ -8,6 +10,7 @@ import 'package:savo/screen/profile/GeneralSettings/general_settings.dart';
 import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
 import 'package:savo/screen/profile/change_password_screen.dart';
 import '../../Constants/all_urls.dart';
+import '../../Constants/theme_data.dart';
 import '../../Controllers/login_controller.dart';
 import '../../generated/l10n.dart';
 import '../../util/images.dart';
@@ -36,24 +39,26 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: themeController.currentTheme.value.cardColor),
-              padding: const EdgeInsets.all(5),
-              child: userInfoController.profileImage == ''
-                  ? SizedBox(
-                      height: 10,
-                      width: 10,
-                      child: Image.asset(
-                        'assets/images/profilePic.jpg',
-                        fit: BoxFit.fill,
+              padding: const EdgeInsets.all(10),
+              child: Obx(
+                () => userInfoController.profileImage.value == ''
+                    ? SizedBox(
+                        height: 10,
+                        width: 10,
+                        child: Image.asset(
+                          'assets/images/profilePic.jpg',
+                          fit: BoxFit.fill,
+                        ),
+                      )
+                    : SizedBox(
+                        height: 10,
+                        width: 10,
+                        child: Image.network(
+                          '$imageUrl${userInfoController.profileImage.value}',
+                          fit: BoxFit.fill,
+                        ),
                       ),
-                    )
-                  : SizedBox(
-                      height: 10,
-                      width: 10,
-                      child: Image.network(
-                        '$imageUrl${userInfoController.profileImage.toString()}',
-                        fit: BoxFit.fill,
-                      ),
-                    ),
+              ),
             ),
           ),
           const SizedBox(height: 10),
@@ -61,14 +66,14 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
             userInfoController.fullName,
             style: themeController.currentTheme.value.textTheme.titleMedium,
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
           Text(
             '${userInfoController.countryCode}${userInfoController.phone}',
-            style: themeController.currentTheme.value.textTheme.displaySmall,
+            style: themeController.currentTheme.value.textTheme.titleSmall,
           ),
 
           // List Tiles
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
           ImageListTile(
               onTap: () {
                 Get.to(() => const AccountInfoScreen());
@@ -94,7 +99,7 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
             image: Images.icSetting,
             title: S.of(context).generalSetting,
             onTap: () {
-              Get.to(()=> const GeneralSettings());
+              Get.to(() => const GeneralSettings());
             },
           ),
           ImageListTile(
@@ -108,12 +113,40 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
             image: Images.icLogout,
             title: S.of(context).logout,
             onTap: () async {
-              loadingController.updateVideoCompressionLoading(false);
-              loadingController.updateProfileLoading(false);
-              loadingController.updateLoading(false);
-              await _loginController.logout();
-              await credentialController.deleteData();
-              Get.off(() => const LoginScreen());
+              Dialogs.materialDialog(
+                  msg: 'Do you want to logout?',
+                  msgAlign: TextAlign.center,
+                  color: themeController.currentTheme.value.cardColor,
+                  title: 'Logout',
+                  context: context,
+                  actions: [
+                    IconsButton(
+                      onPressed: () async {
+                        loadingController.updateVideoCompressionLoading(false);
+                        loadingController.updateProfileLoading(false);
+                        loadingController.updateLoading(false);
+                        Navigator.pop(context);
+                      },
+                      text: 'Cancel',
+                      color: themeController.currentTheme.value.cardColor,
+                      textStyle: const TextStyle(color: primaryColor),
+                      iconColor: primaryColor,
+                    ),
+                    IconsButton(
+                      onPressed: () async {
+                        loadingController.updateVideoCompressionLoading(false);
+                        loadingController.updateProfileLoading(false);
+                        loadingController.updateLoading(false);
+                        await _loginController.logout();
+                        await credentialController.deleteData();
+                        Get.off(() => const LoginScreen());
+                      },
+                      text: 'Logout',
+                      color: primaryColor,
+                      textStyle: const TextStyle(color: Colors.white),
+                      iconColor: Colors.white,
+                    ),
+                  ]);
             },
           ),
         ],

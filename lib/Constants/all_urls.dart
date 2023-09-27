@@ -19,6 +19,7 @@ const String privacyUrl = '${baseUrl}get_privacy_policy';
 //User profile apis
 const String userInfoUrl = '${baseUrl}getUserProfileById';
 const String changePasswordUrl = '${baseUrl}changePassword';
+const String forgotPasswordUrl = '${baseUrl}passwordUpdateById';
 const String profileImageUrl = '${baseUrl}update_profile_img';
 const String occupationUrl = '${baseUrl}get_all_occupation';
 const String updateProfileUrl = '${baseUrl}user_information_update';
@@ -53,6 +54,7 @@ const String withdrawMoneyUrl = '${baseUrl}minus_account_balance';
 const String quotationPayUrl = '${baseUrl}user_transaction';
 const String quotationPaidStatusUrl = '${baseUrl}paidStatusChange';
 const String completeOrderPaymentUrl = '${baseUrl}hold_transaction_add';
+const String walletTransactionsUrl = '${baseUrl}get_transaction_history';
 
 
 //Other apis of project

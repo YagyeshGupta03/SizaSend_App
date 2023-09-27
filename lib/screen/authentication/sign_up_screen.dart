@@ -4,6 +4,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -66,9 +67,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  CustomTextFormField(
+                  FormatterFields(
                     topTitle: S.of(context).fullName,
                     keyboardType: TextInputType.name,
+                    formatter: FilteringTextInputFormatter.allow(
+                        RegExp(r'[a-zA-Z\s-]')),
                     fieldLabel: 'Name',
                     cont: _fullName,
                     suffixWidget: const SizedBox(),
@@ -100,31 +103,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         alignLeft: false,
                       ),
                     ),
-                    suffixWidget: const SizedBox(),
+                    suffixWidget: false,
                   ),
                   SizedBox(height: screenHeight(context) * .015),
                   CustomTextFormField(
                     topTitle: S.of(context).password,
-                    fieldLabel: 'password',
+                    fieldLabel: 'Password',
                     keyboardType: TextInputType.visiblePassword,
                     cont: _password,
                     prefixWidget: Icon(
                       Icons.lock_outline,
                       color: themeController.currentTheme.value.iconTheme.color,
                     ),
-                    suffixWidget: const SizedBox(),
+                    suffixWidget: true,
                   ),
                   SizedBox(height: screenHeight(context) * .015),
                   CustomTextFormField(
                     topTitle: S.of(context).confirmPassword,
                     keyboardType: TextInputType.visiblePassword,
-                    fieldLabel: 'password',
+                    fieldLabel: 'Confirm password',
                     cont: _confirmPassword,
                     prefixWidget: Icon(
                       Icons.lock_outline,
                       color: themeController.currentTheme.value.iconTheme.color,
                     ),
-                    suffixWidget: const SizedBox(),
+                    suffixWidget: true,
                   ),
                   SizedBox(height: screenHeight(context) * .033),
                   ElevatedButton(

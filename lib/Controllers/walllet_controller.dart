@@ -2,11 +2,16 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:savo/Controllers/global_controllers.dart';
+import 'package:savo/Models/Models.dart';
 import 'package:savo/WebPage/add_money_web_page.dart';
 import 'package:savo/screen/WalletScreens/add_money_screen.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import '../Constants/all_urls.dart';
+import '../Constants/theme_data.dart';
 import '../Helper/http_helper.dart';
 import '../screen/WalletScreens/Payment_successful_screen.dart';
 
@@ -14,7 +19,7 @@ class WalletController extends GetxController {
   //
   //
   //
-  void addMoney(amount) async {
+  void addMoney(context, amount) async {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: addMoneyUrl);
     var reply = await networkHelper.postData({
@@ -24,12 +29,25 @@ class WalletController extends GetxController {
 
     if (reply['status'] == 1) {
       userInfoController.getUserInfo().then((value) {
-        Get.to(() => const DashBoardScreen());
-        Fluttertoast.showToast(
-          msg: 'Transaction completed',
-          gravity: ToastGravity.SNACKBAR,
-          backgroundColor: Colors.green,
-        );
+        Dialogs.materialDialog(
+            msg: 'Money added to your wallet',
+            msgAlign: TextAlign.center,
+            title: "Success",
+            color: Colors.white,
+            titleAlign: TextAlign.center,
+            context: context,
+            actions: [
+              IconsButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Get.to(() => const DashBoardScreen());
+                },
+                text: 'Go back',
+                color: primaryColor,
+                textStyle: const TextStyle(color: Colors.white),
+                iconColor: Colors.white,
+              ),
+            ]);
         loadingController.updateLoading(false);
       });
     } else {
@@ -45,7 +63,7 @@ class WalletController extends GetxController {
   //
   //
   //
-  void quotationAddMoney(amount) async {
+  void quotationAddMoney(context, amount) async {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: addMoneyUrl);
     var reply = await networkHelper.postData({
@@ -55,12 +73,25 @@ class WalletController extends GetxController {
 
     if (reply['status'] == 1) {
       userInfoController.getUserInfo().then((value) {
-        Get.back();
-        Fluttertoast.showToast(
-          msg: 'Transaction completed',
-          gravity: ToastGravity.SNACKBAR,
-          backgroundColor: Colors.green,
-        );
+        Dialogs.materialDialog(
+            msg: 'Money added to your wallet',
+            msgAlign: TextAlign.center,
+            title: "Success",
+            color: Colors.white,
+            titleAlign: TextAlign.center,
+            context: context,
+            actions: [
+              IconsButton(
+                onPressed: () async {
+                  Get.back();
+                  Navigator.pop(context);
+                },
+                text: 'Go back',
+                color: primaryColor,
+                textStyle: const TextStyle(color: Colors.white),
+                iconColor: Colors.white,
+              ),
+            ]);
         loadingController.updateLoading(false);
       });
     } else {
@@ -76,7 +107,7 @@ class WalletController extends GetxController {
   //
   //
   //
-  void withdrawMoney(amount) async {
+  void withdrawMoney(context, amount) async {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: withdrawMoneyUrl);
     var reply = await networkHelper.postData({
@@ -86,12 +117,25 @@ class WalletController extends GetxController {
 
     if (reply['status'] == 1) {
       userInfoController.getUserInfo().then((value) {
-        Get.to(() => const DashBoardScreen());
-        Fluttertoast.showToast(
-          msg: 'Transaction completed',
-          gravity: ToastGravity.SNACKBAR,
-          backgroundColor: Colors.green,
-        );
+        Dialogs.materialDialog(
+            msg: 'Money transferred to your bank account',
+            msgAlign: TextAlign.center,
+            title: "Success",
+            color: Colors.white,
+            titleAlign: TextAlign.center,
+            context: context,
+            actions: [
+              IconsButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  Get.to(() => const DashBoardScreen());
+                },
+                text: 'Go back',
+                color: primaryColor,
+                textStyle: const TextStyle(color: Colors.white),
+                iconColor: Colors.white,
+              ),
+            ]);
         loadingController.updateLoading(false);
       });
     } else {
@@ -136,7 +180,7 @@ class WalletController extends GetxController {
         gravity: ToastGravity.SNACKBAR,
         backgroundColor: Colors.red,
       );
-      Get.to(() => const QuotationMoneyAdd());
+      Get.to(() => QuotationMoneyAdd(price: amount));
       loadingController.updateLoading(false);
       return false;
     } else {
@@ -202,7 +246,7 @@ class WalletController extends GetxController {
   void webOpen(amount) async {
     loadingController.updateLoading(true);
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if(connectivityResult == ConnectivityResult.none) {
+    if (connectivityResult == ConnectivityResult.none) {
       loadingController.updateLoading(false);
     }
     final NetworkHelper networkHelper = NetworkHelper(url: redirectWebUrl);
@@ -221,6 +265,42 @@ class WalletController extends GetxController {
         backgroundColor: Colors.red,
       );
       loadingController.updateLoading(false);
+    }
+  }
+
+  //
+  //
+  //
+  //
+  RxList<WalletTransactionModel> walletTransactionsList =
+      <WalletTransactionModel>[].obs;
+  void getWalletHistory() async {
+    final NetworkHelper networkHelper =
+        NetworkHelper(url: walletTransactionsUrl);
+    var reply = await networkHelper.postData({
+      'user_id': credentialController.id.toString(),
+    });
+
+    walletTransactionsList.clear();
+
+    if (reply['status'] == 1) {
+      for (int i = 0; i < reply['data'].length; i++) {
+        DateTime createdAt = DateTime.parse(reply['data'][i]['created_at']);
+        String formattedDate = DateFormat.yMMMMd().format(createdAt);
+        String formattedTime = DateFormat.jm().format(createdAt);
+
+        walletTransactionsList.add(WalletTransactionModel(
+          transactionId: reply['data'][i]['id'],
+          balance: reply['data'][i]['balance'],
+          status: reply['data'][i]['status'] ?? '',
+          paidUser: reply['data'][i]['paid_user_name'] ?? '',
+          date: formattedDate,
+          time: formattedTime,
+        ));
+      }
+      update();
+    } else {
+      print('Error in getting quotation history list');
     }
   }
 }

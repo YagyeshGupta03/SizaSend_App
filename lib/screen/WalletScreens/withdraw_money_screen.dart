@@ -48,7 +48,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
               LoginButton(
                   onTap: () {
                     if (_amount.text.isNotEmpty) {
-                      _walletController.withdrawMoney(_amount.text);
+                      _walletController.withdrawMoney(context, _amount.text);
                     } else {
                       Fluttertoast.showToast(
                         msg: 'Enter the amount',

@@ -42,7 +42,6 @@ dependencies:
   material_dialogs: ^1.1.4
   webview_flutter: ^4.2.4
   firebase_auth: ^4.10.0
-  flutter_barcode_scanner: ^2.0.0
   qr_code_scanner: ^1.0.1
 
 dependency_overrides:

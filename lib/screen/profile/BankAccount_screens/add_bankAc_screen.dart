@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/profile_controller.dart';
+import 'package:savo/screen/profile/BankAccount_screens/bankAc_listing.dart';
 import 'package:savo/util/widgets/login_button.dart';
 import 'package:savo/util/widgets/text_field.dart';
-
 import '../../../generated/l10n.dart';
 
 class AddBankScreen extends StatefulWidget {
@@ -102,8 +102,7 @@ class _AddBankScreenState extends State<AddBankScreen> {
                           backgroundColor: Colors.red,
                         );
                       }
-                    }
-                    else {
+                    } else {
                       Fluttertoast.showToast(
                         msg: S.of(context).kindlyFillAllTheFields,
                         gravity: ToastGravity.SNACKBAR,

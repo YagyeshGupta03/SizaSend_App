@@ -49,7 +49,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
             loadingController.updateLoading(false);
             loadingController.updateVideoCompressionLoading(false);
             loadingController.updateDispatchLoading(false);
-            Get.to(const DashBoardScreen());
+            Get.to(()=>const DashBoardScreen());
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -237,7 +237,6 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                           _height.text.isNotEmpty &&
                           _productDescription.text.isNotEmpty &&
                           _video != null) {
-                        _contactController.askPermissions();
                         _showBottomSheet(context);
                       } else {
                         Fluttertoast.showToast(
@@ -292,7 +291,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: primaryColor),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -310,7 +309,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
       isScrollControlled: true,
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.8,
+          initialChildSize: 0.7,
           expand: false,
           builder: (context, scrollController) {
             return Stack(
@@ -348,71 +347,82 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                         ),
                         const SizedBox(height: 20),
                         SizedBox(
-                          child: _quotationController.searchList.length
-                                  .isEqual(0)
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 40),
-                                    Text('No user',
-                                        style: themeController.currentTheme
-                                            .value.textTheme.titleSmall),
-                                  ],
-                                )
-                              : ListView.builder(
-                                  controller: scrollController,
-                                  itemCount:
-                                      _quotationController.searchList.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        _quotationController.addQuotation(
-                                            context,
-                                            _productName.text,
-                                            _storeLocation.text,
-                                            _quantity.text,
-                                            _weight.text,
-                                            _width.text,
-                                            _height.text,
-                                            _productDescription.text,
-                                            _video,
-                                            _quotationController
-                                                .searchList[index].userId);
-                                      },
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          radius: 25,
-                                          backgroundColor: Colors.white,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: _quotationController
-                                                        .searchList[index]
-                                                        .image ==
-                                                    ''
-                                                ? Image.asset(
-                                                    'assets/images/profilePic.jpg')
-                                                : Image.network(
-                                                    '$imageUrl${_quotationController.searchList[index].image}',
-                                                    height: 40,
-                                                    width: 40,
-                                                  ),
+                          child: Obx(
+                            () => _quotationController.searchList.length
+                                    .isEqual(0)
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 40),
+                                      Text('No user',
+                                          style: themeController.currentTheme
+                                              .value.textTheme.titleSmall),
+                                    ],
+                                  )
+                                : ListView.builder(
+                                    controller: scrollController,
+                                    itemCount:
+                                        _quotationController.searchList.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                        onTap: () {
+                                          _quotationController.addQuotation(
+                                              context,
+                                              _productName.text,
+                                              _storeLocation.text,
+                                              _quantity.text,
+                                              _weight.text,
+                                              _width.text,
+                                              _height.text,
+                                              _productDescription.text,
+                                              _video,
+                                              _quotationController
+                                                  .searchList[index].userId);
+                                        },
+                                        child: ListTile(
+                                          leading: CircleAvatar(
+                                            radius: 20,
+                                            backgroundColor: Colors.white,
+                                            child: ClipOval(
+                                              child: SizedBox(
+                                                height: 40,
+                                                width: 40,
+                                                child: _quotationController
+                                                            .searchList[index]
+                                                            .image ==
+                                                        ''
+                                                    ? Image.asset(
+                                                        'assets/images/profilePic.jpg',
+                                                        fit: BoxFit.cover)
+                                                    : Image.network(
+                                                        '$imageUrl${_quotationController.searchList[index].image}',
+                                                        fit: BoxFit.cover),
+                                              ),
+                                            ),
                                           ),
+                                          title: Text(
+                                              _quotationController
+                                                  .searchList[index].fullName,
+                                              style: themeController
+                                                  .currentTheme
+                                                  .value
+                                                  .textTheme
+                                                  .bodyLarge),
+                                          subtitle: Text(
+                                              '${_quotationController.searchList[index].countryCode}${_quotationController.searchList[index].phone}',
+                                              style: themeController
+                                                  .currentTheme
+                                                  .value
+                                                  .textTheme
+                                                  .displayMedium),
                                         ),
-                                        title: Text(
-                                            _quotationController
-                                                .searchList[index].fullName,
-                                            style: themeController.currentTheme
-                                                .value.textTheme.bodyLarge),
-                                        subtitle: Text(
-                                            '${_quotationController.searchList[index].countryCode}${_quotationController.searchList[index].phone}',
-                                            style: themeController.currentTheme
-                                                .value.textTheme.displayMedium),
-                                      ),
-                                    );
-                                  },
-                                ),
+                                      );
+                                    },
+                                  ),
+                          ),
                         ),
                         const SizedBox(height: 35),
                         Text('Your contacts',
@@ -460,32 +470,27 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                                               .value.textTheme.titleSmall),
                                       // subtitle: Text(_contactController
                                       //     .connectedContactListing[index].phone),
-                                      leading: Container(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(500),
-                                            color: themeController
-                                                .currentTheme.value.cardColor),
-                                        padding: const EdgeInsets.all(10),
-                                        child: _contactController
-                                                    .connectedContactListing[
-                                                        index]
-                                                    .image ==
-                                                ''
-                                            ? Image.asset(
-                                                'assets/images/profilePic.jpg',
-                                                height: 30,
-                                                width: 30,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Image.network(
-                                                '$imageUrl${_contactController.connectedContactListing[index].image}',
-                                                height: 30,
-                                                width: 30,
-                                                fit: BoxFit.cover,
-                                              ),
+                                      leading: CircleAvatar(
+                                        radius: 20,
+                                        child: ClipOval(
+                                          child: SizedBox(
+                                            height: 40,
+                                            width: 40,
+                                            child: _contactController
+                                                        .connectedContactListing[
+                                                            index]
+                                                        .image ==
+                                                    ''
+                                                ? Image.asset(
+                                                    'assets/images/profilePic.jpg',
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Image.network(
+                                                    '$imageUrl${_contactController.connectedContactListing[index].image}',
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   );

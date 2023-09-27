@@ -73,7 +73,6 @@ class FCM {
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       if (message != null) {
         // when app is open and read the notification and its handled
-        print(">>>>>>>>>>>get inital message when screen is on");
         handleClick(context, message);
       }
     });

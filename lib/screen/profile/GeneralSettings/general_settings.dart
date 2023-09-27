@@ -26,7 +26,8 @@ class _GeneralSettingsState extends State<GeneralSettings> {
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
         child: SingleChildScrollView(
-          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const ProfileListTile(
                 title: 'Language',
@@ -53,8 +54,9 @@ class _GeneralSettingsState extends State<GeneralSettings> {
               const SizedBox(height: 20),
               InkWell(
                 onTap: () {
-                  _loginController.termsAndConditions();
-                  Get.to(() => const PrivacyPolicy());
+                  _loginController
+                      .privacyPolicy()
+                      .whenComplete(() => Get.to(() => const PrivacyPolicy()));
                 },
                 child: const Text(
                   'Privacy Policies',

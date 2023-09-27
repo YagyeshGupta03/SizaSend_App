@@ -60,7 +60,6 @@ class LoginController extends GetxController {
       "password": password,
       'token': token,
     });
-
     if (reply['status'] == 1) {
       await credentialController.setData(reply['data']['id'], token);
       userInfoController.getUserInfo().then((value) {
@@ -153,8 +152,8 @@ class LoginController extends GetxController {
     var reply = await networkHelper.postData({});
 
     if (reply['status'] == 1) {
-      title = reply['data']['title'];
-      description = reply['data']['description'];
+      privacyTitle = reply['data']['title'];
+      privacyDescription = reply['data']['description'];
 
       // Navigator.pop(context);
     } else {
@@ -167,7 +166,6 @@ class LoginController extends GetxController {
   //
   //
   String userrId = '';
-  String password = '';
   Future forgotPassword(context, contactsToSend, codeOfCountry) async {
     await loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: contactListUrl);
@@ -177,7 +175,6 @@ class LoginController extends GetxController {
 
     if (reply['status'] == 1) {
       userrId = reply['data'][0]['id'];
-      password = reply['data'][0]['password'];
       await FirebaseAuth.instance
           .verifyPhoneNumber(
             phoneNumber: codeOfCountry.toString() + contactsToSend,
@@ -192,15 +189,13 @@ class LoginController extends GetxController {
             codeSent: (String verificationId, int? resendToken) {
               Get.to(() => OtpScreen(
                   verifyId: verificationId,
-                  password: password,
                   userId: userrId));
             },
             codeAutoRetrievalTimeout: (String verificationId) {},
           )
-          .then((value) => loadingController.updateLoading(false));
+          .whenComplete(() => loadingController.updateLoading(false));
     } else {
       userrId = '';
-      password = '';
       Fluttertoast.showToast(
         msg: "Phone number is not registered",
         gravity: ToastGravity.SNACKBAR,
@@ -214,13 +209,11 @@ class LoginController extends GetxController {
   //
   //
   //
-  Future forgotChangePassword(context, oldPass, newPass, userId) async {
-    final NetworkHelper networkHelper = NetworkHelper(url: changePasswordUrl);
+  Future forgotChangePassword(context, newPass, userId) async {
+    final NetworkHelper networkHelper = NetworkHelper(url: forgotPasswordUrl);
     var reply = await networkHelper.postData({
       "user_id": userId,
-      "password": oldPass,
-      "new_password": newPass,
-      "confirm_password": newPass,
+      "password": newPass,
     });
 
     if (reply['status'] == 1) {

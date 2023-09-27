@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:savo/Constants/all_urls.dart';
+import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Models/Models.dart';
 import 'package:savo/screen/profile/BankAccount_screens/bankAc_listing.dart';
@@ -25,12 +28,25 @@ class BankController extends GetxController {
 
     if (reply['status'] == 1) {
       showBankAc();
-      Fluttertoast.showToast(
-        msg: "${reply['message']}",
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.green,
-      );
-      Get.to(() => const BankListingScreen());
+      Dialogs.materialDialog(
+          msg:
+          'Account added successfully',
+          title: "Success",
+          titleAlign: TextAlign.center,
+          color: Colors.white,
+          context: context,
+          actions: [
+            IconsButton(
+              onPressed: () {
+                Get.back();
+                Get.to(() => const BankListingScreen());
+              },
+              text: 'Go back',
+              color: primaryColor,
+              textStyle:
+              const TextStyle(color: Colors.white),
+            ),
+          ]);
     } else {
       Fluttertoast.showToast(
         msg: "${reply['message']}",
@@ -50,8 +66,8 @@ class BankController extends GetxController {
       "user_id": credentialController.id.toString(),
     });
 
+    bankList.clear();
     if (reply['status'] == 1) {
-      bankList.clear();
       for (int i = 0; i < reply['data'].length; i++) {
         bankList.add(BankModel(
           bankId: reply['data'][i]['id'].toString(),
@@ -78,6 +94,7 @@ class BankController extends GetxController {
 
     if (reply['status'] == 1) {
       showBankAc();
+      Get.back();
       Fluttertoast.showToast(
         msg: "${reply['message']}",
         gravity: ToastGravity.SNACKBAR,
@@ -107,9 +124,9 @@ class ProfileController extends GetxController {
         [image],
         "profile_image");
 
+    userInfoController
+        .getUserInfo();
     if (reply['status'] == 1) {
-      userInfoController
-          .getUserInfo();
       Fluttertoast.showToast(
         msg: S.of(context).imageUpdatedSuccessfully,
         gravity: ToastGravity.SNACKBAR,

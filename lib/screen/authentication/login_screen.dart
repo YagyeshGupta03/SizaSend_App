@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   topTitle: S.of(context).phoneNo,
                   fieldLabel: 'Number',
                   cont: _phone,
-                  suffixWidget: const SizedBox(),
+                  suffixWidget: false,
                   prefixWidget: Icon(
                     Icons.phone,
                     color: themeController.currentTheme.value.iconTheme.color,
@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   topTitle: S.of(context).password,
                   fieldLabel: 'password',
                   cont: _password,
-                  suffixWidget: const SizedBox(),
+                  suffixWidget: true,
                   prefixWidget: Icon(
                     Icons.lock_outline,
                     color: themeController.currentTheme.value.iconTheme.color,

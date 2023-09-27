@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
-import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
+import 'package:savo/screen/dashboard_screen.dart';
 import 'package:savo/screen/profile/BankAccount_screens/add_bankAc_screen.dart';
 import '../../../Controllers/profile_controller.dart';
 import '../../../generated/l10n.dart';
@@ -29,6 +29,12 @@ class _BankListingScreenState extends State<BankListingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Get.to(()=> const DashBoardScreen());
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
         title: Text(
           S.of(context).bankAccount,
           style: themeController.currentTheme.value.textTheme.bodyMedium,
@@ -61,62 +67,9 @@ class _BankListingScreenState extends State<BankListingScreen> {
                         itemCount: _bankController.bankList.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          return Dismissible(
-                            key: Key(_bankController.bankList[index].bankId),
-                            direction: DismissDirection.endToStart,
-                            onDismissed: (direction) {
-                              Dialogs.materialDialog(
-                                  msg: 'Are you sure ? you can\'t undo this',
-                                  title: "Delete",
-                                  color: Colors.white,
-                                  context: context,
-                                  actions: [
-                                    IconsOutlineButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      text: 'Cancel',
-                                      iconData: Icons.cancel_outlined,
-                                      textStyle:
-                                          const TextStyle(color: Colors.grey),
-                                      iconColor: Colors.grey,
-                                    ),
-                                    IconsButton(
-                                      onPressed: () {
-                                        _bankController.deleteBankAc(
-                                            context,
-                                            _bankController
-                                                .bankList[index].bankId);
-                                      },
-                                      text: 'Delete',
-                                      iconData: Icons.delete,
-                                      color: Colors.red,
-                                      textStyle: const TextStyle(color: Colors.white),
-                                      iconColor: Colors.white,
-                                    ),
-                                  ]);
-                            },
-                            background: Container(
-                              width: screenWidth(context),
-                              color: primaryColor.withOpacity(0.12),
-                              margin: const EdgeInsets.symmetric(vertical: 5),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.delete_forever_outlined,
-                                    color: Colors.red,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            child: BankCard(
-                              bankController: _bankController,
-                              index: index,
-                            ),
+                          return BankCard(
+                            bankController: _bankController,
+                            index: index,
                           );
                         },
                       ),
@@ -200,6 +153,40 @@ class BankCard extends StatelessWidget {
                   width: 35,
                 ),
               ),
+            ),
+            trailing: IconButton(
+              onPressed: () {
+                Dialogs.materialDialog(
+                    msg: 'Do you want to delete this bank account?',
+                    title: "Delete",
+                    titleAlign: TextAlign.center,
+                    color: Colors.white,
+                    context: context,
+                    actions: [
+                      IconsOutlineButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        text: 'Cancel',
+                        iconData: Icons.cancel_outlined,
+                        textStyle: const TextStyle(color: Colors.grey),
+                        iconColor: Colors.grey,
+                      ),
+                      IconsButton(
+                        onPressed: () {
+                          _bankController.deleteBankAc(
+                              context, _bankController.bankList[index].bankId);
+                        },
+                        text: 'Delete',
+                        iconData: Icons.delete,
+                        color: primaryColor,
+                        textStyle: const TextStyle(color: Colors.white),
+                        iconColor: Colors.white,
+                      ),
+                    ]);
+              },
+              icon:
+                  const Icon(Icons.delete_forever_outlined, color: Colors.red),
             ),
           ),
         ),

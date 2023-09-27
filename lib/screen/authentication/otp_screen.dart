@@ -15,12 +15,10 @@ class OtpScreen extends StatefulWidget {
   const OtpScreen(
       {super.key,
       required this.verifyId,
-      required this.userId,
-      required this.password});
+      required this.userId});
 
   final String verifyId;
   final String userId;
-  final String password;
   @override
   State<OtpScreen> createState() => _OtpScreenState();
 }

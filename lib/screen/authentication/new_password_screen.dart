@@ -45,7 +45,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 topTitle: 'Enter new password',
                 fieldLabel: 'Password',
                 cont: _password,
-                suffixWidget: const SizedBox(),
+                suffixWidget: true,
                 prefixWidget: Icon(
                   Icons.lock_outline,
                   color: themeController.currentTheme.value.iconTheme.color,
@@ -57,7 +57,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 topTitle: 'Confirm password',
                 fieldLabel: 'Confirm password',
                 cont: _confirmPass,
-                suffixWidget: const SizedBox(),
+                suffixWidget: true,
                 prefixWidget: Icon(
                   Icons.lock_outline,
                   color: themeController.currentTheme.value.iconTheme.color,
@@ -71,7 +71,6 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                       if (_password.text == _confirmPass.text) {
                         _loginController.forgotChangePassword(
                             context,
-                            _loginController.password,
                             _password.text,
                             _loginController.userrId);
                       } else {

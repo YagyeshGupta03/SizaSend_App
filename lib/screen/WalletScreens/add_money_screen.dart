@@ -24,14 +24,17 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
         child: SingleChildScrollView(
-          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Available balance',
                   style:
                       themeController.currentTheme.value.textTheme.bodyLarge),
               Text(userInfoController.balance,
-                  style:
-                  const TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: primaryColor)),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: primaryColor)),
               const SizedBox(height: 25),
               CustomTextField(
                   cont: _amount,
@@ -46,7 +49,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                   onTap: () {
                     if (_amount.text.isNotEmpty) {
                       // _walletController.webOpen(_amount.text);
-                      _walletController.addMoney(_amount.text);
+                      _walletController.addMoney(context, _amount.text);
                     } else {
                       Fluttertoast.showToast(
                         msg: 'Enter the amount',
@@ -66,16 +69,24 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
   }
 }
 
-
-
 class QuotationMoneyAdd extends StatefulWidget {
-  const QuotationMoneyAdd({super.key});
+  const QuotationMoneyAdd({super.key, required this.price});
+
+  final String price;
 
   @override
   State<QuotationMoneyAdd> createState() => _QuotationMoneyAddState();
 }
 
 class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
+  String requiredAmount = '';
+
+  @override
+  void initState() {
+    super.initState();
+    calculateAmount(widget.price);
+  }
+
   final _amount = TextEditingController();
   final WalletController _walletController = Get.put(WalletController());
   @override
@@ -85,14 +96,26 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
         child: SingleChildScrollView(
-          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Available balance',
                   style:
-                  themeController.currentTheme.value.textTheme.bodyLarge),
-              Text(userInfoController.balance,
+                      themeController.currentTheme.value.textTheme.bodyLarge),
+              Text('${userInfoController.balance}  USD',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: primaryColor)),
+              const SizedBox(height: 25),
+              Text('Required extra',
                   style:
-                  const TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: primaryColor)),
+                      themeController.currentTheme.value.textTheme.bodyLarge),
+              Text('$requiredAmount  USD',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: primaryColor)),
               const SizedBox(height: 25),
               CustomTextField(
                   cont: _amount,
@@ -106,7 +129,8 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
               LoginButton(
                   onTap: () {
                     if (_amount.text.isNotEmpty) {
-                      _walletController.quotationAddMoney(_amount.text);
+                      _walletController.quotationAddMoney(
+                          context, _amount.text);
                     } else {
                       Fluttertoast.showToast(
                         msg: 'Enter the amount',
@@ -123,5 +147,13 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
         ),
       ),
     );
+  }
+
+  void calculateAmount(value) {
+    double balance = double.parse(userInfoController.balance);
+    double price = double.parse(value);
+    double amount = price - balance;
+
+    requiredAmount = amount.toString();
   }
 }

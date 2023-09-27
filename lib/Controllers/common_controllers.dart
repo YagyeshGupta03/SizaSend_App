@@ -21,7 +21,7 @@ class UserInfoController extends GetxController{
   String fullName = '';
   String phone = '';
   String countryCode = '';
-  String profileImage = '';
+  RxString profileImage = ''.obs;
   String occupation = '';
   String employer = '';
   String email = '';
@@ -37,7 +37,7 @@ class UserInfoController extends GetxController{
     fullName = '';
     phone = '';
     countryCode = '';
-    profileImage = '';
+    profileImage.value = '';
     occupation = '';
     employer = '';
     email = '';
@@ -48,7 +48,7 @@ class UserInfoController extends GetxController{
      phone = reply['data']['phone'];
      countryCode = reply['data']['country_code'];
      balance = reply['data']['balance'];
-     profileImage = reply['data']['profile_image']??'';
+     profileImage.value = reply['data']['profile_image']??'';
      employer = reply['data']['employer']??'';
      occupation = reply['data']['occupation_name']??'';
      email = reply['data']['email']??'';
@@ -66,6 +66,13 @@ class LoadingController extends GetxController {
   RxBool profileLoading = false.obs;
   RxBool videoCompressionLoad = false.obs;
   RxBool dispatchLoad = false.obs;
+  RxBool payLoad = false.obs;
+  RxBool contactLoad = false.obs;
+
+  updateContactLoading(val) {
+    contactLoad.value = val;
+    update();
+  }
 
   updateLoading(val) {
     loading.value = val;
@@ -74,6 +81,11 @@ class LoadingController extends GetxController {
 
   updateDispatchLoading(val) {
     dispatchLoad.value = val;
+    update();
+  }
+
+  updatePayLoading(val) {
+    payLoad.value = val;
     update();
   }
   updateProfileLoading(val) {

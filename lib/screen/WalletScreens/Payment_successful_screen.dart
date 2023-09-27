@@ -3,7 +3,11 @@ import 'package:get/get.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 
 class PaymentSuccessfulScreen extends StatelessWidget {
-  const PaymentSuccessfulScreen({super.key, required this.orderId, required this.orderName, required this.amount});
+  const PaymentSuccessfulScreen(
+      {super.key,
+      required this.orderId,
+      required this.orderName,
+      required this.amount});
 
   final String orderId;
   final String orderName;
@@ -29,7 +33,7 @@ class PaymentSuccessfulScreen extends StatelessWidget {
                 child: Icon(Icons.check_circle, color: Colors.green, size: 45),
               ),
               const SizedBox(height: 30),
-               PaymentTile(name: 'Order id', value: orderId),
+              PaymentTile(name: 'Order id', value: orderId),
               const SizedBox(height: 20),
               PaymentTile(name: 'Order name', value: orderName),
               const SizedBox(height: 20),
@@ -37,7 +41,7 @@ class PaymentSuccessfulScreen extends StatelessWidget {
               const SizedBox(height: 30),
               ElevatedButton(
                   onPressed: () {
-                    Get.to(()=> const DashBoardScreen());
+                    Get.to(() => const DashBoardScreen());
                   },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),

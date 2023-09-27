@@ -1,3 +1,9 @@
+
+//Model classes for project
+
+
+
+//User model
 class UserModel {
   UserModel({
     required this.fullName,
@@ -14,6 +20,8 @@ class UserModel {
   final String userId;
 }
 
+
+//Bank account model
 class BankModel {
   BankModel({
     required this.bankId,
@@ -30,6 +38,8 @@ class BankModel {
   final String account;
 }
 
+
+//Occupation list model
 class OccupationModel {
   OccupationModel({
     required this.id,
@@ -40,6 +50,8 @@ class OccupationModel {
   final String title;
 }
 
+
+//Quotation model
 class QuotationModel {
   QuotationModel({
     required this.id,
@@ -76,6 +88,8 @@ class QuotationModel {
   final String paid;
 }
 
+
+//Notification model
 class NotificationModel {
   NotificationModel({
     required this.orderId,
@@ -96,6 +110,8 @@ class NotificationModel {
   final DateTime date;
 }
 
+
+//Contact list model
 class ContactModel {
   ContactModel({
     required this.fullName,
@@ -106,4 +122,24 @@ class ContactModel {
   final String userId;
   final String fullName;
   final String image;
+}
+
+
+//Wallet transactions model
+class WalletTransactionModel {
+  WalletTransactionModel({
+    required this.transactionId,
+    required this.balance,
+    required this.status,
+    required this.paidUser,
+    required this.date,
+    required this.time,
+  });
+
+  final String transactionId;
+  final String balance;
+  final String status;
+  final String paidUser;
+  final String date;
+  final String time;
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../Constants/theme_data.dart';
 
 
@@ -29,7 +28,7 @@ class LoginButton extends StatelessWidget {
           ),
           backgroundColor: btnColor),
       child: SizedBox(
-        height: 30,
+        height: 20,
         width: double.infinity,
         child: Center(
           child: Text(

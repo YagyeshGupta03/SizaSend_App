@@ -45,23 +45,25 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
                           borderRadius: BorderRadius.circular(10),
                           color: themeController.currentTheme.value.cardColor),
                       padding: const EdgeInsets.all(5),
-                      child: userInfoController.profileImage == ''
-                          ? SizedBox(
-                              height: 10,
-                              width: 10,
-                              child: Image.asset(
-                                'assets/images/profilePic.jpg',
-                                fit: BoxFit.fill,
+                      child: Obx(
+                        () => userInfoController.profileImage.value == ''
+                            ? SizedBox(
+                                height: 10,
+                                width: 10,
+                                child: Image.asset(
+                                  'assets/images/profilePic.jpg',
+                                  fit: BoxFit.fill,
+                                ),
+                              )
+                            : SizedBox(
+                                height: 10,
+                                width: 10,
+                                child: Image.network(
+                                  '$imageUrl${userInfoController.profileImage.value}',
+                                  fit: BoxFit.fill,
+                                ),
                               ),
-                            )
-                          : SizedBox(
-                              height: 10,
-                              width: 10,
-                              child: Image.network(
-                                '$imageUrl${userInfoController.profileImage.toString()}',
-                                fit: BoxFit.fill,
-                              ),
-                            ),
+                      ),
                     ),
                   ),
                   const Row(

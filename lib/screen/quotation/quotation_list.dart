@@ -118,7 +118,7 @@ class _QuotationListState extends State<QuotationList> {
                                               onPressed: () {
                                                 Dialogs.materialDialog(
                                                     msg:
-                                                        'Are you sure ? you can\'t undo this',
+                                                        'Are you sure ? You want to delete this',
                                                     title: "Delete",
                                                     color: Colors.white,
                                                     context: context,

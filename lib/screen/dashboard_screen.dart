@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:random_avatar/random_avatar.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/login_controller.dart';
 import 'package:savo/animation/exit_animation.dart';
 import 'package:savo/screen/NotificationScreen/notification_screen.dart';
+import 'package:savo/screen/WalletScreens/wallet_transactions.dart';
 import 'package:savo/screen/contact_us_screen.dart';
 import 'package:savo/screen/history/history_home_screen.dart';
 import 'package:savo/screen/home/home_screen.dart';
 import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
 import 'package:savo/screen/profile/profile_home_screen.dart';
 import 'package:savo/screen/quotation/quotation_home_screen.dart';
-import 'package:savo/screen/timeout_screen.dart';
-import 'package:savo/util/images.dart';
 import '../Constants/all_urls.dart';
 import '../Constants/theme_data.dart';
+import '../Controllers/contact_controllers.dart';
 import '../generated/l10n.dart';
 import 'authentication/login_screen.dart';
 
@@ -26,14 +28,16 @@ class DashBoardScreen extends StatefulWidget {
 }
 
 class _DashBoardScreenState extends State<DashBoardScreen> {
+  final ContactController _contactController = Get.put(ContactController());
+
+  @override
+  void initState() {
+    super.initState();
+    _contactController.askPermissions();
+  }
+
   int selectedIndex = 0;
 
-  // List screenTitle = [
-  //   Text("Home", style: themeController.currentTheme.value.textTheme.bodyLarge),
-  //   const Text("Quotation"),
-  //   const Text("History"),
-  //   const Text("Profile"),
-  // ];
   List screen = [
     const HomeScreen(),
     const QuotationHomeScreen(),
@@ -112,13 +116,13 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         // title: screenTitle[selectedIndex],
       ),
       drawer: drawer.elementAt(selectedIndex),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        onPressed: () {},
-        child: Image.asset(Images.icScanner),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      //   onPressed: () {},
+      //   child: Image.asset(Images.icScanner),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: screen.elementAt(selectedIndex),
       ),
@@ -134,7 +138,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           BottomNavigationBarItem(
               icon: const Icon(Icons.person), label: S.of(context).profile),
         ],
-        currentIndex: selectedIndex,
+        currentIndex: 0,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: primaryColor,
         onTap: (index) {
@@ -215,6 +219,14 @@ class CustomDrawer extends StatelessWidget {
                 Get.to(() => const AccountInfoScreen());
               }),
           DrawerCard(
+              title: 'Wallet transactions',
+              icon: Icons.wallet,
+              onTap: () {
+                Navigator.pop(context);
+                Get.to((
+                    ) => const WalletTransactions());
+              }),
+          DrawerCard(
               title: 'Notifications',
               icon: Icons.notifications,
               onTap: () {
@@ -222,21 +234,51 @@ class CustomDrawer extends StatelessWidget {
                 Get.to(() => const NotificationScreen());
               }),
           DrawerCard(
-              title: 'Contact us', icon: Icons.support_agent, onTap: () {
-                Get.to(()=> const AdminEnquiryScreen());
-          }),
+              title: 'Contact us',
+              icon: Icons.support_agent,
+              onTap: () {
+                Get.to(() => const AdminEnquiryScreen());
+              }),
           const SizedBox(height: 50),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  loadingController.updateVideoCompressionLoading(false);
-                  loadingController.updateProfileLoading(false);
-                  loadingController.updateLoading(false);
-                  await _loginController.logout();
-                  await credentialController.deleteData();
-                  Get.off(() => const LoginScreen());
+                  Dialogs.materialDialog(
+                      msg: 'Do you want to logout?',
+                      title: 'Logout',
+                      context: context,
+                      actions: [
+                        IconsButton(
+                          onPressed: () async {
+                            loadingController
+                                .updateVideoCompressionLoading(false);
+                            loadingController.updateProfileLoading(false);
+                            loadingController.updateLoading(false);
+                            Navigator.pop(context);
+                          },
+                          text: 'Cancel',
+                          color: themeController.currentTheme.value.cardColor,
+                          textStyle: const TextStyle(color: primaryColor),
+                          iconColor: primaryColor,
+                        ),
+                        IconsButton(
+                          onPressed: () async {
+                            loadingController
+                                .updateVideoCompressionLoading(false);
+                            loadingController.updateProfileLoading(false);
+                            loadingController.updateLoading(false);
+                            await _loginController.logout();
+                            await credentialController.deleteData();
+                            Get.off(() => const LoginScreen());
+                          },
+                          text: 'Logout',
+                          color: primaryColor,
+                          textStyle: const TextStyle(color: Colors.white),
+                          iconColor: Colors.white,
+                        ),
+                      ]);
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
                 child: const Padding(
