@@ -7,10 +7,10 @@ import 'package:savo/Constants/all_urls.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Models/Models.dart';
-import 'package:savo/screen/profile/BankAccount_screens/bankAc_listing.dart';
 import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
 import '../Helper/http_helper.dart';
 import '../generated/l10n.dart';
+import '../screen/profile/BankAccount_screens/bank_account_listing.dart';
 
 class BankController extends GetxController {
   //

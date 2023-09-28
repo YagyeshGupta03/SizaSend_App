@@ -38,12 +38,13 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _controller =
-        VideoPlayerController.network('$videoUrl${_quotationController.video}')
-          ..initialize().then((_) {
-            setState(() {});
-          });
+    Uri videoUri = Uri.parse('$videoUrl${_quotationController.video}');
+    _controller = VideoPlayerController.networkUrl(videoUri)
+      ..initialize().then((_) {
+        setState(() {});
+      });
   }
+
 
   @override
   void dispose() {
@@ -429,7 +430,7 @@ class CompleteOrderButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final QuotationController _quotationController =
+    final QuotationController quotationController =
         Get.put(QuotationController());
 
     return Column(
@@ -454,9 +455,9 @@ class CompleteOrderButtons extends StatelessWidget {
                     ),
                     IconsButton(
                       onPressed: () async {
-                        await _quotationController.sendQuotationStatus(
+                        await quotationController.sendQuotationStatus(
                             orderId, senderId, 'accept');
-                        _quotationController
+                        quotationController
                             .getQuotationByOrderId(orderId)
                             .whenComplete(() => Get.to(
                                 () => const QuotationDetailScreenForPay()));
@@ -493,9 +494,9 @@ class CompleteOrderButtons extends StatelessWidget {
                     ),
                     IconsButton(
                       onPressed: () async {
-                        await _quotationController.sendQuotationStatus(
+                        await quotationController.sendQuotationStatus(
                             orderId, senderId, 'reject');
-                        _quotationController
+                        quotationController
                             .getQuotationByOrderId(orderId)
                             .whenComplete(() => Get.to(
                                 () => const QuotationDetailScreenForPay()));

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/profile_controller.dart';
-import 'package:savo/screen/profile/BankAccount_screens/bankAc_listing.dart';
 import 'package:savo/util/widgets/login_button.dart';
 import 'package:savo/util/widgets/text_field.dart';
 import '../../../generated/l10n.dart';

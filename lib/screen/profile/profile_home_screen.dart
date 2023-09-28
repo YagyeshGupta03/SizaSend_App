@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/screen/NotificationScreen/notification_screen.dart';
 import 'package:savo/screen/authentication/login_screen.dart';
-import 'package:savo/screen/profile/BankAccount_screens/bankAc_listing.dart';
 import 'package:savo/screen/profile/GeneralSettings/general_settings.dart';
 import 'package:savo/screen/profile/UserAccountScreens/account_info_screen.dart';
 import 'package:savo/screen/profile/change_password_screen.dart';
@@ -15,6 +13,7 @@ import '../../Constants/theme_data.dart';
 import '../../Controllers/login_controller.dart';
 import '../../generated/l10n.dart';
 import '../../util/images.dart';
+import 'BankAccount_screens/bank_account_listing.dart';
 
 class ProfileHomeScreen extends StatefulWidget {
   const ProfileHomeScreen({super.key});
@@ -33,6 +32,7 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           const SizedBox(height: 20),
+
           Center(
             child: Container(
               height: 100,
@@ -62,12 +62,16 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
               ),
             ),
           ),
+
           const SizedBox(height: 10),
+
           Text(
             userInfoController.fullName,
             style: themeController.currentTheme.value.textTheme.titleMedium,
           ),
+
           const SizedBox(height: 5),
+
           Text(
             '${userInfoController.countryCode}${userInfoController.phone}',
             style: themeController.currentTheme.value.textTheme.titleSmall,
@@ -75,12 +79,14 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
 
           // List Tiles
           const SizedBox(height: 15),
+
           ImageListTile(
               onTap: () {
                 Get.to(() => const AccountInfoScreen());
               },
               image: Images.icAccountInfo,
               title: S.of(context).accountInfo),
+
           ImageListTile(
             image: Images.icBank,
             title: S.of(context).bankAccount,
@@ -88,6 +94,7 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
               Get.to(() => const BankListingScreen());
             },
           ),
+
           ImageListTile(
             image: Images.icLanguage,
             title: 'Notification',
@@ -95,7 +102,9 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
               Get.to(() => const NotificationScreen());
             },
           ),
+
           const SizedBox(height: 20),
+
           ImageListTile(
             image: Images.icSetting,
             title: S.of(context).generalSetting,
@@ -103,6 +112,7 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
               Get.to(() => const GeneralSettings());
             },
           ),
+
           ImageListTile(
             image: Images.icChangePassword,
             title: S.of(context).changePassword,
@@ -110,6 +120,7 @@ class _ProfileHomeScreenState extends State<ProfileHomeScreen> {
               Get.to(() => const ChangePasswordScreen());
             },
           ),
+
           ImageListTile(
             image: Images.icLogout,
             title: S.of(context).logout,
@@ -195,9 +206,3 @@ class _ImageListTileState extends State<ImageListTile> {
     );
   }
 }
-
-
-
-
-
-

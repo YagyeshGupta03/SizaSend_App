@@ -71,11 +71,11 @@ class ContactController extends GetxController {
         backgroundColor: Colors.red,
       );
     } else if (permissionStatus == PermissionStatus.permanentlyDenied) {
-      Fluttertoast.showToast(
-        msg: 'Contact data not available on device',
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.red,
-      );
+      // Fluttertoast.showToast(
+      //   msg: 'Contact data not available on device',
+      //   gravity: ToastGravity.SNACKBAR,
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -141,7 +141,7 @@ class ContactController extends GetxController {
                   image: reply['data'][i]['profile_image'] ?? ''),
             );
           }
-        }print(connectedContactListing.length);
+        }
       } else {
         print('Error in showing contact list');
       }

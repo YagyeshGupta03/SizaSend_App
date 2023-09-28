@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Constants/theme_data.dart';
-import 'package:savo/screen/authentication/login_screen.dart';
 import '../Controllers/quotation_controller.dart';
 
 class DispatchScanner extends StatefulWidget {

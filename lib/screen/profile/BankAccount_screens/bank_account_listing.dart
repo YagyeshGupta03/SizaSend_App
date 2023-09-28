@@ -6,9 +6,9 @@ import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/screen/dashboard_screen.dart';
-import 'package:savo/screen/profile/BankAccount_screens/add_bankAc_screen.dart';
 import '../../../Controllers/profile_controller.dart';
 import '../../../generated/l10n.dart';
+import 'add_bank_account_screen.dart';
 
 class BankListingScreen extends StatefulWidget {
   const BankListingScreen({Key? key}) : super(key: key);

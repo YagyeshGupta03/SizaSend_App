@@ -157,7 +157,7 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginController _loginController = Get.put(LoginController());
+    final LoginController loginController = Get.put(LoginController());
     return Drawer(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -175,7 +175,7 @@ class CustomDrawer extends StatelessWidget {
                   width: 80,
                   padding: const EdgeInsets.all(5),
                   color: themeController.currentTheme.value.cardColor,
-                  child: userInfoController.profileImage == ''
+                  child: userInfoController.profileImage.value == ''
                       ? SizedBox(
                           child: Image.asset(
                             'assets/images/profilePic.jpg',
@@ -223,8 +223,7 @@ class CustomDrawer extends StatelessWidget {
               icon: Icons.wallet,
               onTap: () {
                 Navigator.pop(context);
-                Get.to((
-                    ) => const WalletTransactions());
+                Get.to(() => const WalletTransactions());
               }),
           DrawerCard(
               title: 'Notifications',
@@ -269,7 +268,7 @@ class CustomDrawer extends StatelessWidget {
                                 .updateVideoCompressionLoading(false);
                             loadingController.updateProfileLoading(false);
                             loadingController.updateLoading(false);
-                            await _loginController.logout();
+                            await loginController.logout();
                             await credentialController.deleteData();
                             Get.off(() => const LoginScreen());
                           },

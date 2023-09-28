@@ -124,7 +124,6 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                                 // Compression was successful
                                 setState(() {
                                   _video = XFile(compressedFilePath);
-                                  print('video compression successful');
                                 });
                               }
                             }

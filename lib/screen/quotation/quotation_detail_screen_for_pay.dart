@@ -40,11 +40,11 @@ class _QuotationDetailScreenForPayState
   @override
   void initState() {
     super.initState();
-    _controller =
-        VideoPlayerController.network('$videoUrl${_quotationController.video}')
-          ..initialize().then((_) {
-            setState(() {});
-          });
+    Uri videoUri = Uri.parse('$videoUrl${_quotationController.video}');
+    _controller = VideoPlayerController.networkUrl(videoUri)
+      ..initialize().then((_) {
+        setState(() {});
+      });
   }
 
   @override

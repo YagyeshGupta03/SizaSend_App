@@ -74,7 +74,7 @@ class NetworkHelper {
     request.fields.addAll(data);
     image.forEach((element) async {
       request.files
-          .add(await http.MultipartFile.fromPath('$imageKey', element.path));
+          .add(await http.MultipartFile.fromPath(imageKey, element.path));
     });
 
     http.StreamedResponse response = await request.send();

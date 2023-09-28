@@ -6,10 +6,10 @@ String? validateField(String value, String fieldLabel, BuildContext context) {
   if (fieldLabel.contains("Number")) {
     final validator = Validator(
         validators: [
-          RequiredValidator(),
-          NumberValidator(),
-          MaxLengthValidator(length: 10),
-          MinLengthValidator(length: 10),
+          const RequiredValidator(),
+          const NumberValidator(),
+          const MaxLengthValidator(length: 10),
+          const MinLengthValidator(length: 10),
         ]
     );
     return validator.validate(
@@ -17,15 +17,15 @@ String? validateField(String value, String fieldLabel, BuildContext context) {
   } else if(fieldLabel.contains("E-mail")) {
     final validator = Validator(
         validators: [
-          RequiredValidator(),
-          EmailValidator()
+         const RequiredValidator(),
+          const EmailValidator()
         ]
     );
     return validator.validate(
          label: fieldLabel, value: value);
   }
   else {
-    final validator = Validator(validators: [RequiredValidator()]);
+    final validator = Validator(validators: [ const RequiredValidator()]);
     return validator.validate(
          label: fieldLabel, value: value);
   }

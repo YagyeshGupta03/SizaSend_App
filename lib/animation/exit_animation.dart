@@ -19,7 +19,7 @@ class _ExitAnimationWidgetState extends State<ExitAnimationWidget>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
     );
     _opacity =
         Tween<double>(begin: 1.0, end: 0.0).animate(_animationController!);

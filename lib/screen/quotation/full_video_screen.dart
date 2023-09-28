@@ -27,7 +27,8 @@ class _VideoAppState extends State<VideoApp> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network('$videoUrl${widget.video}')
+    Uri videoUri = Uri.parse('$videoUrl${widget.video}');
+    _controller = VideoPlayerController.networkUrl(videoUri)
       ..initialize().then((_) {
         setState(() {});
       });

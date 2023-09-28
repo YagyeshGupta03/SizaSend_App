@@ -85,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen>
               child: Image.asset(
                 Images.icLogo,
                 fit: BoxFit.contain,
-                scale: 4,
+                scale: 3,
               ),
             ),
           ),

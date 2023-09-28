@@ -11,7 +11,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginController _loginController = Get.put(LoginController());
+    final LoginController loginController = Get.put(LoginController());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor.withOpacity(0.25),
@@ -35,7 +35,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Html(
-                data: _loginController.description,
+                data: loginController.description,
               ),
             ],
           ),
@@ -56,7 +56,7 @@ class PrivacyPolicy extends StatefulWidget {
 class _PrivacyPolicyState extends State<PrivacyPolicy> {
   @override
   Widget build(BuildContext context) {
-    final LoginController _loginController = Get.put(LoginController());
+    final LoginController loginController = Get.put(LoginController());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor.withOpacity(0.25),
@@ -80,7 +80,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
               ),
               const SizedBox(height: 20),
               Html(
-                data: _loginController.privacyDescription,
+                data: loginController.privacyDescription,
               ),
             ],
           ),

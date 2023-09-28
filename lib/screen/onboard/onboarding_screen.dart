@@ -96,7 +96,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             credentialController.setOnBoard('1');
-                            Get.to(() => const SignUpScreen());
+                            Get.off(() => const SignUpScreen());
                           },
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, color: buttonColor)),

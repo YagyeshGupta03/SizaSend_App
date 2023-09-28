@@ -13,7 +13,7 @@ import 'package:savo/screen/dashboard_screen.dart';
 import '../Constants/all_urls.dart';
 import '../Constants/theme_data.dart';
 import '../Helper/http_helper.dart';
-import '../screen/WalletScreens/Payment_successful_screen.dart';
+import '../screen/WalletScreens/Payment_success_screen.dart';
 
 class WalletController extends GetxController {
   //

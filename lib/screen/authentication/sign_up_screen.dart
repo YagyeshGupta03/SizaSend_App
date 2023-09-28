@@ -97,7 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             themeController.currentTheme.value.cardColor,
                         initialSelection: '+91',
                         showFlag: false,
-                        favorite: ['+91', 'FR'],
+                        favorite: const ['+91', 'FR'],
                         showCountryOnly: false,
                         showOnlyCountryWhenClosed: false,
                         alignLeft: false,

@@ -110,7 +110,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       if(_phone.text.isNotEmpty && _password.text.isNotEmpty){
                         connectivityController.connectedLogin(context);
                         fcmToken = await _firebaseMessaging.getToken() ?? '';
-                        print(fcmToken);
                         _loginController.login(context, _phone.text, _password.text, fcmToken.toString());
                       } else {
                         Fluttertoast.showToast(
@@ -169,7 +168,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             )
                 : const SizedBox(),
-          ),]
+          ),
+        ],
       ),
     );
   }
