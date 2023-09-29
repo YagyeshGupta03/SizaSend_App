@@ -149,7 +149,7 @@ class _QuotationListState extends State<QuotationList> {
                                                         },
                                                         text: 'Delete',
                                                         iconData: Icons.delete,
-                                                        color: Colors.red,
+                                                        color: primaryColor,
                                                         textStyle:
                                                             const TextStyle(
                                                                 color: Colors

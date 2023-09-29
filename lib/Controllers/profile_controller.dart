@@ -79,7 +79,6 @@ class BankController extends GetxController {
         update();
       }
     } else {
-      print('Error in getting bank details');
     }
   }
 
@@ -158,7 +157,6 @@ class ProfileController extends GetxController {
         update();
       }
     } else {
-      print('Error in getting occupation list');
     }
   }
 

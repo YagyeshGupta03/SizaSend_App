@@ -104,7 +104,7 @@ class FCM {
 
   handleClick(BuildContext context, RemoteMessage message) {
     ///Chat Handle
-
+    Get.to(() => const NotificationScreen());
     print(message);
 
     // if (message.data.containsValue("chat")) {
@@ -124,3 +124,5 @@ class FCM {
 
 // background message
 Future<void> onBackgroundMessage(RemoteMessage message) async {}
+
+

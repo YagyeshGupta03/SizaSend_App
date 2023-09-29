@@ -15,13 +15,19 @@ class HomeHeaderScreen extends StatelessWidget {
         SizedBox(
           height: s.height * .038,
         ),
-         Text(
-          "Hello, ${userInfoController.fullName} ",
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+         Padding(
+           padding: const EdgeInsets.only(left: 10),
+           child: Text(
+            "Hello, ${userInfoController.fullName} ",
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        const Text(
-          "These are today's updates.",
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+         ),
+       const Padding(
+          padding:  EdgeInsets.only(left: 10),
+          child:  Text(
+            "These are today's updates.",
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+          ),
         ),
         SizedBox(
           height: s.height * .014,

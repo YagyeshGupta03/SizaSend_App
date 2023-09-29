@@ -157,7 +157,6 @@ class LoginController extends GetxController {
 
       // Navigator.pop(context);
     } else {
-      print('error in getting terms and conditons');
     }
   }
 

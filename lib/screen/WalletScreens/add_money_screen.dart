@@ -48,8 +48,8 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
               LoginButton(
                   onTap: () {
                     if (_amount.text.isNotEmpty) {
-                      // _walletController.webOpen(_amount.text);
-                      _walletController.addMoney(context, _amount.text);
+                      _walletController.webOpen(_amount.text, true);
+                      // _walletController.addMoney(context, _amount.text);
                     } else {
                       Fluttertoast.showToast(
                         msg: 'Enter the amount',
@@ -129,8 +129,9 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
               LoginButton(
                   onTap: () {
                     if (_amount.text.isNotEmpty) {
-                      _walletController.quotationAddMoney(
-                          context, _amount.text);
+                      _walletController.webOpen(_amount.text, false);
+                      // _walletController.quotationAddMoney(
+                      //     context, _amount.text);
                     } else {
                       Fluttertoast.showToast(
                         msg: 'Enter the amount',

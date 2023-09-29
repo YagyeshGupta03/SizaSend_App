@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
+import 'package:savo/screen/profile/BankAccount_screens/bank_account_listing.dart';
 import 'package:savo/util/widgets/login_button.dart';
 import 'package:savo/util/widgets/text_field.dart';
 import '../../Controllers/walllet_controller.dart';
@@ -16,7 +17,7 @@ class WithdrawMoneyScreen extends StatefulWidget {
 
 class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
   final _amount = TextEditingController();
-  final WalletController _walletController = Get.put(WalletController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +49,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
               LoginButton(
                   onTap: () {
                     if (_amount.text.isNotEmpty) {
-                      _walletController.withdrawMoney(context, _amount.text);
+                      Get.to(()=> BankListWithdraw(withdrawal: true, amount: _amount.text));
                     } else {
                       Fluttertoast.showToast(
                         msg: 'Enter the amount',
@@ -57,7 +58,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                       );
                     }
                   },
-                  title: 'Withdraw Money',
+                  title: 'Select bank account',
                   txtColor: Colors.white,
                   btnColor: primaryColor)
             ],

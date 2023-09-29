@@ -92,16 +92,13 @@ class _OtpScreenState extends State<OtpScreen> {
                     enableActiveFill: true,
                     controller: textEditingController,
                     onCompleted: (v) {
-                      print("Completed");
                     },
                     onChanged: (value) {
-                      print(value);
                       setState(() {
                         currentText = value;
                       });
                     },
                     beforeTextPaste: (text) {
-                      print("Allowing to paste $text");
                       return true;
                     },
                     appContext: context,

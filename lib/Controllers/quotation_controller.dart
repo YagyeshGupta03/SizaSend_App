@@ -270,7 +270,6 @@ class QuotationController extends GetxController {
         update();
       }
     } else {
-      print('Error in getting quotation list');
     }
   }
 
@@ -326,7 +325,6 @@ class QuotationController extends GetxController {
         );
       }
     } else {
-      print('Error in getting notification list');
     }
   }
 
@@ -430,7 +428,6 @@ class QuotationController extends GetxController {
         update();
       }
     } else {
-      print('Error in getting quotation history list');
     }
   }
 
@@ -518,7 +515,6 @@ class QuotationController extends GetxController {
       });
     } else {
       loadingController.updateDispatchLoading(false);
-      print('Error in dispatching image');
     }
     loadingController.updateDispatchLoading(false);
   }
@@ -571,7 +567,6 @@ class QuotationController extends GetxController {
             ),
           ]);
       await loadingController.updateDispatchLoading(false);
-      print('Error in dispatching image');
     }
     loadingController.updateDispatchLoading(false);
   }
@@ -618,7 +613,6 @@ class QuotationController extends GetxController {
         backgroundColor: Colors.green,
       );
     } else {
-      print('Error in deleting notification');
     }
   }
 }

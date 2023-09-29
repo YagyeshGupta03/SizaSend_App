@@ -107,18 +107,19 @@ class WalletController extends GetxController {
   //
   //
   //
-  void withdrawMoney(context, amount) async {
+  void withdrawMoney(context, amount, bankId) async {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: withdrawMoneyUrl);
     var reply = await networkHelper.postData({
       'user_id': credentialController.id.toString(),
       'minus_amount': amount,
+      'bank_id': bankId,
     });
 
     if (reply['status'] == 1) {
       userInfoController.getUserInfo().then((value) {
         Dialogs.materialDialog(
-            msg: 'Money transferred to your bank account',
+            msg: 'Withdrawal request submitted',
             msgAlign: TextAlign.center,
             title: "Success",
             color: Colors.white,
@@ -208,10 +209,8 @@ class WalletController extends GetxController {
     });
 
     if (reply['status'] == 1) {
-      print('Updated paid status');
       return true;
     } else {
-      print('Could not update paid status');
       return false;
     }
   }
@@ -243,7 +242,7 @@ class WalletController extends GetxController {
   //
   //
   //
-  void webOpen(amount) async {
+  void webOpen(amount, status) async {
     loadingController.updateLoading(true);
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
@@ -256,7 +255,7 @@ class WalletController extends GetxController {
     });
 
     if (reply['status'] == 1) {
-      Get.to(() => WebPage(link: reply['link']));
+      Get.to(() => WebPage(link: reply['link'], status: status));
       loadingController.updateLoading(false);
     } else {
       Fluttertoast.showToast(

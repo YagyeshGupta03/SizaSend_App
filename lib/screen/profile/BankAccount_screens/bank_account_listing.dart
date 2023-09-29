@@ -5,6 +5,7 @@ import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
+import 'package:savo/screen/WalletScreens/bank_details_screen.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import '../../../Controllers/profile_controller.dart';
 import '../../../generated/l10n.dart';
@@ -19,6 +20,7 @@ class BankListingScreen extends StatefulWidget {
 
 class _BankListingScreenState extends State<BankListingScreen> {
   final BankController _bankController = Get.put(BankController());
+
   @override
   void initState() {
     super.initState();
@@ -31,7 +33,7 @@ class _BankListingScreenState extends State<BankListingScreen> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.to(()=> const DashBoardScreen());
+            Get.to(() => const DashBoardScreen());
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -70,6 +72,7 @@ class _BankListingScreenState extends State<BankListingScreen> {
                           return BankCard(
                             bankController: _bankController,
                             index: index,
+                            withdrawal: false,
                           );
                         },
                       ),
@@ -118,10 +121,12 @@ class BankCard extends StatelessWidget {
     super.key,
     required BankController bankController,
     required this.index,
+    required this.withdrawal,
   }) : _bankController = bankController;
 
   final BankController _bankController;
   final int index;
+  final bool withdrawal;
 
   @override
   Widget build(BuildContext context) {
@@ -154,40 +159,142 @@ class BankCard extends StatelessWidget {
                 ),
               ),
             ),
-            trailing: IconButton(
-              onPressed: () {
-                Dialogs.materialDialog(
-                    msg: 'Do you want to delete this bank account?',
-                    title: "Delete",
-                    titleAlign: TextAlign.center,
-                    color: Colors.white,
-                    context: context,
-                    actions: [
-                      IconsOutlineButton(
-                        onPressed: () {
-                          Navigator.pop(context);
+            trailing: withdrawal
+                ? const SizedBox()
+                : IconButton(
+                    onPressed: () {
+                      Dialogs.materialDialog(
+                          msg: 'Do you want to delete this bank account?',
+                          title: "Delete",
+                          titleAlign: TextAlign.center,
+                          color: Colors.white,
+                          context: context,
+                          actions: [
+                            IconsOutlineButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              text: 'Cancel',
+                              iconData: Icons.cancel_outlined,
+                              textStyle: const TextStyle(color: Colors.grey),
+                              iconColor: Colors.grey,
+                            ),
+                            IconsButton(
+                              onPressed: () {
+                                _bankController.deleteBankAc(context,
+                                    _bankController.bankList[index].bankId);
+                              },
+                              text: 'Delete',
+                              iconData: Icons.delete,
+                              color: primaryColor,
+                              textStyle: const TextStyle(color: Colors.white),
+                              iconColor: Colors.white,
+                            ),
+                          ]);
+                    },
+                    icon: const Icon(Icons.delete_forever_outlined,
+                        color: Colors.red),
+                  ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//
+//
+//
+//
+class BankListWithdraw extends StatefulWidget {
+  const BankListWithdraw(
+      {super.key, required this.withdrawal, required this.amount});
+
+  final bool withdrawal;
+  final String amount;
+
+  @override
+  State<BankListWithdraw> createState() => _BankListWithdrawState();
+}
+
+class _BankListWithdrawState extends State<BankListWithdraw> {
+  final BankController _bankController = Get.put(BankController());
+
+  @override
+  void initState() {
+    super.initState();
+    _bankController.showBankAc();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Get.to(() => const DashBoardScreen());
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
+        title: Text(
+          S.of(context).bankAccount,
+          style: themeController.currentTheme.value.textTheme.bodyMedium,
+        ),
+        centerTitle: true,
+      ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  S.of(context).yourBankAccount,
+                  style: themeController.currentTheme.value.textTheme.bodyLarge,
+                ),
+              ),
+              const SizedBox(height: 50),
+              Obx(
+                () => _bankController.bankList.length.isEqual(0)
+                    ? Center(
+                        child: Text(
+                        S.of(context).noAccountCurrently,
+                        style: themeController
+                            .currentTheme.value.textTheme.displayMedium,
+                      ))
+                    : ListView.builder(
+                        itemCount: _bankController.bankList.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              if (widget.withdrawal) {
+                                Get.to(() => BankDetailsScreen(
+                                    bankId:
+                                        _bankController.bankList[index].bankId,
+                                    acName: _bankController
+                                        .bankList[index].fullName,
+                                    bankName: _bankController
+                                        .bankList[index].bankName,
+                                    acNumber:
+                                        _bankController.bankList[index].account,
+                                    ifsc: _bankController.bankList[index].ifsc,
+                                    amount: widget.amount));
+                              }
+                            },
+                            child: BankCard(
+                              bankController: _bankController,
+                              index: index,
+                              withdrawal: widget.withdrawal,
+                            ),
+                          );
                         },
-                        text: 'Cancel',
-                        iconData: Icons.cancel_outlined,
-                        textStyle: const TextStyle(color: Colors.grey),
-                        iconColor: Colors.grey,
                       ),
-                      IconsButton(
-                        onPressed: () {
-                          _bankController.deleteBankAc(
-                              context, _bankController.bankList[index].bankId);
-                        },
-                        text: 'Delete',
-                        iconData: Icons.delete,
-                        color: primaryColor,
-                        textStyle: const TextStyle(color: Colors.white),
-                        iconColor: Colors.white,
-                      ),
-                    ]);
-              },
-              icon:
-                  const Icon(Icons.delete_forever_outlined, color: Colors.red),
-            ),
+              ),
+              const SizedBox(height: 25),
+            ],
           ),
         ),
       ),
