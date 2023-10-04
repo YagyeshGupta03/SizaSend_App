@@ -143,3 +143,25 @@ class WalletTransactionModel {
   final String date;
   final String time;
 }
+
+
+
+
+//Withdrawal history model
+class WithdrawalRequestModel {
+  WithdrawalRequestModel({
+    required this.requestId,
+    required this.amount,
+    required this.status,
+    required this.bankName,
+    required this.date,
+    required this.time,
+  });
+
+  final String requestId;
+  final String amount;
+  final String status;
+  final String bankName;
+  final String date;
+  final String time;
+}

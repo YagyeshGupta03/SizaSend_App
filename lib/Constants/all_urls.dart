@@ -55,6 +55,7 @@ const String quotationPayUrl = '${baseUrl}user_transaction';
 const String quotationPaidStatusUrl = '${baseUrl}paidStatusChange';
 const String completeOrderPaymentUrl = '${baseUrl}hold_transaction_add';
 const String walletTransactionsUrl = '${baseUrl}get_transaction_history';
+const String withdrawRequestUrl = '${baseUrl}get_payment_request';
 
 
 //Other apis of project

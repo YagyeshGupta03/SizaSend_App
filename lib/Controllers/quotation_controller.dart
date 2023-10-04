@@ -8,6 +8,7 @@ import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/walllet_controller.dart';
 import 'package:savo/Models/Models.dart';
+import 'package:savo/screen/WalletScreens/refund_screen.dart';
 import '../Helper/http_helper.dart';
 import '../screen/dashboard_screen.dart';
 
@@ -16,7 +17,7 @@ class QuotationController extends GetxController {
   //
   // Function to add quotation
   void addQuotation(context, productName, storeLocation, quantity, weight,
-      width, height, description, video, receiverId) async {
+      width, height, description, video, receiverId, price, length) async {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: addQuotationUrl);
     var reply = await networkHelper.postMultiPartData({
@@ -26,6 +27,8 @@ class QuotationController extends GetxController {
       'receiver_id': receiverId,
       'quantity': quantity,
       'weight': weight,
+      'length': length,
+      'sender_price': price,
       'width': width,
       'height': height,
       'description': description,
@@ -37,6 +40,7 @@ class QuotationController extends GetxController {
       sendNotification(reply['data']['id'], receiverId);
       receiveQuotation();
       loadingController.updateLoading(false);
+      Get.to(() => const DashBoardScreen());
     } else {
       Fluttertoast.showToast(
         msg: reply['message'],
@@ -269,8 +273,7 @@ class QuotationController extends GetxController {
         }
         update();
       }
-    } else {
-    }
+    } else {}
   }
 
   //
@@ -324,8 +327,7 @@ class QuotationController extends GetxController {
               message: reply['data'][i]['message']),
         );
       }
-    } else {
-    }
+    } else {}
   }
 
   //
@@ -427,8 +429,7 @@ class QuotationController extends GetxController {
         }
         update();
       }
-    } else {
-    }
+    } else {}
   }
 
   //
@@ -438,6 +439,10 @@ class QuotationController extends GetxController {
   String orderId = '';
   String productName = '';
   String price = '';
+  String itemCost = '';
+  String courierCharges = '';
+  String adminCharges = '';
+  String length = '';
   String store = '';
   String quantity = '';
   String weight = '';
@@ -445,6 +450,7 @@ class QuotationController extends GetxController {
   String height = '';
   String description = '';
   String senderId = '';
+  String senderName = '';
   String video = '';
   String sendImage = '';
   String receiveImage = '';
@@ -461,6 +467,10 @@ class QuotationController extends GetxController {
       orderId = reply['data']['id'];
       productName = reply['data']['name'];
       price = reply['data']['total_price'];
+      itemCost = reply['data']['sender_price'];
+      adminCharges = reply['data']['charge'];
+      courierCharges = reply['data']['price'];
+      length = reply['data']['length'];
       store = reply['data']['store_name'];
       quantity = reply['data']['quantity'];
       weight = reply['data']['weight'];
@@ -470,6 +480,7 @@ class QuotationController extends GetxController {
       orderStatus = reply['data']['order_status'];
       status = reply['data']['status'] ?? '';
       senderId = reply['data']['user_id'];
+      senderName = reply['data']['full_name'];
       video = reply['data']['video'] ?? '';
       sendImage = reply['data']['send_image'] ?? '';
       receiveImage = reply['data']['receive_image'] ?? '';
@@ -499,6 +510,7 @@ class QuotationController extends GetxController {
         Dialogs.materialDialog(
             msg: 'Your order is dispatched',
             title: 'Dispatched',
+            msgAlign: TextAlign.center,
             context: context,
             actions: [
               IconsButton(
@@ -532,21 +544,28 @@ class QuotationController extends GetxController {
       "deliver": code.toString(),
     });
     if (reply['status'] == 1) {
-      await _walletController.completeOrderPayment(
-          orderId, 'complete', senderID);
       Dialogs.materialDialog(
-          msg: 'Your order is delivered',
-          title: 'Delivered',
+          msg: 'Do you accept this order?',
+          title: 'Delivery success',
           context: context,
           actions: [
             IconsButton(
               onPressed: () {
-                Get.to(() => const DashBoardScreen());
+                Get.to(() => const RefundScreen());
               },
-              text: 'Close',
+              text: 'Reject',
+              color: Colors.white,
+              textStyle: const TextStyle(color: primaryColor),
+            ),
+            IconsButton(
+              onPressed: () {
+                _walletController.completeOrderPayment(
+                    context, orderId, 'complete', senderID);
+                Navigator.pop(context);
+              },
+              text: 'Accept',
               color: primaryColor,
               textStyle: const TextStyle(color: Colors.white),
-              iconColor: Colors.white,
             ),
           ]);
       loadingController.updateDispatchLoading(false);
@@ -612,7 +631,6 @@ class QuotationController extends GetxController {
         gravity: ToastGravity.SNACKBAR,
         backgroundColor: Colors.green,
       );
-    } else {
-    }
+    } else {}
   }
 }

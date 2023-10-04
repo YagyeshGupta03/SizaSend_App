@@ -10,6 +10,7 @@ class CredentialController extends GetxController {
   String? id;
   String? fcmToken;
   String? onBoard;
+  String? amount;
 
   //Login credentials
   setData(userID, token) async {
@@ -30,7 +31,15 @@ class CredentialController extends GetxController {
     onBoard = prefs.getString('onboard');
     update();
   }
-
+  //
+  //
+  //
+  setWithdraw(money) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('amount', money);
+    amount = prefs.getString('amount');
+    update();
+  }
   //
   //
   //
@@ -69,6 +78,15 @@ class CredentialController extends GetxController {
     update();
   }
 
+  //
+  //
+  //
+  deleteWithdraw() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('amount', '');
+    amount = prefs.getString('amount') ?? "";
+    update();
+  }
   //
   //
   //

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:savo/Constants/sizes.dart';
@@ -7,9 +8,10 @@ import 'package:savo/Constants/theme_data.dart';
 import '../Controllers/quotation_controller.dart';
 
 class DispatchScanner extends StatefulWidget {
-  const DispatchScanner({super.key, required this.orderId});
+  const DispatchScanner({super.key, required this.orderId, required this.barcode});
 
   final String orderId;
+  final String barcode;
 
   @override
   State<DispatchScanner> createState() => _DispatchScannerState();
@@ -103,10 +105,10 @@ class _DispatchScannerState extends State<DispatchScanner> {
                       // color: primaryColor,
                       margin: const EdgeInsets.all(10),
                       padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: const Center(
+                      child:  Center(
                         child: Text(
-                          'Scanning...',
-                          style: TextStyle(
+                          widget.barcode,
+                          style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: primaryColor),

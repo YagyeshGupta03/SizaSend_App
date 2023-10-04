@@ -34,6 +34,8 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
   final _weight = TextEditingController();
   final _width = TextEditingController();
   final _height = TextEditingController();
+  final _length = TextEditingController();
+  final _price = TextEditingController();
   final _productDescription = TextEditingController();
   final _searchBar = TextEditingController();
   XFile? _video;
@@ -128,6 +130,8 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                               }
                             }
                           }
+                        } else {
+                          loadingController.updateVideoCompressionLoading(false);
                         }
                       }
                     },
@@ -176,6 +180,17 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                       hintText: ''),
                   SizedBox(height: screenHeight(context) * .015),
                   CustomTextField(
+                      cont: _price,
+                      title: 'Price',
+                      icon: const SuffixText(
+                        text: 'in Rands',
+                      ),
+                      fieldLabel: 'This field',
+                      keyboard: TextInputType.number,
+                      fillColor: themeController.currentTheme.value.cardColor,
+                      hintText: ''),
+                  SizedBox(height: screenHeight(context) * .015),
+                  CustomTextField(
                       cont: _quantity,
                       title: 'Quantity',
                       icon: const SizedBox(),
@@ -184,38 +199,75 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                       fillColor: themeController.currentTheme.value.cardColor,
                       hintText: ''),
                   SizedBox(height: screenHeight(context) * .015),
-                  CustomTextField(
-                      cont: _weight,
-                      title: 'Weight',
-                      icon: const SuffixText(
-                        text: 'in kg',
+                  Row( crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: CustomTextField(
+                            cont: _width,
+                            title: 'Width',
+                            icon: const SuffixText(
+                              text: 'in cm',
+                            ),
+                            fieldLabel: 'This field',
+                            keyboard: TextInputType.number,
+                            fillColor: themeController.currentTheme.value.cardColor,
+                            hintText: ''),
                       ),
-                      fieldLabel: 'This field',
-                      keyboard: TextInputType.number,
-                      fillColor: themeController.currentTheme.value.cardColor,
-                      hintText: ''),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        flex: 2,
+                        child: CustomTextField(
+                            cont: _height,
+                            title: 'Height',
+                            icon: const SuffixText(
+                              text: 'in cm',
+                            ),
+                            fieldLabel: 'This field',
+                            keyboard: TextInputType.number,
+                            fillColor: themeController.currentTheme.value.cardColor,
+                            hintText: ''),
+                      ),
+                      // const Padding(
+                      //   padding:EdgeInsets.only(bottom: 20),
+                      //   child:  Text('x'),
+                      // ),
+
+                    ],
+                  ),
                   SizedBox(height: screenHeight(context) * .015),
-                  CustomTextField(
-                      cont: _width,
-                      title: 'Width',
-                      icon: const SuffixText(
-                        text: 'in cms',
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: CustomTextField(
+                            cont: _length,
+                            title: 'Length',
+                            icon: const SuffixText(
+                              text: 'in cm',
+                            ),
+                            fieldLabel: 'This field',
+                            keyboard: TextInputType.number,
+                            fillColor: themeController.currentTheme.value.cardColor,
+                            hintText: ''),
                       ),
-                      fieldLabel: 'This field',
-                      keyboard: TextInputType.number,
-                      fillColor: themeController.currentTheme.value.cardColor,
-                      hintText: ''),
-                  SizedBox(height: screenHeight(context) * .015),
-                  CustomTextField(
-                      cont: _height,
-                      title: 'Height',
-                      icon: const SuffixText(
-                        text: 'in cms',
+                      const SizedBox(width: 8),
+                      Expanded(
+                        flex: 2,
+                        child: CustomTextField(
+                            cont: _weight,
+                            title: 'Weight',
+                            icon: const SuffixText(
+                              text: 'in kg',
+                            ),
+                            fieldLabel: 'This field',
+                            keyboard: TextInputType.number,
+                            fillColor: themeController.currentTheme.value.cardColor,
+                            hintText: ''),
                       ),
-                      fieldLabel: 'This field',
-                      keyboard: TextInputType.number,
-                      fillColor: themeController.currentTheme.value.cardColor,
-                      hintText: ''),
+                    ],
+                  ),
+
                   SizedBox(height: screenHeight(context) * .015),
                   CustomTextField(
                       cont: _productDescription,
@@ -233,6 +285,8 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                           _quantity.text.isNotEmpty &&
                           _weight.text.isNotEmpty &&
                           _width.text.isNotEmpty &&
+                          _length.text.isNotEmpty &&
+                          _price.text.isNotEmpty &&
                           _height.text.isNotEmpty &&
                           _productDescription.text.isNotEmpty &&
                           _video != null) {
@@ -379,7 +433,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                                               _productDescription.text,
                                               _video,
                                               _quotationController
-                                                  .searchList[index].userId);
+                                                  .searchList[index].userId, _price.text, _length.text);
                                         },
                                         child: ListTile(
                                           leading: CircleAvatar(
@@ -458,7 +512,8 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                                           _video,
                                           _contactController
                                               .connectedContactListing[index]
-                                              .userId);
+                                              .userId,_price.text, _length.text
+                                      );
                                     },
                                     child: ListTile(
                                       title: Text(

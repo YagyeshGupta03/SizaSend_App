@@ -77,11 +77,12 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 25),
               Text(
                 S.of(context).personalInfo,
-                style: themeController.currentTheme.value.textTheme.titleMedium,
+                style: themeController.currentTheme.value.textTheme.headlineMedium,
               ),
+              const SizedBox(height: 10),
               ProfileListTile(
                 title: S.of(context).yourName,
                 value: userInfoController.fullName,
@@ -99,7 +100,8 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
               ),
               Text(S.of(context).contactInfo,
                   style:
-                      themeController.currentTheme.value.textTheme.titleMedium),
+                      themeController.currentTheme.value.textTheme.headlineMedium),
+              const SizedBox(height: 10),
               ProfileListTile(
                 title: S.of(context).phoneNumber,
                 value:
@@ -109,6 +111,7 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
                 title: S.of(context).email,
                 value: userInfoController.email,
               ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   _profileController.getOccupationData();
@@ -138,11 +141,11 @@ class ProfileListTile extends StatelessWidget {
     return ListTile(
       title: Text(
         title,
-        style: themeController.currentTheme.value.textTheme.bodyLarge,
+        style: themeController.currentTheme.value.textTheme.titleSmall,
       ),
       trailing: Text(
         value ?? "",
-        style: themeController.currentTheme.value.textTheme.displayMedium,
+        style: themeController.currentTheme.value.textTheme.headlineSmall,
       ),
     );
   }

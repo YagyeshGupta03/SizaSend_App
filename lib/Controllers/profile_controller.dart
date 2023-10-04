@@ -55,6 +55,48 @@ class BankController extends GetxController {
       );
     }
   }
+  //
+  //
+  //  Add bank account
+  void addBankAcForWithdraw(context, fullName, bankName, ifsc, account) async {
+    final NetworkHelper networkHelper = NetworkHelper(url: addBankAcUrl);
+    var reply = await networkHelper.postData({
+      "user_id": credentialController.id.toString(),
+      "full_name": fullName,
+      "bank_name": bankName,
+      "ifsc_code": ifsc,
+      "account_no": account,
+    });
+
+    if (reply['status'] == 1) {
+      showBankAc();
+      Dialogs.materialDialog(
+          msg:
+          'Account added successfully',
+          title: "Success",
+          titleAlign: TextAlign.center,
+          color: Colors.white,
+          context: context,
+          actions: [
+            IconsButton(
+              onPressed: () {
+                Get.back();
+                Get.to(() => BankListWithdraw());
+              },
+              text: 'Go back',
+              color: primaryColor,
+              textStyle:
+              const TextStyle(color: Colors.white),
+            ),
+          ]);
+    } else {
+      Fluttertoast.showToast(
+        msg: "${reply['message']}",
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+    }
+  }
 
   //
   //

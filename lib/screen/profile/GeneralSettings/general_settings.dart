@@ -47,7 +47,7 @@ class _GeneralSettingsState extends State<GeneralSettings> {
                   'Terms and Conditions',
                   style: TextStyle(
                       fontWeight: FontWeight.w700,
-                      fontSize: 16,
+                      fontSize: 14,
                       color: primaryColor),
                 ),
               ),
@@ -62,7 +62,7 @@ class _GeneralSettingsState extends State<GeneralSettings> {
                   'Privacy Policies',
                   style: TextStyle(
                       fontWeight: FontWeight.w700,
-                      fontSize: 16,
+                      fontSize: 14,
                       color: primaryColor),
                 ),
               ),

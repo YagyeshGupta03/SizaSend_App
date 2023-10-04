@@ -92,7 +92,7 @@ class CustomTextField extends StatelessWidget {
     required this.keyboard,
     required this.fillColor,
     this.enable,
-    required this.hintText,
+    required this.hintText, this.onChanged,
   }) : super(key: key);
 
   final TextEditingController cont;
@@ -103,6 +103,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final TextInputType keyboard;
   final Color fillColor;
+  final Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +120,7 @@ class CustomTextField extends StatelessWidget {
           cursorColor: primaryColor,
           controller: cont,
           keyboardType: keyboard,
+          onChanged: onChanged,
           enabled: enable,
           validator: (value) => validateField(value!, fieldLabel, context),
           autovalidateMode: AutovalidateMode.onUserInteraction,

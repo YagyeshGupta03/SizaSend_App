@@ -138,7 +138,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           BottomNavigationBarItem(
               icon: const Icon(Icons.person), label: S.of(context).profile),
         ],
-        currentIndex: 0,
+        currentIndex: selectedIndex,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: primaryColor,
         onTap: (index) {
@@ -149,7 +149,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     );
   }
 }
-
+//
+//
+//
+//
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
     super.key,

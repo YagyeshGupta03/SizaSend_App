@@ -11,6 +11,7 @@ import 'package:savo/Controllers/quotation_controller.dart';
 import 'package:savo/Controllers/walllet_controller.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import 'package:savo/screen/quotation/full_video_screen.dart';
+import 'package:savo/screen/quotation/quotation_billing_screen.dart';
 import 'package:savo/util/widgets/login_button.dart';
 import 'package:video_player/video_player.dart';
 import '../../Constants/all_urls.dart';
@@ -276,10 +277,10 @@ class _QuotationDetailScreenForPayState
                                             IconsButton(
                                               onPressed: () {
                                                 Navigator.pop(context);
-                                                Get.to(() => DispatchScanner(
-                                                    orderId:
-                                                        _quotationController
-                                                            .orderId));
+                                                // Get.to(() => DispatchScanner(
+                                                //     orderId:
+                                                //         _quotationController
+                                                //             .orderId));
                                               },
                                               text: 'Scan',
                                               iconData: Icons.document_scanner,
@@ -303,38 +304,7 @@ class _QuotationDetailScreenForPayState
                                 : _quotationController.orderStatus == 'unpaid'
                                     ? LoginButton(
                                         onTap: () {
-                                          Dialogs.materialDialog(
-                                              msg: 'Do you want to pay for this quotation?',
-                                              msgAlign: TextAlign.center,
-                                              title: "Pay",
-                                              color: Colors.white,
-                                              titleAlign: TextAlign.center,
-                                              context: context,
-                                              actions: [
-                                                IconsOutlineButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  text: 'Cancel',
-                                                  iconData: Icons.cancel_outlined,
-                                                  textStyle: const TextStyle(color: Colors.grey),
-                                                  iconColor: Colors.grey,
-                                                ),
-                                                IconsButton(
-                                                  onPressed: () async {
-                                                    _walletController.quotationPay(
-                                                        _quotationController.price,
-                                                        _quotationController.senderId,
-                                                        _quotationController.orderId,
-                                                        _quotationController.productName);
-                                                    Navigator.pop(context);
-                                                  },
-                                                  text: 'Pay',
-                                                  color: primaryColor,
-                                                  textStyle: const TextStyle(color: Colors.white),
-                                                  iconColor: Colors.white,
-                                                ),
-                                              ]);
+                                          Get.to(()=> const QuotationBillingScreen());
                                         },
                                         title: 'Pay',
                                         txtColor: Colors.white,

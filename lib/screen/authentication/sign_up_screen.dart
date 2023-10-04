@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import 'package:savo/screen/authentication/login_screen.dart';
 import 'package:savo/util/widgets/text_field.dart';
 import '../../Constants/theme_data.dart';
 import '../../generated/l10n.dart';
+import 'otp_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -24,13 +26,12 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final LoginController _loginController = Get.put(LoginController());
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final _fullName = TextEditingController();
   final _phone = TextEditingController();
   final _password = TextEditingController();
   final _confirmPassword = TextEditingController();
   var codeOfCountry = '';
+  bool checked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -58,14 +59,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         style: themeController
                             .currentTheme.value.textTheme.displayLarge),
                   ),
-                  Text(
-                    S
-                        .of(context)
-                        .loremIpsumDolorSitAmetConsecteturAdipiscingElitSedDo,
-                    style: themeController
-                        .currentTheme.value.textTheme.displaySmall,
-                    textAlign: TextAlign.center,
-                  ),
+                  // Text(
+                  //   S
+                  //       .of(context)
+                  //       .loremIpsumDolorSitAmetConsecteturAdipiscingElitSedDo,
+                  //   style: themeController
+                  //       .currentTheme.value.textTheme.displaySmall,
+                  //   textAlign: TextAlign.center,
+                  // ),
                   const SizedBox(height: 20),
                   FormatterFields(
                     topTitle: S.of(context).fullName,
@@ -138,14 +139,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           _password.text.isNotEmpty &&
                           _confirmPassword.text.isNotEmpty) {
                         if (_password.text == _confirmPassword.text) {
-                          fcmToken = await _firebaseMessaging.getToken() ?? '';
-                          _loginController.signUp(
-                              context,
-                              _fullName.text,
-                              _phone.text,
-                              _password.text,
-                              codeOfCountry,
-                              fcmToken);
+                          await FirebaseAuth.instance
+                              .verifyPhoneNumber(
+                                phoneNumber:
+                                    codeOfCountry.toString() + _phone.text,
+                                verificationCompleted:
+                                    (PhoneAuthCredential credential) {},
+                                verificationFailed: (FirebaseAuthException e) {
+                                  Fluttertoast.showToast(
+                                    msg: 'Your daily limit exceeded',
+                                    gravity: ToastGravity.SNACKBAR,
+                                    backgroundColor: Colors.red,
+                                  );
+                                },
+                                codeSent:
+                                    (String verificationId, int? resendToken) {
+                                  Get.to(() => SignupOtpVerification(
+                                        verifyId: verificationId,
+                                        fullName: _fullName.text,
+                                        phone: _phone.text,
+                                        password: _password.text,
+                                        codeOfCountry: codeOfCountry.toString(),
+                                      ));
+                                },
+                                codeAutoRetrievalTimeout:
+                                    (String verificationId) {},
+                              )
+                              .whenComplete(
+                                  () => loadingController.updateLoading(false));
                         } else {
                           Fluttertoast.showToast(
                             msg: S.of(context).confirmPasswordDoesNotMatch,

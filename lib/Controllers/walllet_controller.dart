@@ -9,6 +9,7 @@ import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Models/Models.dart';
 import 'package:savo/WebPage/add_money_web_page.dart';
 import 'package:savo/screen/WalletScreens/add_money_screen.dart';
+import 'package:savo/screen/WalletScreens/withdraw_money_screen.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import '../Constants/all_urls.dart';
 import '../Constants/theme_data.dart';
@@ -107,16 +108,17 @@ class WalletController extends GetxController {
   //
   //
   //
-  void withdrawMoney(context, amount, bankId) async {
+  void withdrawMoney(context, bankId) async {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: withdrawMoneyUrl);
     var reply = await networkHelper.postData({
       'user_id': credentialController.id.toString(),
-      'minus_amount': amount,
+      'minus_amount': credentialController.amount.toString(),
       'bank_id': bankId,
     });
 
     if (reply['status'] == 1) {
+      credentialController.deleteWithdraw();
       userInfoController.getUserInfo().then((value) {
         Dialogs.materialDialog(
             msg: 'Withdrawal request submitted',
@@ -129,7 +131,7 @@ class WalletController extends GetxController {
               IconsButton(
                 onPressed: () async {
                   Navigator.pop(context);
-                  Get.to(() => const DashBoardScreen());
+                  Get.to(() => const WithdrawMoneyScreen());
                 },
                 text: 'Go back',
                 color: primaryColor,
@@ -181,7 +183,7 @@ class WalletController extends GetxController {
         gravity: ToastGravity.SNACKBAR,
         backgroundColor: Colors.red,
       );
-      Get.to(() => QuotationMoneyAdd(price: amount));
+      Get.to(() => QuotationMoneyAdd(price: amount, orderID: orderId));
       loadingController.updateLoading(false);
       return false;
     } else {
@@ -219,7 +221,7 @@ class WalletController extends GetxController {
   //
   //
   //
-  Future<bool> completeOrderPayment(orderId, status, senderId) async {
+  Future<bool> completeOrderPayment(context, orderId, status, senderId) async {
     final NetworkHelper networkHelper =
         NetworkHelper(url: completeOrderPaymentUrl);
     var reply = await networkHelper.postData({
@@ -232,6 +234,38 @@ class WalletController extends GetxController {
     if (reply['status'] == 1) {
       updatePaidStatus(orderId, status).then((value) async {
         await userInfoController.getUserInfo();
+       if(status == 'complete'){
+         Dialogs.materialDialog(
+             msg: 'Order delivered successfully',
+             title: 'Accepted',
+             context: context,
+             actions: [
+               IconsButton(
+                 onPressed: () {
+                   Get.to(()=> const DashBoardScreen());
+                 },
+                 text: 'Back to home',
+                 color: primaryColor,
+                 textStyle: const TextStyle(color: Colors.white),
+               ),
+             ]);
+       } else{
+         Dialogs.materialDialog(
+             msg: 'Amount will be added to your wallet',
+             title: 'Refund successful',
+             msgAlign: TextAlign.center,
+             context: context,
+             actions: [
+               IconsButton(
+                 onPressed: () {
+                   Get.to(()=> const DashBoardScreen());
+                 },
+                 text: 'Back to home',
+                 color: primaryColor,
+                 textStyle: const TextStyle(color: Colors.white),
+               ),
+             ]);
+       }
       });
       return true;
     } else {
@@ -242,7 +276,7 @@ class WalletController extends GetxController {
   //
   //
   //
-  void webOpen(amount, status) async {
+  void webOpen(amount, status, type, wallet) async {
     loadingController.updateLoading(true);
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
@@ -252,6 +286,8 @@ class WalletController extends GetxController {
     var reply = await networkHelper.postData({
       'user_id': credentialController.id.toString(),
       'amount': amount,
+      'type': type,
+      'wallet': wallet,
     });
 
     if (reply['status'] == 1) {
@@ -293,6 +329,41 @@ class WalletController extends GetxController {
           balance: reply['data'][i]['balance'],
           status: reply['data'][i]['status'] ?? '',
           paidUser: reply['data'][i]['paid_user_name'] ?? '',
+          date: formattedDate,
+          time: formattedTime,
+        ));
+      }
+      update();
+    } else {
+      print('Error in getting wallet history list');
+    }
+  }
+
+  //
+  //
+  //
+  //
+  RxList<WithdrawalRequestModel> withdrawRequestList =
+      <WithdrawalRequestModel>[].obs;
+  void getWithdrawalHistory() async {
+    final NetworkHelper networkHelper =
+        NetworkHelper(url: withdrawRequestUrl);
+    var reply = await networkHelper.postData({
+      'user_id': credentialController.id.toString(),
+    });
+
+    withdrawRequestList.clear();
+    if (reply['status'] == 1) {
+      for (int i = 0; i < reply['data'].length; i++) {
+        DateTime createdAt = DateTime.parse(reply['data'][i]['created_at']);
+        String formattedDate = DateFormat.yMMMMd().format(createdAt);
+        String formattedTime = DateFormat.jm().format(createdAt);
+
+        withdrawRequestList.add(WithdrawalRequestModel(
+          requestId: reply['data'][i]['id'],
+          amount: reply['data'][i]['amount'],
+          status: reply['data'][i]['status'],
+          bankName: reply['data'][i]['bank_name'],
           date: formattedDate,
           time: formattedTime,
         ));

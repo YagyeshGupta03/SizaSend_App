@@ -47,7 +47,49 @@ class LoginController extends GetxController {
       );
     }
   }
+  //
+  //
 
+
+  //
+  Future signUpVerification(context, contactsToSend, codeOfCountry) async {
+    await loadingController.updateLoading(true);
+    final NetworkHelper networkHelper = NetworkHelper(url: contactListUrl);
+    var reply = await networkHelper.postData({
+      'contect_list': contactsToSend,
+    });
+
+    if (reply['status'] == 1) {
+      userrId = reply['data'][0]['id'];
+      await FirebaseAuth.instance
+          .verifyPhoneNumber(
+        phoneNumber: codeOfCountry.toString() + contactsToSend,
+        verificationCompleted: (PhoneAuthCredential credential) {},
+        verificationFailed: (FirebaseAuthException e) {
+          Fluttertoast.showToast(
+            msg: 'Your daily limit exceeded',
+            gravity: ToastGravity.SNACKBAR,
+            backgroundColor: Colors.red,
+          );
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          Get.to(() => OtpScreen(
+              verifyId: verificationId,
+              userId: userrId));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      )
+          .whenComplete(() => loadingController.updateLoading(false));
+    } else {
+      userrId = '';
+      Fluttertoast.showToast(
+        msg: "Phone number is not registered",
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      loadingController.updateLoading(false);
+    }
+  }
   //
   //
   //

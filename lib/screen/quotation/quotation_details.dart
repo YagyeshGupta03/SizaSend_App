@@ -8,10 +8,11 @@ import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/quotation_controller.dart';
-import 'package:savo/Controllers/walllet_controller.dart';
 import 'package:savo/screen/qr_code_scanner.dart';
 import 'package:savo/screen/quotation/full_video_screen.dart';
+import 'package:savo/screen/quotation/quotation_billing_screen.dart';
 import 'package:savo/screen/quotation/quotation_detail_screen_for_pay.dart';
+import 'package:savo/util/widgets/dispatch_button.dart';
 import 'package:savo/util/widgets/login_button.dart';
 import 'package:video_player/video_player.dart';
 import '../../Constants/all_urls.dart';
@@ -27,7 +28,6 @@ class QuotationDetailScreen extends StatefulWidget {
 }
 
 class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
-  final WalletController _walletController = Get.put(WalletController());
   final QuotationController _quotationController =
       Get.put(QuotationController());
 
@@ -44,7 +44,6 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
         setState(() {});
       });
   }
-
 
   @override
   void dispose() {
@@ -262,35 +261,9 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                             ? const SizedBox()
                             : _quotationController.orderStatus == 'dispatch'
                                 ? const SizedBox()
-                                : LoginButton(
-                                    onTap: () async {
-                                      Dialogs.materialDialog(
-                                          msg: 'Scan the barcode',
-                                          title: "Dispatch",
-                                          titleAlign: TextAlign.center,
-                                          color: Colors.white,
-                                          context: context,
-                                          actions: [
-                                            IconsButton(
-                                              onPressed: () async {
-                                                Navigator.pop(context);
-                                                Get.to(() => DispatchScanner(
-                                                    orderId:
-                                                        _quotationController
-                                                            .orderId));
-                                              },
-                                              text: 'Scan',
-                                              iconData: Icons.document_scanner,
-                                              color: primaryColor,
-                                              textStyle: const TextStyle(
-                                                  color: Colors.white),
-                                              iconColor: Colors.white,
-                                            ),
-                                          ]);
-                                    },
-                                    title: 'Dispatch',
-                                    txtColor: Colors.white,
-                                    btnColor: primaryColor)
+                                : DispatchButton(orderId: _quotationController
+                        .orderId)
+
                         // to check by receiver to pay or track
                         : _quotationController.status == ''
                             ? CompleteOrderButtons(
@@ -301,38 +274,8 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                 : _quotationController.orderStatus == 'unpaid'
                                     ? LoginButton(
                                         onTap: () {
-                                          Dialogs.materialDialog(
-                                              msg: 'Do you want to pay for this quotation?',
-                                              msgAlign: TextAlign.center,
-                                              title: "Pay",
-                                              color: Colors.white,
-                                              titleAlign: TextAlign.center,
-                                              context: context,
-                                              actions: [
-                                                IconsOutlineButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  text: 'Cancel',
-                                                  iconData: Icons.cancel_outlined,
-                                                  textStyle: const TextStyle(color: Colors.grey),
-                                                  iconColor: Colors.grey,
-                                                ),
-                                                IconsButton(
-                                                  onPressed: () async {
-                                                    Navigator.pop(context);
-                                                    _walletController.quotationPay(
-                                                        _quotationController.price,
-                                                        _quotationController.senderId,
-                                                        _quotationController.orderId,
-                                                        _quotationController.productName);
-                                                  },
-                                                  text: 'Pay',
-                                                  color: primaryColor,
-                                                  textStyle: const TextStyle(color: Colors.white),
-                                                  iconColor: Colors.white,
-                                                ),
-                                              ]);
+                                          Get.to(() =>
+                                              const QuotationBillingScreen());
                                         },
                                         title: 'Pay',
                                         txtColor: Colors.white,
@@ -340,43 +283,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                     // to check by receiver to accept or reject
                                     : _quotationController.orderStatus ==
                                             'dispatch'
-                                        ? LoginButton(
-                                            onTap: () async {
-                                              Dialogs.materialDialog(
-                                                  msg: 'Scan the barcode',
-                                                  title: "Delivered",
-                                                  color: Colors.white,
-                                                  titleAlign: TextAlign.center,
-                                                  context: context,
-                                                  actions: [
-                                                    IconsButton(
-                                                      onPressed: () async {
-                                                        Navigator.pop(context);
-                                                        Get.to(() =>
-                                                            DeliverScanner(
-                                                              orderId:
-                                                                  _quotationController
-                                                                      .orderId,
-                                                              senderId:
-                                                                  _quotationController
-                                                                      .senderId,
-                                                            ));
-                                                      },
-                                                      text: 'Scan',
-                                                      iconData: Icons
-                                                          .document_scanner,
-                                                      color: primaryColor,
-                                                      textStyle:
-                                                          const TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                      iconColor: Colors.white,
-                                                    ),
-                                                  ]);
-                                            },
-                                            title: 'Delivered',
-                                            txtColor: Colors.white,
-                                            btnColor: primaryColor)
+                                        ? DeliveryButton(orderId: _quotationController.orderId, senderId: _quotationController.senderId)
                                         : const SizedBox(),
                   ],
                 ),

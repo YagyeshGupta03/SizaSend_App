@@ -6,6 +6,7 @@ import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/screen/WalletScreens/bank_details_screen.dart';
+import 'package:savo/screen/WalletScreens/withdraw_money_screen.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import '../../../Controllers/profile_controller.dart';
 import '../../../generated/l10n.dart';
@@ -208,10 +209,7 @@ class BankCard extends StatelessWidget {
 //
 class BankListWithdraw extends StatefulWidget {
   const BankListWithdraw(
-      {super.key, required this.withdrawal, required this.amount});
-
-  final bool withdrawal;
-  final String amount;
+      {super.key});
 
   @override
   State<BankListWithdraw> createState() => _BankListWithdrawState();
@@ -232,7 +230,7 @@ class _BankListWithdrawState extends State<BankListWithdraw> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.to(() => const DashBoardScreen());
+            Get.to(() => const WithdrawMoneyScreen());
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -270,7 +268,6 @@ class _BankListWithdrawState extends State<BankListWithdraw> {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-                              if (widget.withdrawal) {
                                 Get.to(() => BankDetailsScreen(
                                     bankId:
                                         _bankController.bankList[index].bankId,
@@ -280,21 +277,95 @@ class _BankListWithdrawState extends State<BankListWithdraw> {
                                         .bankList[index].bankName,
                                     acNumber:
                                         _bankController.bankList[index].account,
-                                    ifsc: _bankController.bankList[index].ifsc,
-                                    amount: widget.amount));
-                              }
+                                    ifsc: _bankController.bankList[index].ifsc));
                             },
-                            child: BankCard(
+                            child: BankWithdrawCard(
                               bankController: _bankController,
                               index: index,
-                              withdrawal: widget.withdrawal,
                             ),
                           );
                         },
                       ),
               ),
               const SizedBox(height: 25),
+              InkWell(
+                onTap: () {
+                  Get.to(() => const AddBankScreenOnWithdraw());
+                },
+                child: Card(
+                  elevation: 0,
+                  color: themeController.currentTheme.value.cardColor,
+                  child: Container(
+                    color: themeController.currentTheme.value.cardColor,
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    child: ListTile(
+                      title: Text(
+                        S.of(context).addNewBankAccount,
+                        style: themeController
+                            .currentTheme.value.textTheme.displaySmall,
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward,
+                        color:
+                            themeController.currentTheme.value.iconTheme.color,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+//
+//
+//
+//
+class BankWithdrawCard extends StatelessWidget {
+  const BankWithdrawCard({
+    super.key,
+    required BankController bankController,
+    required this.index,
+  }) : _bankController = bankController;
+
+  final BankController _bankController;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Card(
+        elevation: 1, // Adjust the elevation as needed
+        child: Container(
+          color: themeController.currentTheme.value.cardColor,
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: ListTile(
+            title: Text(
+              _bankController.bankList[index].bankName,
+              style: themeController.currentTheme.value.textTheme.bodyLarge,
+            ),
+            subtitle: Text(
+              _bankController.bankList[index].account,
+              style: themeController.currentTheme.value.textTheme.displayMedium,
+            ),
+            leading: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Image.asset(
+                  'assets/icons/ic_bank.jpg',
+                  fit: BoxFit.fill,
+                  height: 35,
+                  width: 35,
+                ),
+              ),
+            ),
           ),
         ),
       ),

@@ -11,7 +11,7 @@ class HomeTransactionList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
         Text(S.of(context).recentTransactions,
             style: themeController.currentTheme.value.textTheme.bodyLarge),
         const SizedBox(height: 10),
