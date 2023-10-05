@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:savo/Controllers/walllet_controller.dart';
+import 'package:savo/util/widgets/widget.dart';
 import '../../Controllers/global_controllers.dart';
 
 class WalletTransactions extends StatefulWidget {
@@ -151,8 +152,8 @@ class _WalletTransactionsState extends State<WalletTransactions> {
                                 _walletController.walletTransactionsList[index]
                                     .status ==
                                     'addition'
-                                    ? '+${_walletController.walletTransactionsList[index].balance}'
-                                    : '-${_walletController.walletTransactionsList[index].balance}',
+                                    ? '+${convertToCurrency(_walletController.walletTransactionsList[index].balance)}'
+                                    : '-${convertToCurrency(_walletController.walletTransactionsList[index].balance)}',
                                 style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w800,

@@ -284,7 +284,6 @@ class _SignupOtpVerificationState extends State<SignupOtpVerification> {
                               widget.codeOfCountry,
                               fcmToken);
                         });
-                        loadingController.updateLoading(false);
                       } catch (e) {
                         Fluttertoast.showToast(
                           msg: 'Invalid OTP',

@@ -156,6 +156,9 @@ class WithdrawalRequestModel {
     required this.bankName,
     required this.date,
     required this.time,
+    required this.acNumber,
+    required this.ifsc,
+    required this.charges,
   });
 
   final String requestId;
@@ -164,4 +167,7 @@ class WithdrawalRequestModel {
   final String bankName;
   final String date;
   final String time;
+  final String acNumber;
+  final String ifsc;
+  final String charges;
 }

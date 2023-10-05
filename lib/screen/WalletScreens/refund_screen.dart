@@ -61,7 +61,7 @@ class _RefundScreenState extends State<RefundScreen> {
                                   context,
                                   _quotationController.orderId,
                                   'refund',
-                                  _quotationController.senderId);
+                                  _quotationController.senderId, _refund.text);
                             },
                             text: 'Refund',
                             color: primaryColor,

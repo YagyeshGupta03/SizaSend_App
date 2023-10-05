@@ -154,7 +154,7 @@ class WalletController extends GetxController {
   //
   //
   //
-  Future<bool> quotationPay(amount, senderId, orderId, orderName) async {
+  Future<bool> quotationPay(amount, senderId, orderId, orderName, courierCharge, costOfItem) async {
     await loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: quotationPayUrl);
     var reply = await networkHelper.postData({
@@ -162,6 +162,8 @@ class WalletController extends GetxController {
       'sender_id': credentialController.id.toString(),
       'amount': amount,
       'order_id': orderId,
+      'courier_charge': courierCharge,
+      'cost_of_item': costOfItem,
     });
 
     if (reply['status'] == 1) {
@@ -221,7 +223,7 @@ class WalletController extends GetxController {
   //
   //
   //
-  Future<bool> completeOrderPayment(context, orderId, status, senderId) async {
+  Future<bool> completeOrderPayment(context, orderId, status, senderId, reason) async {
     final NetworkHelper networkHelper =
         NetworkHelper(url: completeOrderPaymentUrl);
     var reply = await networkHelper.postData({
@@ -250,6 +252,7 @@ class WalletController extends GetxController {
                ),
              ]);
        } else{
+         updateRefundReason(context, orderId, reason);
          Dialogs.materialDialog(
              msg: 'Amount will be added to your wallet',
              title: 'Refund successful',
@@ -267,6 +270,25 @@ class WalletController extends GetxController {
              ]);
        }
       });
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //
+  //
+  //
+  //
+  Future<bool> updateRefundReason(context, orderId, reason) async {
+    final NetworkHelper networkHelper =
+    NetworkHelper(url: updateRefundReasonUrl);
+    var reply = await networkHelper.postData({
+      'order_id': orderId,
+      'reason': reason,
+    });
+
+    if (reply['status'] == 1) {
       return true;
     } else {
       return false;
@@ -326,7 +348,7 @@ class WalletController extends GetxController {
 
         walletTransactionsList.add(WalletTransactionModel(
           transactionId: reply['data'][i]['id'],
-          balance: reply['data'][i]['balance'],
+          balance: reply['data'][i]['balance']??"",
           status: reply['data'][i]['status'] ?? '',
           paidUser: reply['data'][i]['paid_user_name'] ?? '',
           date: formattedDate,
@@ -358,7 +380,6 @@ class WalletController extends GetxController {
         DateTime createdAt = DateTime.parse(reply['data'][i]['created_at']);
         String formattedDate = DateFormat.yMMMMd().format(createdAt);
         String formattedTime = DateFormat.jm().format(createdAt);
-
         withdrawRequestList.add(WithdrawalRequestModel(
           requestId: reply['data'][i]['id'],
           amount: reply['data'][i]['amount'],
@@ -366,6 +387,9 @@ class WalletController extends GetxController {
           bankName: reply['data'][i]['bank_name'],
           date: formattedDate,
           time: formattedTime,
+          acNumber: reply['data'][i]['account_no'],
+          ifsc: reply['data'][i]['ifsc_code'],
+          charges: reply['data'][i]['processing_fees'],
         ));
       }
       update();

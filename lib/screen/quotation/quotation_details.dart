@@ -8,9 +8,7 @@ import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/quotation_controller.dart';
-import 'package:savo/screen/qr_code_scanner.dart';
 import 'package:savo/screen/quotation/full_video_screen.dart';
-import 'package:savo/screen/quotation/quotation_billing_screen.dart';
 import 'package:savo/screen/quotation/quotation_detail_screen_for_pay.dart';
 import 'package:savo/util/widgets/dispatch_button.dart';
 import 'package:savo/util/widgets/login_button.dart';
@@ -18,6 +16,9 @@ import 'package:video_player/video_player.dart';
 import '../../Constants/all_urls.dart';
 import '../../Constants/theme_data.dart';
 import '../../Controllers/global_controllers.dart';
+import '../../Controllers/walllet_controller.dart';
+import '../../util/widgets/widget.dart';
+import '../WalletScreens/add_total_money_screen.dart';
 import '../dashboard_screen.dart';
 
 class QuotationDetailScreen extends StatefulWidget {
@@ -30,6 +31,7 @@ class QuotationDetailScreen extends StatefulWidget {
 class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
   final QuotationController _quotationController =
       Get.put(QuotationController());
+  final WalletController _walletController = Get.put(WalletController());
 
   String dispatchCode = '';
   String deliverCode = '';
@@ -157,6 +159,48 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
+                    _quotationController.senderId == credentialController.id
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Sent to',
+                                style: themeController
+                                    .currentTheme.value.textTheme.displayMedium,
+                                textAlign: TextAlign.justify,
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                _quotationController.receiverName,
+                                style: const TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: primaryColor),
+                                textAlign: TextAlign.justify,
+                              ),
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Sent by',
+                                style: themeController
+                                    .currentTheme.value.textTheme.displayMedium,
+                                textAlign: TextAlign.justify,
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                _quotationController.senderName,
+                                style: const TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: primaryColor),
+                                textAlign: TextAlign.justify,
+                              ),
+                            ],
+                          ),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -168,8 +212,8 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.justify,
                         ),
-                        Text(
-                          '${_quotationController.price} USD',
+
+                        Text(convertToCurrency(_quotationController.price),
                           style: const TextStyle(
                               fontSize: 15, color: primaryColor),
                           maxLines: 1,
@@ -186,73 +230,11 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                       textAlign: TextAlign.justify,
                     ),
                     const SizedBox(height: 35),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Store Location',
-                          style: themeController
-                              .currentTheme.value.textTheme.bodyLarge,
-                          textAlign: TextAlign.justify,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _quotationController.store,
-                      style: themeController
-                          .currentTheme.value.textTheme.displayMedium,
-                      textAlign: TextAlign.justify,
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      height: 150,
-                      width: screenWidth(context),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Image.asset(
-                        'assets/images/map.png',
-                        fit: BoxFit.fill,
-                      ),
-                    ),
+                    StoreLocation(quotationController: _quotationController),
                     const SizedBox(height: 35),
-                    Text(
-                      'Information',
-                      style: themeController
-                          .currentTheme.value.textTheme.bodyLarge,
-                      textAlign: TextAlign.justify,
-                    ),
-                    const SizedBox(height: 15),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InfoColumn(
-                              title: 'Quantity',
-                              value: _quotationController.quantity),
-                          InfoColumn(
-                              title: 'Price',
-                              value: _quotationController.price),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InfoColumn(
-                              title: 'Weight',
-                              value: _quotationController.weight),
-                          InfoColumn(
-                              title: 'Size',
-                              value:
-                                  '${_quotationController.height} cm x ${_quotationController.width} cm'),
-                        ],
-                      ),
-                    ),
+                    OtherInformation(quotationController: _quotationController),
+                    const SizedBox(height: 40),
+                    PaymentDetails(quotationController: _quotationController),
                     const SizedBox(height: 40),
                     // to check if sender
                     _quotationController.senderId == credentialController.id
@@ -261,8 +243,8 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                             ? const SizedBox()
                             : _quotationController.orderStatus == 'dispatch'
                                 ? const SizedBox()
-                                : DispatchButton(orderId: _quotationController
-                        .orderId)
+                                : DispatchButton(
+                                    orderId: _quotationController.orderId)
 
                         // to check by receiver to pay or track
                         : _quotationController.status == ''
@@ -274,8 +256,52 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                 : _quotationController.orderStatus == 'unpaid'
                                     ? LoginButton(
                                         onTap: () {
-                                          Get.to(() =>
-                                              const QuotationBillingScreen());
+                                          Dialogs.materialDialog(
+                                              msg:
+                                                  'Do you want to pay for this quotation?',
+                                              msgAlign: TextAlign.center,
+                                              title: "Pay",
+                                              color: Colors.white,
+                                              titleAlign: TextAlign.center,
+                                              context: context,
+                                              actions: [
+                                                IconsOutlineButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  text: 'Cancel',
+                                                  iconData:
+                                                      Icons.cancel_outlined,
+                                                  textStyle: const TextStyle(
+                                                      color: Colors.grey),
+                                                  iconColor: Colors.grey,
+                                                ),
+                                                IconsButton(
+                                                  onPressed: () async {
+                                                    Navigator.pop(context);
+                                                    _walletController
+                                                        .quotationPay(
+                                                            _quotationController
+                                                                .price,
+                                                            _quotationController
+                                                                .senderId,
+                                                            _quotationController
+                                                                .orderId,
+                                                            _quotationController
+                                                                .productName,
+                                                      _quotationController
+                                                          .courierCharges,
+                                                      _quotationController
+                                                          .itemCost,
+                                                    );
+                                                  },
+                                                  text: 'Pay',
+                                                  color: primaryColor,
+                                                  textStyle: const TextStyle(
+                                                      color: Colors.white),
+                                                  iconColor: Colors.white,
+                                                ),
+                                              ]);
                                         },
                                         title: 'Pay',
                                         txtColor: Colors.white,
@@ -283,8 +309,32 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                     // to check by receiver to accept or reject
                                     : _quotationController.orderStatus ==
                                             'dispatch'
-                                        ? DeliveryButton(orderId: _quotationController.orderId, senderId: _quotationController.senderId)
+                                        ? DeliveryButton(
+                                            orderId:
+                                                _quotationController.orderId,
+                                            senderId:
+                                                _quotationController.senderId)
                                         : const SizedBox(),
+                    _quotationController.orderStatus == 'refund'
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Reason to refund',
+                                style: themeController
+                                    .currentTheme.value.textTheme.bodyLarge,
+                                textAlign: TextAlign.justify,
+                              ),
+                              Text(
+                                _quotationController.reason,
+                                style: themeController
+                                    .currentTheme.value.textTheme.displayMedium,
+                                textAlign: TextAlign.justify,
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
+                    const SizedBox(height: 50)
                   ],
                 ),
               ),
@@ -322,6 +372,143 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                   ),
           ],
         ));
+  }
+}
+
+//
+//
+//
+//
+//
+//
+//
+//
+class StoreLocation extends StatelessWidget {
+  const StoreLocation({
+    super.key,
+    required QuotationController quotationController,
+  }) : _quotationController = quotationController;
+
+  final QuotationController _quotationController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Store Location',
+              style: themeController.currentTheme.value.textTheme.bodyLarge,
+              textAlign: TextAlign.justify,
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(
+          _quotationController.store,
+          style: themeController.currentTheme.value.textTheme.displayMedium,
+          textAlign: TextAlign.justify,
+        ),
+        const SizedBox(height: 8),
+        Container(
+          height: 150,
+          width: screenWidth(context),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+          child: Image.asset(
+            'assets/images/map.png',
+            fit: BoxFit.fill,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class OtherInformation extends StatelessWidget {
+  const OtherInformation({
+    super.key,
+    required QuotationController quotationController,
+  }) : _quotationController = quotationController;
+
+  final QuotationController _quotationController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Information',
+          style: themeController.currentTheme.value.textTheme.bodyLarge,
+          textAlign: TextAlign.justify,
+        ),
+        const SizedBox(height: 15),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InfoColumn(
+                  title: 'Quantity', value: _quotationController.quantity),
+              InfoColumn(title: 'Price', value: _quotationController.price),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InfoColumn(title: 'Weight', value: _quotationController.weight),
+              InfoColumn(
+                  title: 'Size',
+                  value:
+                      '${_quotationController.height} cm x ${_quotationController.width} cm'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PaymentDetails extends StatelessWidget {
+  const PaymentDetails({
+    super.key,
+    required QuotationController quotationController,
+  }) : _quotationController = quotationController;
+
+  final QuotationController _quotationController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Total payment',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        const SizedBox(height: 10),
+        TotalAmountTile(
+            value: convertToCurrency(_quotationController.itemCost),
+            title: 'Cost of item'),
+        TotalAmountTile(
+            value: convertToCurrency(_quotationController.courierCharges),
+            title: 'Courier charges'),
+        TotalAmountTile(
+            value: convertToCurrency(_quotationController.adminCharges),
+            title: 'Sizasend charges'),
+        const SizedBox(height: 20),
+        const Divider(),
+        const SizedBox(height: 10),
+        TotalAmountTile(
+            value: convertToCurrency(_quotationController.price),
+            title: 'Total payment'),
+      ],
+    );
   }
 }
 
@@ -424,10 +611,6 @@ class CompleteOrderButtons extends StatelessWidget {
   }
 }
 
-//
-//
-//
-//
 class InfoColumn extends StatelessWidget {
   const InfoColumn({super.key, required this.title, required this.value});
 

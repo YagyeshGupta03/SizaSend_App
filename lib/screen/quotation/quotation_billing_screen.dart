@@ -19,7 +19,6 @@ class QuotationBillingScreen extends StatefulWidget {
 }
 
 class _QuotationBillingScreenState extends State<QuotationBillingScreen> {
-  final WalletController _walletController = Get.put(WalletController());
   final QuotationController _quotationController =
       Get.put(QuotationController());
 
@@ -65,40 +64,7 @@ class _QuotationBillingScreenState extends State<QuotationBillingScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 0),
                       child: LoginButton(
                           onTap: () {
-                            Dialogs.materialDialog(
-                                msg: 'Do you want to pay for this quotation?',
-                                msgAlign: TextAlign.center,
-                                title: "Pay",
-                                color: Colors.white,
-                                titleAlign: TextAlign.center,
-                                context: context,
-                                actions: [
-                                  IconsOutlineButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    text: 'Cancel',
-                                    iconData: Icons.cancel_outlined,
-                                    textStyle:
-                                        const TextStyle(color: Colors.grey),
-                                    iconColor: Colors.grey,
-                                  ),
-                                  IconsButton(
-                                    onPressed: () async {
-                                      Navigator.pop(context);
-                                      _walletController.quotationPay(
-                                          _quotationController.price,
-                                          _quotationController.senderId,
-                                          _quotationController.orderId,
-                                          _quotationController.productName);
-                                    },
-                                    text: 'Pay',
-                                    color: primaryColor,
-                                    textStyle:
-                                        const TextStyle(color: Colors.white),
-                                    iconColor: Colors.white,
-                                  ),
-                                ]);
+
                           },
                           title: 'Proceed to pay',
                           txtColor: Colors.white,

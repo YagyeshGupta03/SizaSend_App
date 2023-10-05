@@ -17,6 +17,7 @@ import 'package:video_player/video_player.dart';
 import '../../Constants/all_urls.dart';
 import '../../Constants/theme_data.dart';
 import '../../Controllers/global_controllers.dart';
+import '../../util/widgets/widget.dart';
 import '../qr_code_scanner.dart';
 import 'quotation_details.dart';
 
@@ -161,6 +162,48 @@ class _QuotationDetailScreenForPayState
                       ),
                     ),
                     const SizedBox(height: 20),
+                    _quotationController.senderId == credentialController.id
+                        ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Sent to',
+                          style: themeController
+                              .currentTheme.value.textTheme.displayMedium,
+                          textAlign: TextAlign.justify,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          _quotationController.receiverName,
+                          style: const TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w700,
+                              color: primaryColor),
+                          textAlign: TextAlign.justify,
+                        ),
+                      ],
+                    )
+                        : Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Sent by',
+                          style: themeController
+                              .currentTheme.value.textTheme.displayMedium,
+                          textAlign: TextAlign.justify,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          _quotationController.senderName,
+                          style: const TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w700,
+                              color: primaryColor),
+                          textAlign: TextAlign.justify,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -173,7 +216,7 @@ class _QuotationDetailScreenForPayState
                           textAlign: TextAlign.justify,
                         ),
                         Text(
-                          '${_quotationController.price} USD',
+                          convertToCurrency(_quotationController.price),
                           style: const TextStyle(
                               fontSize: 15, color: primaryColor),
                           maxLines: 1,
@@ -190,73 +233,11 @@ class _QuotationDetailScreenForPayState
                       textAlign: TextAlign.justify,
                     ),
                     const SizedBox(height: 35),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Store Location',
-                          style: themeController
-                              .currentTheme.value.textTheme.bodyLarge,
-                          textAlign: TextAlign.justify,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _quotationController.store,
-                      style: themeController
-                          .currentTheme.value.textTheme.displayMedium,
-                      textAlign: TextAlign.justify,
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      height: 150,
-                      width: screenWidth(context),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Image.asset(
-                        'assets/images/map.png',
-                        fit: BoxFit.fill,
-                      ),
-                    ),
+                    StoreLocation(quotationController: _quotationController),
                     const SizedBox(height: 35),
-                    Text(
-                      'Information',
-                      style: themeController
-                          .currentTheme.value.textTheme.bodyLarge,
-                      textAlign: TextAlign.justify,
-                    ),
-                    const SizedBox(height: 15),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InfoColumn(
-                              title: 'Quantity',
-                              value: _quotationController.quantity),
-                          InfoColumn(
-                              title: 'Price',
-                              value: _quotationController.price),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InfoColumn(
-                              title: 'Weight',
-                              value: _quotationController.weight),
-                          InfoColumn(
-                              title: 'Size',
-                              value:
-                                  '${_quotationController.height} cm x ${_quotationController.width} cm'),
-                        ],
-                      ),
-                    ),
+                    OtherInformation(quotationController: _quotationController),
+                    const SizedBox(height: 40),
+                    PaymentDetails(quotationController: _quotationController),
                     const SizedBox(height: 40),
                     // to check if sender
                     _quotationController.senderId == credentialController.id
@@ -304,7 +285,44 @@ class _QuotationDetailScreenForPayState
                                 : _quotationController.orderStatus == 'unpaid'
                                     ? LoginButton(
                                         onTap: () {
-                                          Get.to(()=> const QuotationBillingScreen());
+                                          Dialogs.materialDialog(
+                                              msg: 'Do you want to pay for this quotation?',
+                                              msgAlign: TextAlign.center,
+                                              title: "Pay",
+                                              color: Colors.white,
+                                              titleAlign: TextAlign.center,
+                                              context: context,
+                                              actions: [
+                                                IconsOutlineButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  text: 'Cancel',
+                                                  iconData: Icons.cancel_outlined,
+                                                  textStyle:
+                                                  const TextStyle(color: Colors.grey),
+                                                  iconColor: Colors.grey,
+                                                ),
+                                                IconsButton(
+                                                  onPressed: () async {
+                                                    Navigator.pop(context);
+                                                    _walletController.quotationPay(
+                                                        _quotationController.price,
+                                                        _quotationController.senderId,
+                                                        _quotationController.orderId,
+                                                        _quotationController.productName,
+                                                      _quotationController
+                                                          .courierCharges,
+                                                      _quotationController
+                                                          .itemCost);
+                                                  },
+                                                  text: 'Pay',
+                                                  color: primaryColor,
+                                                  textStyle:
+                                                  const TextStyle(color: Colors.white),
+                                                  iconColor: Colors.white,
+                                                ),
+                                              ]);
                                         },
                                         title: 'Pay',
                                         txtColor: Colors.white,

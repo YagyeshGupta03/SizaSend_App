@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:savo/Constants/all_urls.dart';
+import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Models/Models.dart';
 import '../Helper/http_helper.dart';
 
@@ -134,12 +135,14 @@ class ContactController extends GetxController {
       if (reply['status'] == 1) {
         for (int i = 0; i < reply['data'].length; i++) {
           if (reply['data'][i].toString() != "null") {
-            connectedContactListing.add(
-              ContactModel(
-                  fullName: reply['data'][i]['full_name'],
-                  userId: reply['data'][i]['id'],
-                  image: reply['data'][i]['profile_image'] ?? ''),
-            );
+            if(credentialController.id != reply['data'][i]['id']) {
+              connectedContactListing.add(
+                ContactModel(
+                    fullName: reply['data'][i]['full_name'],
+                    userId: reply['data'][i]['id'],
+                    image: reply['data'][i]['profile_image'] ?? ''),
+              );
+            }
           }
         }
       } else {

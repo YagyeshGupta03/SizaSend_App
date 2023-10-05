@@ -49,7 +49,7 @@ class _WebPageState extends State<WebPage> {
       ..loadRequest(Uri.parse(widget.link));
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return true;
       },
       child: Scaffold(
         body: WebViewWidget(controller: controller),

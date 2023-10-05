@@ -10,6 +10,8 @@ import 'package:savo/screen/dashboard_screen.dart';
 import 'package:savo/screen/quotation/quotation_details.dart';
 import 'package:savo/util/widgets/text_field.dart';
 
+import '../../util/widgets/widget.dart';
+
 class AddMoneyScreen extends StatefulWidget {
   const AddMoneyScreen({Key? key}) : super(key: key);
 
@@ -61,7 +63,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
       double minimum = 2.00;
       double percent = 2 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -69,7 +71,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
       double minimum = 2.00;
       double percent = 3.2 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -77,7 +79,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
       double minimum = 2.00;
       double percent = 3.5 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -85,7 +87,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
       double minimum = 2.00;
       double percent = 3.5 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -100,7 +102,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
       double minimum = 2.00;
       double percent = 3.5 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -108,7 +110,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
       double minimum = 2.00;
       double percent = 3.5 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -116,7 +118,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
       double minimum = 2.00;
       double percent = 3.2 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -162,14 +164,14 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Available balance',
                         style: themeController
                             .currentTheme.value.textTheme.bodyLarge),
-                    Text(userInfoController.balance,
+                    Text(convertToCurrency(userInfoController.balance),
                         style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 16,
@@ -228,6 +230,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                       if (_amount.text.isNotEmpty) {
                         Get.to(() => AddTotalMoneyScreen(
                             amount: _amount.text,
+                            status: true,
                             type: paymentTypes[index],
                             charges:
                                 '${calculate(double.parse(_amount.text.isNotEmpty ? _amount.text : "0.0"), paymentTypes[index])}',
@@ -285,11 +288,9 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
   }
 }
 
-
-
-
 class QuotationMoneyAdd extends StatefulWidget {
-  const QuotationMoneyAdd({super.key, required this.price, required this.orderID});
+  const QuotationMoneyAdd(
+      {super.key, required this.price, required this.orderID});
 
   final String price;
   final String orderID;
@@ -300,7 +301,8 @@ class QuotationMoneyAdd extends StatefulWidget {
 
 class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
   String requiredAmount = '';
-  final QuotationController _quotationController = Get.put(QuotationController());
+  final QuotationController _quotationController =
+      Get.put(QuotationController());
   @override
   void initState() {
     super.initState();
@@ -351,7 +353,7 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
       double minimum = 2.00;
       double percent = 2 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -359,7 +361,7 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
       double minimum = 2.00;
       double percent = 3.2 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -367,7 +369,7 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
       double minimum = 2.00;
       double percent = 3.5 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -375,7 +377,7 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
       double minimum = 2.00;
       double percent = 3.5 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -390,7 +392,7 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
       double minimum = 2.00;
       double percent = 3.5 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -398,7 +400,7 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
       double minimum = 2.00;
       double percent = 3.5 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -406,7 +408,7 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
       double minimum = 2.00;
       double percent = 3.2 / 100;
       double amountPercentage = amount * percent;
-      double finalPrice = (amountPercentage + minimum)*2;
+      double finalPrice = (amountPercentage + minimum) * 2;
       return finalPrice.toStringAsFixed(1);
     }
 
@@ -433,6 +435,7 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
         return double.parse('0.0');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -440,12 +443,10 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
         leading: IconButton(
           onPressed: () {
             _quotationController
-                .getQuotationByOrderId(
-                widget.orderID)
+                .getQuotationByOrderId(widget.orderID)
                 .whenComplete(() => Get.to(
-                  () =>
-              const QuotationDetailScreen(),
-            ));
+                      () => const QuotationDetailScreen(),
+                    ));
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -456,21 +457,22 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column( crossAxisAlignment: CrossAxisAlignment.start,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Available balance',
-                      style:
-                          themeController.currentTheme.value.textTheme.bodyLarge),
-                  Text('${userInfoController.balance}  USD',
+                      style: themeController
+                          .currentTheme.value.textTheme.bodyLarge),
+                  Text(convertToCurrency(userInfoController.balance),
                       style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
                           color: primaryColor)),
                   const SizedBox(height: 25),
                   Text('Required extra',
-                      style:
-                          themeController.currentTheme.value.textTheme.bodyLarge),
-                  Text('$requiredAmount  USD',
+                      style: themeController
+                          .currentTheme.value.textTheme.bodyLarge),
+                  Text(convertToCurrency(requiredAmount),
                       style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
@@ -480,6 +482,11 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
                       cont: _amount,
                       title: 'Amount',
                       icon: const SizedBox(),
+                      onChanged: (val) {
+                        setState(() {
+                          text == val;
+                        });
+                      },
                       fieldLabel: 'Amount',
                       keyboard: TextInputType.number,
                       fillColor: themeController.currentTheme.value.cardColor,
@@ -487,7 +494,7 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
                   const SizedBox(height: 25),
                   Padding(
                     padding:
-                    const EdgeInsets.only(left: 0, top: 10, bottom: 10),
+                        const EdgeInsets.only(left: 0, top: 10, bottom: 10),
                     child: Text(
                       'Pay using',
                       style: themeController
@@ -523,9 +530,10 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
                       if (_amount.text.isNotEmpty) {
                         Get.to(() => AddTotalMoneyScreen(
                             amount: _amount.text,
+                            status: false,
                             type: paymentTypes[index],
                             charges:
-                            '${calculate(double.parse(_amount.text.isNotEmpty ? _amount.text : "0.0"), paymentTypes[index])}',
+                                '${calculate(double.parse(_amount.text.isNotEmpty ? _amount.text : "0.0"), paymentTypes[index])}',
                             transactionGateway: paymentsWay[index]));
                       } else {
                         Fluttertoast.showToast(

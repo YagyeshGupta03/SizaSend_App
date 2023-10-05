@@ -106,24 +106,20 @@ class _TransactionListState extends State<TransactionList> {
                                             ),
                                     ],
                                   ),
-                                  // trailing: _quotationController
-                                  //     .getQuotationList[index]
-                                  //     .senderId ==
-                                  //     credentialController.id
-                                  //     ?  IconButton(
-                                  //   onPressed: () {
-                                  //     _quotationController.deleteQuotation(
-                                  //         context,
-                                  //         _quotationController
-                                  //             .getQuotationList[index]
-                                  //             .orderId);
-                                  //   },
-                                  //   icon: const Icon(
-                                  //     Icons.delete,
-                                  //     color: Colors.red,
-                                  //   ),
-                                  // )
-                                  // : const SizedBox(),
+                                  trailing: _quotationController
+                                      .getQuotationHistory[index]
+                                      .paid ==
+                                      'refund'
+                                      ?  const Text(
+                                      '[Refund]',
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.red, fontWeight: FontWeight.w800))
+                                  :  const Text(
+                                    '[Complete]',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.green, fontWeight: FontWeight.w800)),
                                 ),
                               ),
                             ],

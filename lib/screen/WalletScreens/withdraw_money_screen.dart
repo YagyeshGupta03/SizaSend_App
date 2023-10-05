@@ -5,10 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/walllet_controller.dart';
+import 'package:savo/screen/WalletScreens/withdraw_charges_screen.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import 'package:savo/screen/profile/BankAccount_screens/bank_account_listing.dart';
 import 'package:savo/util/widgets/login_button.dart';
 import 'package:savo/util/widgets/text_field.dart';
+import 'package:savo/util/widgets/widget.dart';
 
 class WithdrawMoneyScreen extends StatefulWidget {
   const WithdrawMoneyScreen({Key? key}) : super(key: key);
@@ -129,61 +131,80 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
                                               .value.textTheme.titleSmall,
                                         ),
                                       ),
-                              Card(
-                                color: themeController
-                                    .currentTheme.value.cardColor,
-                                elevation: 0,
-                                child: ListTile(
-                                  tileColor: themeController
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => WithdrawChargesScreen(
+                                      withdrawAmount: _walletController
+                                          .withdrawRequestList[index].amount,
+                                      charges: _walletController
+                                          .withdrawRequestList[index].charges,
+                                      bankName: _walletController
+                                          .withdrawRequestList[index].bankName,
+                                      status: _walletController
+                                          .withdrawRequestList[index].status,
+                                      acNumber: _walletController
+                                          .withdrawRequestList[index].bankName,
+                                      ifsc: _walletController
+                                          .withdrawRequestList[index].ifsc));
+                                },
+                                child: Card(
+                                  color: themeController
                                       .currentTheme.value.cardColor,
-                                  leading: Container(
-                                    height: 40,
-                                    width: 40,
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white),
-                                    child: Image.asset(
-                                        'assets/icons/bankTransfer.png',
-                                        fit: BoxFit.fill),
-                                  ),
-                                  title: Text(
-                                    _walletController
-                                        .withdrawRequestList[index].bankName,
-                                    style: themeController.currentTheme.value
-                                        .textTheme.titleSmall,
-                                  ),
-                                  subtitle: Text(
-                                    _walletController.withdrawRequestList[index]
-                                                .status ==
-                                            'Accept'
-                                        ? 'Bank transfer success'
-                                        : _walletController
-                                            .withdrawRequestList[index].status,
-                                    style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w800,
-                                        color: _walletController
-                                                    .withdrawRequestList[index]
-                                                    .status ==
-                                                'Accept'
-                                            ? Colors.green
-                                            : primaryColor),
-                                  ),
-                                  trailing: Text(
-                                    '${
+                                  elevation: 0,
+                                  child: ListTile(
+                                    tileColor: themeController
+                                        .currentTheme.value.cardColor,
+                                    leading: Container(
+                                      height: 40,
+                                      width: 40,
+                                      padding: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white),
+                                      child: Image.asset(
+                                          'assets/icons/bankTransfer.png',
+                                          fit: BoxFit.fill),
+                                    ),
+                                    title: Text(
                                       _walletController
-                                          .withdrawRequestList[index].amount
-                                    } USD',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w800,
-                                        color: _walletController
-                                                    .withdrawRequestList[index]
-                                                    .status ==
-                                                'Accept'
-                                            ? Colors.green
-                                            : primaryColor),
+                                          .withdrawRequestList[index].bankName,
+                                      style: themeController.currentTheme.value
+                                          .textTheme.titleSmall,
+                                    ),
+                                    subtitle: Text(
+                                      _walletController
+                                                  .withdrawRequestList[index]
+                                                  .status ==
+                                              'Accept'
+                                          ? 'Bank transfer success'
+                                          : _walletController
+                                              .withdrawRequestList[index]
+                                              .status,
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w800,
+                                          color: _walletController
+                                                      .withdrawRequestList[
+                                                          index]
+                                                      .status ==
+                                                  'Accept'
+                                              ? Colors.green
+                                              : primaryColor),
+                                    ),
+                                    trailing: Text(
+                                      convertToCurrency(_walletController.withdrawRequestList[index].amount),
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800,
+                                          color: _walletController
+                                                      .withdrawRequestList[
+                                                          index]
+                                                      .status ==
+                                                  'Accept'
+                                              ? Colors.green
+                                              : primaryColor),
+                                    ),
                                   ),
                                 ),
                               ),

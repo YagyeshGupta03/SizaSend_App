@@ -26,11 +26,12 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final LoginController _loginController = Get.put(LoginController());
   final _fullName = TextEditingController();
   final _phone = TextEditingController();
   final _password = TextEditingController();
   final _confirmPassword = TextEditingController();
-  var codeOfCountry = '';
+  var codeOfCountry = '+91';
   bool checked = false;
 
   @override
@@ -139,34 +140,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           _password.text.isNotEmpty &&
                           _confirmPassword.text.isNotEmpty) {
                         if (_password.text == _confirmPassword.text) {
-                          await FirebaseAuth.instance
-                              .verifyPhoneNumber(
-                                phoneNumber:
-                                    codeOfCountry.toString() + _phone.text,
-                                verificationCompleted:
-                                    (PhoneAuthCredential credential) {},
-                                verificationFailed: (FirebaseAuthException e) {
-                                  Fluttertoast.showToast(
-                                    msg: 'Your daily limit exceeded',
-                                    gravity: ToastGravity.SNACKBAR,
-                                    backgroundColor: Colors.red,
-                                  );
-                                },
-                                codeSent:
-                                    (String verificationId, int? resendToken) {
-                                  Get.to(() => SignupOtpVerification(
-                                        verifyId: verificationId,
-                                        fullName: _fullName.text,
-                                        phone: _phone.text,
-                                        password: _password.text,
-                                        codeOfCountry: codeOfCountry.toString(),
-                                      ));
-                                },
-                                codeAutoRetrievalTimeout:
-                                    (String verificationId) {},
-                              )
-                              .whenComplete(
-                                  () => loadingController.updateLoading(false));
+                          _loginController.verifySignNumber(
+                              context,
+                              _phone.text,
+                              codeOfCountry,
+                              _fullName.text,
+                              _password.text);
                         } else {
                           Fluttertoast.showToast(
                             msg: S.of(context).confirmPasswordDoesNotMatch,
@@ -184,9 +163,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         loadingController.updateLoading(false);
                       }
                     },
-                    child: Text(
-                      S.of(context).signUp,
-                      style: const TextStyle(color: Colors.white),
+                    child: const Text(
+                      'Verify phone number',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                   SizedBox(height: screenHeight(context) * .015),

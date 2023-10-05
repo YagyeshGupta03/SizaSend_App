@@ -451,8 +451,10 @@ class QuotationController extends GetxController {
   String description = '';
   String senderId = '';
   String senderName = '';
+  String receiverName = '';
   String video = '';
   String sendImage = '';
+  String reason = '';
   String receiveImage = '';
   String orderStatus = '';
   String status = '';
@@ -480,10 +482,14 @@ class QuotationController extends GetxController {
       orderStatus = reply['data']['order_status'];
       status = reply['data']['status'] ?? '';
       senderId = reply['data']['user_id'];
-      senderName = reply['data']['full_name'];
+      senderName = reply['data']['sender_name'];
+      reason = reply['data']['reason']??'';
+      receiverName = reply['data']['receiver_name'];
       video = reply['data']['video'] ?? '';
       sendImage = reply['data']['send_image'] ?? '';
       receiveImage = reply['data']['receive_image'] ?? '';
+      print(senderName);
+      print(receiverName);
       return true;
     } else {
       print('Error in getting quotation history list');
@@ -551,6 +557,7 @@ class QuotationController extends GetxController {
           actions: [
             IconsButton(
               onPressed: () {
+                Navigator.pop(context);
                 Get.to(() => const RefundScreen());
               },
               text: 'Reject',
@@ -560,7 +567,7 @@ class QuotationController extends GetxController {
             IconsButton(
               onPressed: () {
                 _walletController.completeOrderPayment(
-                    context, orderId, 'complete', senderID);
+                    context, orderId, 'complete', senderID, '');
                 Navigator.pop(context);
               },
               text: 'Accept',

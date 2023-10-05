@@ -10,17 +10,19 @@ class AddTotalMoneyScreen extends StatelessWidget {
       {super.key,
       required this.amount,
       required this.type,
-      required this.charges, required this.transactionGateway});
+      required this.charges, required this.transactionGateway, required this.status});
 
   final String amount;
   final String type;
   final String transactionGateway;
   final String charges;
+  final bool status;
 
   @override
   Widget build(BuildContext context) {
     final WalletController walletController = Get.put(WalletController());
-    String finalPrice = '${double.parse(amount)+ double.parse(charges)}';
+    double price = double.parse(amount)+ double.parse(charges);
+    String finalPrice = price.toStringAsFixed(1);
     return Scaffold(
       appBar: AppBar(),
       body: Container(
@@ -51,7 +53,7 @@ class AddTotalMoneyScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: LoginButton(
                           onTap: () {
-                            walletController.webOpen(finalPrice, true, type, amount);
+                            walletController.webOpen(finalPrice, status, type, amount);
                           },
                           title: 'Proceed to pay',
                           txtColor: Colors.white,

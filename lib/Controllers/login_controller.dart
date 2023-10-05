@@ -14,9 +14,7 @@ class LoginController extends GetxController {
   //
   //
   Future signUp(context, fullName, phone, password, countryCode, token) async {
-    await loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: signupURl);
-
     var reply = await networkHelper.postData({
       "full_name": fullName,
       "phone": phone,
@@ -239,6 +237,59 @@ class LoginController extends GetxController {
       userrId = '';
       Fluttertoast.showToast(
         msg: "Phone number is not registered",
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      loadingController.updateLoading(false);
+    }
+  }
+  //
+  //
+  //
+  //
+  String phoneVerify = '';
+  Future verifySignNumber(context, phone, codeOfCountry, fullName, password) async {
+    await loadingController.updateLoading(true);
+    final NetworkHelper networkHelper = NetworkHelper(url: verifySignNumberUrl);
+    var reply = await networkHelper.postData({
+      'phone': phone,
+    });
+
+    if (reply['status'] == 0) {
+      await FirebaseAuth.instance
+          .verifyPhoneNumber(
+            phoneNumber:
+            codeOfCountry.toString() + phone,
+            verificationCompleted:
+                (PhoneAuthCredential credential) {},
+            verificationFailed: (FirebaseAuthException e) {
+              Fluttertoast.showToast(
+                msg: e.toString(),
+                gravity: ToastGravity.SNACKBAR,
+                backgroundColor: Colors.red,
+              );
+              print('????????????????????????');
+              print(e.toString());
+              print('????????????????????????');
+            },
+            codeSent:
+                (String verificationId, int? resendToken) {
+              Get.to(() => SignupOtpVerification(
+                    verifyId: verificationId,
+                    fullName: fullName,
+                    phone: phone,
+                    password: password,
+                    codeOfCountry: codeOfCountry.toString(),
+                  ));
+            },
+            codeAutoRetrievalTimeout:
+                (String verificationId) {},
+          )
+          .whenComplete(
+              () => loadingController.updateLoading(false));
+    } else {
+      Fluttertoast.showToast(
+        msg: "Phone number is already registered",
         gravity: ToastGravity.SNACKBAR,
         backgroundColor: Colors.red,
       );
