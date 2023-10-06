@@ -68,19 +68,36 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                     height: 45,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
-                      gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xffFFB01D),
-                            Color(0xff5BCE55),
-                          ]),
+                      color: Colors.white
+                      // gradient: const LinearGradient(
+                      //     begin: Alignment.topLeft,
+                      //     end: Alignment.bottomRight,
+                      //     colors: [
+                      //       Color(0xffFFB01D),
+                      //       Color(0xff5BCE55),
+                      //     ]),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.all(2.0),
                       child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: RandomAvatar('saytoonz', trBackground: true)),
+                        radius: 20,
+                        child: ClipOval(
+                          child: SizedBox(
+                            height: 40,
+                            width: 40,
+                            child: userInfoController.profileImage ==
+                                ''
+                                ? Image.asset(
+                              'assets/images/profilePic.jpg',
+                              fit: BoxFit.cover,
+                            )
+                                : Image.network(
+                              '$imageUrl${userInfoController.profileImage}',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],

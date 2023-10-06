@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:material_dialogs/dialogs.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:savo/util/widgets/widget.dart';
 import '../../Constants/theme_data.dart';
 import '../../Controllers/global_controllers.dart';
 import '../../Controllers/quotation_controller.dart';
-import '../../Controllers/walllet_controller.dart';
 import '../../util/widgets/login_button.dart';
 import '../WalletScreens/add_total_money_screen.dart';
 

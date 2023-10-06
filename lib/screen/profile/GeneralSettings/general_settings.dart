@@ -35,7 +35,7 @@ class _GeneralSettingsState extends State<GeneralSettings> {
               ),
               const ProfileListTile(
                 title: 'Currency',
-                value: 'USD',
+                value: 'Rand',
               ),
               const SizedBox(height: 20),
               InkWell(

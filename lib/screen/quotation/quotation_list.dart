@@ -146,6 +146,8 @@ class _QuotationListState extends State<QuotationList> {
                                                                       .getQuotationList[
                                                                           index]
                                                                       .orderId);
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                         text: 'Delete',
                                                         iconData: Icons.delete,

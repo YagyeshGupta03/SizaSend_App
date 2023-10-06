@@ -65,7 +65,7 @@ class QuotationController extends GetxController {
       receiveQuotation();
     } else {
       Fluttertoast.showToast(
-        msg: "${reply['message']}",
+        msg: "Quotation is already paid",
         gravity: ToastGravity.SNACKBAR,
         backgroundColor: Colors.red,
       );

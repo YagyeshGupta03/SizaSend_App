@@ -27,6 +27,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
   void initState() {
     super.initState();
     _walletController.getWithdrawalHistory();
+    userInfoController.getUserInfo();
   }
 
   String lastDisplayedDate = "";
@@ -34,6 +35,8 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double balance = double.parse(userInfoController.balance);
+    String walletBalance = balance.toStringAsFixed(1);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -52,7 +55,7 @@ class _WithdrawMoneyScreenState extends State<WithdrawMoneyScreen> {
               Text('Available balance',
                   style:
                       themeController.currentTheme.value.textTheme.bodyLarge),
-              Text(userInfoController.balance,
+              Text(convertToCurrency(walletBalance),
                   style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 16,

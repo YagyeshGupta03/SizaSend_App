@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:savo/Controllers/global_controllers.dart';
+import 'package:savo/util/widgets/widget.dart';
 
 import '../../util/images.dart';
 
@@ -8,6 +9,8 @@ class HomeHeaderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double balance = double.parse(userInfoController.balance);
+    String walletBalance = balance.toStringAsFixed(1);
     var s = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +70,7 @@ class HomeHeaderScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 10),
                         child: Text(
-                          userInfoController.balance,
+                          convertToCurrency(walletBalance),
                           style: const TextStyle(
                               fontSize: 28,
                               color: Colors.white,

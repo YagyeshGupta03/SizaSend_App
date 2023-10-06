@@ -212,8 +212,8 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.justify,
                         ),
-
-                        Text(convertToCurrency(_quotationController.price),
+                        Text(
+                          convertToCurrency(_quotationController.price),
                           style: const TextStyle(
                               fontSize: 15, color: primaryColor),
                           maxLines: 1,
@@ -243,8 +243,13 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                             ? const SizedBox()
                             : _quotationController.orderStatus == 'dispatch'
                                 ? const SizedBox()
-                                : DispatchButton(
-                                    orderId: _quotationController.orderId)
+                                : _quotationController.orderStatus ==
+                                            'complete' ||
+                                        _quotationController.orderStatus ==
+                                            'refund'
+                                    ? const SizedBox()
+                                    : DispatchButton(
+                                        orderId: _quotationController.orderId)
 
                         // to check by receiver to pay or track
                         : _quotationController.status == ''
@@ -281,14 +286,14 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                                     Navigator.pop(context);
                                                     _walletController
                                                         .quotationPay(
-                                                            _quotationController
-                                                                .price,
-                                                            _quotationController
-                                                                .senderId,
-                                                            _quotationController
-                                                                .orderId,
-                                                            _quotationController
-                                                                .productName,
+                                                      _quotationController
+                                                          .price,
+                                                      _quotationController
+                                                          .senderId,
+                                                      _quotationController
+                                                          .orderId,
+                                                      _quotationController
+                                                          .productName,
                                                       _quotationController
                                                           .courierCharges,
                                                       _quotationController

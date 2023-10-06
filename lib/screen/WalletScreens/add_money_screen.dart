@@ -145,9 +145,11 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
         return double.parse('0.0');
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
+    double balance = double.parse(userInfoController.balance);
+    String walletBalance = balance.toStringAsFixed(1);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -171,7 +173,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                     Text('Available balance',
                         style: themeController
                             .currentTheme.value.textTheme.bodyLarge),
-                    Text(convertToCurrency(userInfoController.balance),
+                    Text(convertToCurrency(walletBalance),
                         style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 16,
@@ -438,6 +440,8 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
 
   @override
   Widget build(BuildContext context) {
+    double balance = double.parse(userInfoController.balance);
+    String walletBalance = balance.toStringAsFixed(1);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -463,7 +467,7 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
                   Text('Available balance',
                       style: themeController
                           .currentTheme.value.textTheme.bodyLarge),
-                  Text(convertToCurrency(userInfoController.balance),
+                  Text(convertToCurrency(walletBalance),
                       style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
@@ -592,6 +596,6 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
     double price = double.parse(value);
     double amount = price - balance;
 
-    requiredAmount = amount.toString();
+    requiredAmount = amount.toStringAsFixed(1);
   }
 }
