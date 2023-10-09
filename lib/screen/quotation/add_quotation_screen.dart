@@ -5,6 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:savo/Controllers/quotation_controller.dart';
 import 'package:savo/screen/dashboard_screen.dart';
 import 'package:video_compress/video_compress.dart';
@@ -17,8 +19,9 @@ import '../../generated/l10n.dart';
 import '../../util/widgets/text_field.dart';
 
 class AddQuotationScreen extends StatefulWidget {
-  const AddQuotationScreen({Key? key}) : super(key: key);
+  const AddQuotationScreen({Key? key, required this.buyerId}) : super(key: key);
 
+  final String buyerId;
   @override
   State<AddQuotationScreen> createState() => _AddQuotationScreenState();
 }
@@ -36,6 +39,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
   final _height = TextEditingController();
   final _length = TextEditingController();
   final _price = TextEditingController();
+  final _courier = TextEditingController();
   final _productDescription = TextEditingController();
   final _searchBar = TextEditingController();
   XFile? _video;
@@ -51,7 +55,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
             loadingController.updateLoading(false);
             loadingController.updateVideoCompressionLoading(false);
             loadingController.updateDispatchLoading(false);
-            Get.to(()=>const DashBoardScreen());
+            Get.to(() => const DashBoardScreen());
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -67,7 +71,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    'Create order',
+                    'Create quotation',
                     style:
                         themeController.currentTheme.value.textTheme.bodyMedium,
                   ),
@@ -80,60 +84,149 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                   const SizedBox(height: 20),
                   InkWell(
                     onTap: () async {
-                      final picker = ImagePicker();
-                      final pickedFile =
-                          await picker.pickVideo(source: ImageSource.gallery);
+                      Dialogs.materialDialog(
+                          msg: 'Choose a video source',
+                          title: 'Upload video',
+                          msgAlign: TextAlign.center,
+                          context: context,
+                          actions: [
+                            IconsButton(
+                              onPressed: () async {
+                                final picker = ImagePicker();
+                                final pickedFile = await picker.pickVideo(
+                                    source: ImageSource.gallery);
+                                if (pickedFile != null) {
+                                  final videoFile = File(pickedFile.path);
+                                  final videoSizeInBytes =
+                                      await videoFile.length();
+                                  final videoSizeInMB = videoSizeInBytes /
+                                      (1024 * 1024); // Convert bytes to MB
 
-                      if (pickedFile != null) {
-                        final videoFile = File(pickedFile.path);
-                        final videoSizeInBytes = await videoFile.length();
-                        final videoSizeInMB = videoSizeInBytes /
-                            (1024 * 1024); // Convert bytes to MB
+                                  if (videoSizeInMB <= 10) {
+                                    loadingController
+                                        .updateVideoCompressionLoading(true);
+                                    setState(() {
+                                      _video = pickedFile;
+                                    });
+                                  } else {
+                                    Fluttertoast.showToast(
+                                      msg: 'Video is greater than 10 MB',
+                                      gravity: ToastGravity.SNACKBAR,
+                                      backgroundColor: Colors.red,
+                                    );
+                                    return; // Do not proceed with compression if the video is too large
+                                  }
 
-                        if (videoSizeInMB <= 10) {
-                          loadingController.updateVideoCompressionLoading(true);
-                          setState(() {
-                            _video = pickedFile;
-                          });
-                        } else {
-                          Fluttertoast.showToast(
-                            msg: 'Video is greater than 10 MB',
-                            gravity: ToastGravity.SNACKBAR,
-                            backgroundColor: Colors.red,
-                          );
-                          return; // Do not proceed with compression if the video is too large
-                        }
+                                  // Compress the video if needed
+                                  if (videoSizeInMB > 2) {
+                                    final info =
+                                        await VideoCompress.compressVideo(
+                                      pickedFile.path,
+                                      quality: VideoQuality
+                                          .Res640x480Quality, // You can adjust the quality
+                                    );
 
-                        // Compress the video if needed
-                        if (videoSizeInMB > 2) {
-                          final info = await VideoCompress.compressVideo(
-                            pickedFile.path,
-                            quality: VideoQuality
-                                .Res640x480Quality, // You can adjust the quality
-                          );
+                                    if (info != null) {
+                                      final compressedFilePath = info.path;
+                                      if (compressedFilePath != null) {
+                                        final compressedFile =
+                                            File(compressedFilePath);
+                                        final compressedFileSizeInBytes =
+                                            await compressedFile.length();
 
-                          if (info != null) {
-                            final compressedFilePath = info.path;
-                            if (compressedFilePath != null) {
-                              final compressedFile = File(compressedFilePath);
-                              final compressedFileSizeInBytes =
-                                  await compressedFile.length();
+                                        if (compressedFileSizeInBytes <
+                                            videoSizeInBytes) {
+                                          loadingController
+                                              .updateVideoCompressionLoading(
+                                                  false);
+                                          // Compression was successful
+                                          setState(() {
+                                            _video = XFile(compressedFilePath);
+                                          });
+                                        }
+                                      }
+                                    }
+                                  } else {
+                                    loadingController
+                                        .updateVideoCompressionLoading(false);
+                                  }
+                                }
+                              },
+                              text: 'Camera',
+                              color: Colors.white,
+                              textStyle: const TextStyle(color: primaryColor),
+                              iconData: Icons.camera,
+                              iconColor: primaryColor,
+                            ),
+                            IconsButton(
+                              onPressed: () async {
+                                final picker = ImagePicker();
+                                final pickedFile = await picker.pickVideo(
+                                    source: ImageSource.gallery);
+                                if (pickedFile != null) {
+                                  final videoFile = File(pickedFile.path);
+                                  final videoSizeInBytes =
+                                      await videoFile.length();
+                                  final videoSizeInMB = videoSizeInBytes /
+                                      (1024 * 1024); // Convert bytes to MB
 
-                              if (compressedFileSizeInBytes <
-                                  videoSizeInBytes) {
-                                loadingController
-                                    .updateVideoCompressionLoading(false);
-                                // Compression was successful
-                                setState(() {
-                                  _video = XFile(compressedFilePath);
-                                });
-                              }
-                            }
-                          }
-                        } else {
-                          loadingController.updateVideoCompressionLoading(false);
-                        }
-                      }
+                                  if (videoSizeInMB <= 10) {
+                                    loadingController
+                                        .updateVideoCompressionLoading(true);
+                                    setState(() {
+                                      _video = pickedFile;
+                                    });
+                                  } else {
+                                    Fluttertoast.showToast(
+                                      msg: 'Video is greater than 10 MB',
+                                      gravity: ToastGravity.SNACKBAR,
+                                      backgroundColor: Colors.red,
+                                    );
+                                    return; // Do not proceed with compression if the video is too large
+                                  }
+
+                                  // Compress the video if needed
+                                  if (videoSizeInMB > 2) {
+                                    final info =
+                                        await VideoCompress.compressVideo(
+                                      pickedFile.path,
+                                      quality: VideoQuality
+                                          .Res640x480Quality, // You can adjust the quality
+                                    );
+
+                                    if (info != null) {
+                                      final compressedFilePath = info.path;
+                                      if (compressedFilePath != null) {
+                                        final compressedFile =
+                                            File(compressedFilePath);
+                                        final compressedFileSizeInBytes =
+                                            await compressedFile.length();
+
+                                        if (compressedFileSizeInBytes <
+                                            videoSizeInBytes) {
+                                          loadingController
+                                              .updateVideoCompressionLoading(
+                                                  false);
+                                          // Compression was successful
+                                          setState(() {
+                                            _video = XFile(compressedFilePath);
+                                          });
+                                        }
+                                      }
+                                    }
+                                  } else {
+                                    loadingController
+                                        .updateVideoCompressionLoading(false);
+                                  }
+                                }
+                              },
+                              text: 'Gallery',
+                              color: primaryColor,
+                              textStyle: const TextStyle(color: Colors.white),
+                              iconData: Icons.video_library,
+                              iconColor: Colors.white,
+                            ),
+                          ]);
                     },
                     child: Container(
                       height: 120,
@@ -172,7 +265,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                   SizedBox(height: screenHeight(context) * .015),
                   CustomTextField(
                       cont: _storeLocation,
-                      title: 'Store Location',
+                      title: 'Collection',
                       icon: const SizedBox(),
                       fieldLabel: 'This field',
                       keyboard: TextInputType.streetAddress,
@@ -191,6 +284,17 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                       hintText: ''),
                   SizedBox(height: screenHeight(context) * .015),
                   CustomTextField(
+                      cont: _courier,
+                      title: 'Courier charges',
+                      icon: const SuffixText(
+                        text: 'in Rands',
+                      ),
+                      fieldLabel: 'This field',
+                      keyboard: TextInputType.number,
+                      fillColor: themeController.currentTheme.value.cardColor,
+                      hintText: ''),
+                  SizedBox(height: screenHeight(context) * .015),
+                  CustomTextField(
                       cont: _quantity,
                       title: 'Quantity',
                       icon: const SizedBox(),
@@ -199,7 +303,8 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                       fillColor: themeController.currentTheme.value.cardColor,
                       hintText: ''),
                   SizedBox(height: screenHeight(context) * .015),
-                  Row( crossAxisAlignment: CrossAxisAlignment.end,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Expanded(
                         flex: 2,
@@ -211,7 +316,8 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                             ),
                             fieldLabel: 'This field',
                             keyboard: TextInputType.number,
-                            fillColor: themeController.currentTheme.value.cardColor,
+                            fillColor:
+                                themeController.currentTheme.value.cardColor,
                             hintText: ''),
                       ),
                       const SizedBox(width: 8),
@@ -225,14 +331,14 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                             ),
                             fieldLabel: 'This field',
                             keyboard: TextInputType.number,
-                            fillColor: themeController.currentTheme.value.cardColor,
+                            fillColor:
+                                themeController.currentTheme.value.cardColor,
                             hintText: ''),
                       ),
                       // const Padding(
                       //   padding:EdgeInsets.only(bottom: 20),
                       //   child:  Text('x'),
                       // ),
-
                     ],
                   ),
                   SizedBox(height: screenHeight(context) * .015),
@@ -248,7 +354,8 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                             ),
                             fieldLabel: 'This field',
                             keyboard: TextInputType.number,
-                            fillColor: themeController.currentTheme.value.cardColor,
+                            fillColor:
+                                themeController.currentTheme.value.cardColor,
                             hintText: ''),
                       ),
                       const SizedBox(width: 8),
@@ -262,12 +369,12 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                             ),
                             fieldLabel: 'This field',
                             keyboard: TextInputType.number,
-                            fillColor: themeController.currentTheme.value.cardColor,
+                            fillColor:
+                                themeController.currentTheme.value.cardColor,
                             hintText: ''),
                       ),
                     ],
                   ),
-
                   SizedBox(height: screenHeight(context) * .015),
                   CustomTextField(
                       cont: _productDescription,
@@ -289,8 +396,26 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                           _price.text.isNotEmpty &&
                           _height.text.isNotEmpty &&
                           _productDescription.text.isNotEmpty &&
+                          _courier.text.isNotEmpty &&
                           _video != null) {
-                        _showBottomSheet(context);
+                        if (widget.buyerId == '') {
+                          _showBottomSheet(context);
+                        } else {
+                          _quotationController.addQuotation(
+                              context,
+                              _productName.text,
+                              _storeLocation.text,
+                              _quantity.text,
+                              _weight.text,
+                              _width.text,
+                              _height.text,
+                              _productDescription.text,
+                              _video,
+                              widget.buyerId,
+                              _price.text,
+                              _length.text,
+                              _courier.text);
+                        }
                       } else {
                         Fluttertoast.showToast(
                           msg: S.of(context).kindlyFillAllTheFields,
@@ -384,7 +509,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                             _quotationController.getSearchData(val);
                           },
                           decoration: InputDecoration(
-                            hintText: 'Name or phone number',
+                            hintText: "Buyer's name or phone number",
                             border: InputBorder.none,
                             hoverColor: Colors.transparent,
                             hintStyle: themeController
@@ -433,7 +558,10 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                                               _productDescription.text,
                                               _video,
                                               _quotationController
-                                                  .searchList[index].userId, _price.text, _length.text);
+                                                  .searchList[index].userId,
+                                              _price.text,
+                                              _length.text,
+                                              _courier.text);
                                         },
                                         child: ListTile(
                                           leading: CircleAvatar(
@@ -512,8 +640,10 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                                           _video,
                                           _contactController
                                               .connectedContactListing[index]
-                                              .userId,_price.text, _length.text
-                                      );
+                                              .userId,
+                                          _price.text,
+                                          _length.text,
+                                          _courier.text);
                                     },
                                     child: ListTile(
                                       title: Text(

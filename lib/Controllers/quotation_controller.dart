@@ -9,6 +9,7 @@ import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/Controllers/walllet_controller.dart';
 import 'package:savo/Models/Models.dart';
 import 'package:savo/screen/WalletScreens/refund_screen.dart';
+import 'package:savo/screen/quotation/quotatiion_invoice_screen.dart';
 import '../Helper/http_helper.dart';
 import '../screen/dashboard_screen.dart';
 
@@ -17,7 +18,7 @@ class QuotationController extends GetxController {
   //
   // Function to add quotation
   void addQuotation(context, productName, storeLocation, quantity, weight,
-      width, height, description, video, receiverId, price, length) async {
+      width, height, description, video, receiverId, price, length, courier) async {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: addQuotationUrl);
     var reply = await networkHelper.postMultiPartData({
@@ -29,6 +30,7 @@ class QuotationController extends GetxController {
       'weight': weight,
       'length': length,
       'sender_price': price,
+      'courier_charge': courier,
       'width': width,
       'height': height,
       'description': description,
@@ -639,5 +641,65 @@ class QuotationController extends GetxController {
         backgroundColor: Colors.green,
       );
     } else {}
+  }
+  //
+  //
+  //
+  //
+  //
+  //Function to get quotation invoice
+  String orderIdI = '';
+  String product = '';
+  String totalPrice = '';
+  String costOFItem = '';
+  String courierPrice = '';
+  String charge = '';
+  String lengthI = '';
+  String storeI = '';
+  String quantityI = '';
+  String weightI = '';
+  String widthI = '';
+  String heightI = '';
+  String descriptionI = '';
+  String sender = '';
+  String receiver = '';
+  String reasonI = '';
+  String orderStatusI = '';
+  String business = '';
+  String vat = '';
+
+  Future<bool> getQuotationInvoice(orderID) async {
+    final NetworkHelper networkHelper =
+    NetworkHelper(url: getQuotationInvoiceUrl);
+    var reply = await networkHelper.postData({'order_id': orderID});
+
+    if (reply['status'] == 1) {
+      orderIdI = reply['data'][0]['id'];
+      product = reply['data'][0]['name'];
+      totalPrice = reply['data'][0]['total_price'];
+      costOFItem = reply['data'][0]['sender_price'];
+      print('working');
+      charge = reply['data'][0]['charge'];
+      courierPrice = reply['data'][0]['price'];
+      lengthI = reply['data'][0]['length'];
+      storeI = reply['data'][0]['store_name'];
+      quantityI = reply['data'][0]['quantity'];
+      weightI = reply['data'][0]['weight'];
+      widthI = reply['data'][0]['width'];
+      heightI = reply['data'][0]['height'];
+      lengthI = reply['data'][0]['length'];
+      descriptionI = reply['data'][0]['description'];
+      orderStatusI = reply['data'][0]['order_status'];
+      sender = reply['data'][0]['sender_name'];
+      reasonI = reply['data'][0]['reason']??'';
+      receiver = reply['data'][0]['receiver_name'];
+      business = reply['data'][0]['occupation_name']??'';
+      vat = reply['data'][0]['employer']??'';
+      Get.to(()=> const QuotationInvoiceScreen());
+      return true;
+    } else {
+      print('Error in getting quotation history list');
+      return false;
+    }
   }
 }

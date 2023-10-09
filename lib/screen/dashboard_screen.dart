@@ -147,11 +147,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         items: [
           BottomNavigationBarItem(
               icon: const Icon(Icons.home), label: S.of(context).home),
-          BottomNavigationBarItem(
-              icon: const Icon(Icons.file_open),
-              label: S.of(context).quotation),
-          BottomNavigationBarItem(
-              icon: const Icon(Icons.history), label: S.of(context).history),
+          const BottomNavigationBarItem(
+              icon: Icon(Icons.file_open),
+              label: 'Quotations'),
+          const BottomNavigationBarItem(
+              icon: Icon(Icons.history), label: 'Successful'),
           BottomNavigationBarItem(
               icon: const Icon(Icons.person), label: S.of(context).profile),
         ],

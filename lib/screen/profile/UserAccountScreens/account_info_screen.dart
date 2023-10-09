@@ -88,11 +88,11 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
                 value: userInfoController.fullName,
               ),
               ProfileListTile(
-                title: S.of(context).occupation,
+                title: 'Business name',
                 value: userInfoController.occupation,
               ),
               ProfileListTile(
-                title: S.of(context).employer,
+                title: 'Vat number',
                 value: userInfoController.employer,
               ),
               SizedBox(

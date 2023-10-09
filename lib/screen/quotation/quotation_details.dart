@@ -9,6 +9,7 @@ import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/quotation_controller.dart';
 import 'package:savo/screen/quotation/full_video_screen.dart';
+import 'package:savo/screen/quotation/quotatiion_invoice_screen.dart';
 import 'package:savo/screen/quotation/quotation_detail_screen_for_pay.dart';
 import 'package:savo/util/widgets/dispatch_button.dart';
 import 'package:savo/util/widgets/login_button.dart';
@@ -339,7 +340,22 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                             ],
                           )
                         : const SizedBox(),
-                    const SizedBox(height: 50)
+                    const SizedBox(height: 30),
+                    _quotationController.orderStatus == 'refund' ||
+                            _quotationController.orderStatus == 'complete'
+                        ? LoginButton(
+                            onTap: () {
+                              _quotationController
+                                  .getQuotationInvoice(
+                                      _quotationController.orderId)
+                                  .whenComplete(() => Get.to(
+                                      () => const QuotationInvoiceScreen()));
+                            },
+                            title: 'View Invoice',
+                            txtColor: Colors.white,
+                            btnColor: primaryColor)
+                        : const SizedBox(),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -405,7 +421,7 @@ class StoreLocation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'Store Location',
+              'Collection',
               style: themeController.currentTheme.value.textTheme.bodyLarge,
               textAlign: TextAlign.justify,
             ),

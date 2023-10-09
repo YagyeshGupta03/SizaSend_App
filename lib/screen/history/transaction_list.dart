@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import '../../Controllers/quotation_controller.dart';
 import '../quotation/quotation_details.dart';
@@ -110,15 +111,15 @@ class _TransactionListState extends State<TransactionList> {
                                       .getQuotationHistory[index]
                                       .paid ==
                                       'refund'
-                                      ?  const Text(
-                                      '[Refund]',
+                                      ? const Text(
+                                      '[Refunded]',
                                       style: TextStyle(
-                                          fontSize: 13,
+                                          fontSize: 10,
                                           color: Colors.red, fontWeight: FontWeight.w800))
                                   :  const Text(
-                                    '[Complete]',
+                                    '[Completed]',
                                     style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 10,
                                         color: Colors.green, fontWeight: FontWeight.w800)),
                                 ),
                               ),

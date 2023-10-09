@@ -25,7 +25,7 @@ class HomeOperations extends StatelessWidget {
             loadingController.updateProfileLoading(false);
             loadingController.updateVideoCompressionLoading(false);
             loadingController.updateLoading(false);
-            Get.to(()=> const AddQuotationScreen());
+            Get.to(()=> const AddQuotationScreen(buyerId: ''));
           },
         ),
         OperationButton(

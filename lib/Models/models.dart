@@ -171,3 +171,21 @@ class WithdrawalRequestModel {
   final String ifsc;
   final String charges;
 }
+
+
+
+class BuyerModel {
+  BuyerModel({
+    required this.receiverId,
+    required this.fullName,
+    required this.phone,
+    required this.email,
+    required this.image,
+  });
+
+  final String receiverId;
+  final String fullName;
+  final String phone;
+  final String email;
+  final String image;
+}

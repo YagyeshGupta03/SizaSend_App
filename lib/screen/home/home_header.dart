@@ -38,18 +38,19 @@ class HomeHeaderScreen extends StatelessWidget {
         Stack(
           children: [
             Image.asset(Images.balCardImage),
-            Column(
+            Column( mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.more_horiz,
-                        color: Colors.white,
-                      ),
-                  ),
-                ),
+                // Align(
+                //   alignment: Alignment.centerRight,
+                //   child: IconButton(
+                //       onPressed: () {},
+                //       icon: const Icon(
+                //         Icons.more_horiz,
+                //         color: Colors.white,
+                //       ),
+                //   ),
+                // ),
+                const SizedBox(height: 50),
                  Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -57,22 +58,22 @@ class HomeHeaderScreen extends StatelessWidget {
                     children: [
                       const Row(
                         children: [
-                          Icon(
-                            Icons.monetization_on_outlined,
-                            color: Colors.white,
-                          ),
+                          // Icon(
+                          //   Icons.monetization_on_outlined,
+                          //   color: Colors.white,
+                          // ),
                           Text(
                             "Account Balance",
-                            style: TextStyle(fontSize: 14, color: Colors.white),
+                            style: TextStyle(fontSize: 12, color: Colors.white),
                           )
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 0),
                         child: Text(
                           convertToCurrency(walletBalance),
                           style: const TextStyle(
-                              fontSize: 28,
+                              fontSize: 24,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
                         ),

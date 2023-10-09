@@ -133,7 +133,7 @@ class _DeliveryButtonState extends State<DeliveryButton> {
         onTap: () async {
           Dialogs.materialDialog(
               msg: 'Scan the barcode',
-              title: "Delivered",
+              title: "Scan",
               titleAlign: TextAlign.center,
               color: Colors.white,
               context: context,
@@ -212,7 +212,7 @@ class _DeliveryButtonState extends State<DeliveryButton> {
                 ),
               ]);
         },
-        title: 'Delivered',
+        title: 'Scan the parcel',
         txtColor: Colors.white,
         btnColor: primaryColor);
   }

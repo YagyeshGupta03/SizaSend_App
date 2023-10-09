@@ -23,6 +23,7 @@ const String forgotPasswordUrl = '${baseUrl}passwordUpdateById';
 const String profileImageUrl = '${baseUrl}update_profile_img';
 const String occupationUrl = '${baseUrl}get_all_occupation';
 const String updateProfileUrl = '${baseUrl}user_information_update';
+const String buyerListUrl = '${baseUrl}all_quotation_receivers';
 
 
 //Bank related apis
@@ -42,6 +43,7 @@ const String receiveNotificationUrl = '${baseUrl}received_notification';
 const String notificationStatusUrl = '${baseUrl}notification_status_update';
 const String sendQuotationStatusUrl = '${baseUrl}order_status_change';
 const String getQuotationDetailsByIdUrl = '${baseUrl}Order_details_by_order_id';
+const String getQuotationInvoiceUrl = '${baseUrl}get_all_invoice_details';
 const String sendDispatchImageUrl = '${baseUrl}order_send_img';
 const String sendDeliveredImageUrl = '${baseUrl}order_receive_img';
 const String notificationsDeleteUrl = '${baseUrl}deleteNotificationById';
