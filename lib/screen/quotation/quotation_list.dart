@@ -6,6 +6,7 @@ import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/screen/quotation/quotation_details.dart';
+import 'package:savo/util/widgets/widget.dart';
 import '../../Controllers/quotation_controller.dart';
 
 class QuotationList extends StatefulWidget {
@@ -183,14 +184,14 @@ class _QuotationListState extends State<QuotationList> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   const Text(
-                                    "Weight/Size",
+                                    "Weight",
                                     style: TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
-                                    _quotationController
-                                        .getQuotationList[index].weight,
+                                    '${_quotationController
+                                          .getQuotationList[index].weight} Kg',
                                     style: const TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.bold),
@@ -204,7 +205,7 @@ class _QuotationListState extends State<QuotationList> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   const Text(
-                                    "Store Name",
+                                    "Collection",
                                     style: TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.w400),
@@ -289,8 +290,8 @@ class _QuotationListState extends State<QuotationList> {
                                   Row(
                                     children: [
                                       Text(
-                                        _quotationController
-                                            .getQuotationList[index].price,
+                                        convertToCurrency(_quotationController
+                                            .getQuotationList[index].price),
                                         style: const TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.bold),

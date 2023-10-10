@@ -10,15 +10,30 @@ import 'package:savo/Controllers/walllet_controller.dart';
 import 'package:savo/Models/Models.dart';
 import 'package:savo/screen/WalletScreens/refund_screen.dart';
 import 'package:savo/screen/quotation/quotatiion_invoice_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Helper/http_helper.dart';
 import '../screen/dashboard_screen.dart';
+import '../screen/pdf_view.dart';
+import '../screen/quotation/quotation_detail_screen_for_pay.dart';
 
 class QuotationController extends GetxController {
   //
   //
   // Function to add quotation
-  void addQuotation(context, productName, storeLocation, quantity, weight,
-      width, height, description, video, receiverId, price, length, courier) async {
+  void addQuotation(
+      context,
+      productName,
+      storeLocation,
+      quantity,
+      weight,
+      width,
+      height,
+      description,
+      video,
+      receiverId,
+      price,
+      length,
+      courier) async {
     loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: addQuotationUrl);
     var reply = await networkHelper.postMultiPartData({
@@ -456,6 +471,7 @@ class QuotationController extends GetxController {
   String receiverName = '';
   String video = '';
   String sendImage = '';
+  String deliveredCode = '';
   String reason = '';
   String receiveImage = '';
   String orderStatus = '';
@@ -481,11 +497,12 @@ class QuotationController extends GetxController {
       width = reply['data']['width'];
       height = reply['data']['height'];
       description = reply['data']['description'];
+      deliveredCode = reply['data']['deliver'] ?? '';
       orderStatus = reply['data']['order_status'];
       status = reply['data']['status'] ?? '';
       senderId = reply['data']['user_id'];
       senderName = reply['data']['sender_name'];
-      reason = reply['data']['reason']??'';
+      reason = reply['data']['reason'] ?? '';
       receiverName = reply['data']['receiver_name'];
       video = reply['data']['video'] ?? '';
       sendImage = reply['data']['send_image'] ?? '';
@@ -553,28 +570,20 @@ class QuotationController extends GetxController {
     });
     if (reply['status'] == 1) {
       Dialogs.materialDialog(
-          msg: 'Do you accept this order?',
-          title: 'Delivery success',
+          msg: 'Scan successful',
+          title: 'Success',
           context: context,
           actions: [
             IconsButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pop(context);
-                Get.to(() => const RefundScreen());
+                getQuotationByOrderId(orderId).whenComplete(
+                    () => Get.to(() => const QuotationDetailScreenForPay()));
               },
-              text: 'Reject',
-              color: Colors.white,
-              textStyle: const TextStyle(color: primaryColor),
-            ),
-            IconsButton(
-              onPressed: () {
-                _walletController.completeOrderPayment(
-                    context, orderId, 'complete', senderID, '');
-                Navigator.pop(context);
-              },
-              text: 'Accept',
+              text: 'Go back',
               color: primaryColor,
               textStyle: const TextStyle(color: Colors.white),
+              iconColor: Colors.white,
             ),
           ]);
       loadingController.updateDispatchLoading(false);
@@ -642,6 +651,30 @@ class QuotationController extends GetxController {
       );
     } else {}
   }
+
+  //
+  //
+  //
+  RxString pdfLink = ''.obs;
+  Future<bool> generatePDF(context, orderId, save) async {
+    final NetworkHelper networkHelper = NetworkHelper(url: generatePdfUrl);
+    var reply = await networkHelper.postData({
+      "order_id": orderId,
+    });
+
+    if (reply['status'] == 1) {
+      launchUrl(Uri.parse(reply['link']));
+      return true;
+    } else {
+      Fluttertoast.showToast(
+        msg: 'PDF generation failed',
+        gravity: ToastGravity.SNACKBAR,
+        backgroundColor: Colors.red,
+      );
+      return false;
+    }
+  }
+
   //
   //
   //
@@ -670,32 +703,31 @@ class QuotationController extends GetxController {
 
   Future<bool> getQuotationInvoice(orderID) async {
     final NetworkHelper networkHelper =
-    NetworkHelper(url: getQuotationInvoiceUrl);
+        NetworkHelper(url: getQuotationInvoiceUrl);
     var reply = await networkHelper.postData({'order_id': orderID});
 
     if (reply['status'] == 1) {
-      orderIdI = reply['data'][0]['id'];
-      product = reply['data'][0]['name'];
-      totalPrice = reply['data'][0]['total_price'];
-      costOFItem = reply['data'][0]['sender_price'];
-      print('working');
-      charge = reply['data'][0]['charge'];
-      courierPrice = reply['data'][0]['price'];
-      lengthI = reply['data'][0]['length'];
-      storeI = reply['data'][0]['store_name'];
-      quantityI = reply['data'][0]['quantity'];
-      weightI = reply['data'][0]['weight'];
-      widthI = reply['data'][0]['width'];
-      heightI = reply['data'][0]['height'];
-      lengthI = reply['data'][0]['length'];
-      descriptionI = reply['data'][0]['description'];
-      orderStatusI = reply['data'][0]['order_status'];
-      sender = reply['data'][0]['sender_name'];
-      reasonI = reply['data'][0]['reason']??'';
-      receiver = reply['data'][0]['receiver_name'];
-      business = reply['data'][0]['occupation_name']??'';
-      vat = reply['data'][0]['employer']??'';
-      Get.to(()=> const QuotationInvoiceScreen());
+      orderIdI = reply['data']['id'];
+      product = reply['data']['name'];
+      totalPrice = reply['data']['total_price'];
+      costOFItem = reply['data']['sender_price'];
+      charge = reply['data']['charge'];
+      courierPrice = reply['data']['price'];
+      lengthI = reply['data']['length'];
+      storeI = reply['data']['store_name'];
+      quantityI = reply['data']['quantity'];
+      weightI = reply['data']['weight'];
+      widthI = reply['data']['width'];
+      heightI = reply['data']['height'];
+      lengthI = reply['data']['length'];
+      descriptionI = reply['data']['description'];
+      orderStatusI = reply['data']['order_status'];
+      sender = reply['data']['sender_name'];
+      reasonI = reply['data']['reason'] ?? '';
+      receiver = reply['data']['receiver_name'];
+      business = reply['data']['occupation_name'] ?? '';
+      vat = reply['data']['employer'] ?? '';
+      Get.to(() => const InvoiceScreen());
       return true;
     } else {
       print('Error in getting quotation history list');

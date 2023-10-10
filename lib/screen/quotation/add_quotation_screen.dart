@@ -94,7 +94,7 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                               onPressed: () async {
                                 final picker = ImagePicker();
                                 final pickedFile = await picker.pickVideo(
-                                    source: ImageSource.gallery);
+                                    source: ImageSource.camera);
                                 if (pickedFile != null) {
                                   final videoFile = File(pickedFile.path);
                                   final videoSizeInBytes =
@@ -108,12 +108,14 @@ class _AddQuotationScreenState extends State<AddQuotationScreen> {
                                     setState(() {
                                       _video = pickedFile;
                                     });
+                                    Navigator.pop(context);
                                   } else {
                                     Fluttertoast.showToast(
                                       msg: 'Video is greater than 10 MB',
                                       gravity: ToastGravity.SNACKBAR,
                                       backgroundColor: Colors.red,
                                     );
+                                    Navigator.pop(context);
                                     return; // Do not proceed with compression if the video is too large
                                   }
 

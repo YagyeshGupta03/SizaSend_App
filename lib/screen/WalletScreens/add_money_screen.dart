@@ -145,7 +145,7 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
         return double.parse('0.0');
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     double balance = double.parse(userInfoController.balance);
@@ -270,7 +270,8 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                             child: Image.asset(images[index], fit: BoxFit.fill),
                           ),
                           subtitle: Text(
-                            '- R ${calculate(double.parse(_amount.text.isNotEmpty ? _amount.text : "0.0"), paymentTypes[index])}',
+                            convertToCurrency(
+                                '- ${calculate(double.parse(_amount.text.isNotEmpty ? _amount.text : "0.0"), paymentTypes[index])}'),
                             style: const TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w800,
@@ -572,7 +573,8 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
                             child: Image.asset(images[index], fit: BoxFit.fill),
                           ),
                           subtitle: Text(
-                            '- R ${calculate(double.parse(_amount.text.isNotEmpty ? _amount.text : "0.0"), paymentTypes[index])}',
+                            convertToCurrency(
+                                '${calculate(double.parse(_amount.text.isNotEmpty ? _amount.text : "0.0"), paymentTypes[index])}'),
                             style: const TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w800,

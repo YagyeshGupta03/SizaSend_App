@@ -226,12 +226,6 @@ class CustomDrawer extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           DrawerCard(
-              title: 'Home',
-              icon: Icons.home,
-              onTap: () {
-                Navigator.pop(context);
-              }),
-          DrawerCard(
               title: 'Profile',
               icon: Icons.person,
               onTap: () {

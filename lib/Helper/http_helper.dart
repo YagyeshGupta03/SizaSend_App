@@ -15,6 +15,23 @@ class NetworkHelper {
 
   final String url;
 
+
+
+  Future getData(uri) async {
+    http.Response response = await http.get(Uri.parse(uri));
+    print(response.statusCode);
+    print(response.body);
+    if (response.statusCode == 200) {
+      var responseData = jsonDecode(response.body);
+      return responseData;
+    } else {
+      var responseData = jsonDecode(response.body);
+      return responseData;
+    }
+  }
+
+
+
   Future postData(Map<String, String> bodyData) async {
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
@@ -41,23 +58,25 @@ class NetworkHelper {
       return null;
     } on HttpException {
       return null;
-    } on FormatException {
-      Fluttertoast.showToast(
-        msg: 'Internal server error',
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.red,
-      );
-      return null;
+    }
+    on FormatException {
+      // Fluttertoast.showToast(
+      //   msg: 'Internal server error',
+      //   gravity: ToastGravity.SNACKBAR,
+      //   backgroundColor: Colors.red,
+      // );
+      // return null;
     } on TimeoutException {
       Get.to(() => const TimeoutScreen());
       return null;
-    } on Exception {
-      Fluttertoast.showToast(
-        msg: 'Internal server error',
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.red,
-      );
-      return null;
+    }
+    on Exception {
+      // Fluttertoast.showToast(
+      //   msg: 'Internal server error',
+      //   gravity: ToastGravity.SNACKBAR,
+      //   backgroundColor: Colors.red,
+      // );
+      // return null;
     } catch (e) {
       Fluttertoast.showToast(
         msg: 'Exception',

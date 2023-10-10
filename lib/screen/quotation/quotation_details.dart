@@ -20,7 +20,9 @@ import '../../Controllers/global_controllers.dart';
 import '../../Controllers/walllet_controller.dart';
 import '../../util/widgets/widget.dart';
 import '../WalletScreens/add_total_money_screen.dart';
+import '../WalletScreens/refund_screen.dart';
 import '../dashboard_screen.dart';
+import '../pdf_view.dart';
 
 class QuotationDetailScreen extends StatefulWidget {
   const QuotationDetailScreen({super.key});
@@ -92,37 +94,21 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                       child: Stack(
                         children: [
                           _controller.value.isInitialized
-                              ? Container(
-                                  height: 200,
-                                  width: screenWidth(context),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: AspectRatio(
-                                    aspectRatio: _controller.value.aspectRatio,
-                                    child: VideoPlayer(_controller),
-                                  ),
-                                )
-                              : Container(
-                                  height: 200,
-                                  width: screenWidth(context),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: themeController
-                                        .currentTheme.value.cardColor,
-                                  ),
-                                  child: Center(
-                                    child: LoadingAnimationWidget
-                                        .threeArchedCircle(
-                                      color: primaryColor,
-                                      size: 50,
+                              ? Stack(children: [
+                                  Container(
+                                    height: 200,
+                                    width: screenWidth(context),
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: AspectRatio(
+                                      aspectRatio:
+                                          _controller.value.aspectRatio,
+                                      child: VideoPlayer(_controller),
                                     ),
                                   ),
-                                ),
-                          _controller.value.isBuffering
-                              ? const SizedBox()
-                              : _controller.value.isPlaying
-                                  ? const SizedBox()
-                                  : Container(
+                                  Center(
+                                    child: Container(
                                       height: 200,
                                       width: screenWidth(context),
                                       color: Colors.black38,
@@ -142,11 +128,16 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                         ),
                                       ),
                                     ),
-                          _controller.value.isBuffering
-                              ? Container(
+                                  )
+                                ])
+                              : Container(
                                   height: 200,
                                   width: screenWidth(context),
-                                  color: Colors.transparent,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: themeController
+                                        .currentTheme.value.cardColor,
+                                  ),
                                   child: Center(
                                     child: LoadingAnimationWidget
                                         .threeArchedCircle(
@@ -154,8 +145,7 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                       size: 50,
                                     ),
                                   ),
-                                )
-                              : const SizedBox(),
+                                ),
                         ],
                       ),
                     ),
@@ -315,11 +305,18 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                     // to check by receiver to accept or reject
                                     : _quotationController.orderStatus ==
                                             'dispatch'
-                                        ? DeliveryButton(
-                                            orderId:
-                                                _quotationController.orderId,
-                                            senderId:
-                                                _quotationController.senderId)
+                                        ? _quotationController.deliveredCode ==
+                                                ''
+                                            ? DeliveryButton(
+                                                orderId: _quotationController
+                                                    .orderId,
+                                                senderId: _quotationController
+                                                    .senderId)
+                                            : RefundButton(
+                                                orderId: _quotationController
+                                                    .orderId,
+                                                senderId: _quotationController
+                                                    .senderId)
                                         : const SizedBox(),
                     _quotationController.orderStatus == 'refund'
                         ? Column(
@@ -341,15 +338,14 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                           )
                         : const SizedBox(),
                     const SizedBox(height: 30),
-                    _quotationController.orderStatus == 'refund' ||
-                            _quotationController.orderStatus == 'complete'
+                    _quotationController.orderStatus == 'complete'
                         ? LoginButton(
                             onTap: () {
                               _quotationController
                                   .getQuotationInvoice(
                                       _quotationController.orderId)
                                   .whenComplete(() => Get.to(
-                                      () => const QuotationInvoiceScreen()));
+                                      () => const InvoiceScreen()));
                             },
                             title: 'View Invoice',
                             txtColor: Colors.white,
@@ -474,7 +470,7 @@ class OtherInformation extends StatelessWidget {
             children: [
               InfoColumn(
                   title: 'Quantity', value: _quotationController.quantity),
-              InfoColumn(title: 'Price', value: _quotationController.price),
+              InfoColumn(title: 'Length', value: '${_quotationController.length} cm'),
             ],
           ),
         ),
@@ -486,7 +482,7 @@ class OtherInformation extends StatelessWidget {
             children: [
               InfoColumn(title: 'Weight', value: _quotationController.weight),
               InfoColumn(
-                  title: 'Size',
+                  title: 'Height x width',
                   value:
                       '${_quotationController.height} cm x ${_quotationController.width} cm'),
             ],
@@ -658,6 +654,95 @@ class InfoColumn extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class RefundButton extends StatelessWidget {
+  const RefundButton({
+    super.key,
+    required this.orderId,
+    required this.senderId,
+  });
+
+  final String orderId;
+  final String senderId;
+
+  @override
+  Widget build(BuildContext context) {
+    final WalletController walletController = Get.put(WalletController());
+
+    return Column(
+      children: [
+        LoginButton(
+            onTap: () {
+              Dialogs.materialDialog(
+                  msg: 'Do you want to accept this parcel?',
+                  msgAlign: TextAlign.center,
+                  title: "Accept Parcel",
+                  color: Colors.white,
+                  context: context,
+                  actions: [
+                    IconsOutlineButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      text: 'Cancel',
+                      iconData: Icons.cancel_outlined,
+                      textStyle: const TextStyle(color: Colors.grey),
+                      iconColor: Colors.grey,
+                    ),
+                    IconsButton(
+                      onPressed: () async {
+                        walletController.completeOrderPayment(
+                            context, orderId, 'complete', senderId, '');
+                        Navigator.pop(context);
+                      },
+                      text: 'Accept',
+                      color: primaryColor,
+                      textStyle: const TextStyle(color: Colors.white),
+                      iconColor: Colors.white,
+                    ),
+                  ]);
+            },
+            title: 'Accept parcel',
+            txtColor: Colors.white,
+            btnColor: primaryColor),
+        const SizedBox(height: 5),
+        LoginButton(
+            onTap: () {
+              Dialogs.materialDialog(
+                  msg: 'Do you want to reject this parcel?',
+                  msgAlign: TextAlign.center,
+                  title: "Reject parcel",
+                  color: Colors.white,
+                  context: context,
+                  actions: [
+                    IconsOutlineButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      text: 'Cancel',
+                      iconData: Icons.cancel_outlined,
+                      textStyle: const TextStyle(color: Colors.grey),
+                      iconColor: Colors.grey,
+                    ),
+                    IconsButton(
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        Get.to(() => const RefundScreen());
+                      },
+                      text: 'Reject',
+                      color: primaryColor,
+                      textStyle: const TextStyle(color: Colors.white),
+                      iconColor: Colors.white,
+                    ),
+                  ]);
+            },
+            title: 'Reject parcel',
+            txtColor: primaryColor,
+            btnColor: themeController.currentTheme.value.cardColor),
+      ],
     );
   }
 }

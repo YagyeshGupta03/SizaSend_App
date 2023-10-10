@@ -238,7 +238,7 @@ class WalletController extends GetxController {
         await userInfoController.getUserInfo();
        if(status == 'complete'){
          Dialogs.materialDialog(
-             msg: 'Order delivered successfully',
+             msg: 'Parcel accepted successfully',
              title: 'Accepted',
              context: context,
              actions: [

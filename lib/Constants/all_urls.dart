@@ -65,6 +65,7 @@ const String withdrawRequestUrl = '${baseUrl}get_payment_request';
 const String contactListUrl = '${baseUrl}get_data_from_contectlist';
 const String verifySignNumberUrl = '${baseUrl}number_existing';
 const String adminEnquiryUrl = '${baseUrl}add_contect_inquiry';
+const String generatePdfUrl = '${baseUrl}pdf_generate';
 
 
 

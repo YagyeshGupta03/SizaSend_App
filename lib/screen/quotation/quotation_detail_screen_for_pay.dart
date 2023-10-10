@@ -93,37 +93,21 @@ class _QuotationDetailScreenForPayState
                       child: Stack(
                         children: [
                           _controller.value.isInitialized
-                              ? Container(
-                                  height: 200,
-                                  width: screenWidth(context),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: AspectRatio(
-                                    aspectRatio: _controller.value.aspectRatio,
-                                    child: VideoPlayer(_controller),
-                                  ),
-                                )
-                              : Container(
-                                  height: 200,
-                                  width: screenWidth(context),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: themeController
-                                        .currentTheme.value.cardColor,
-                                  ),
-                                  child: Center(
-                                    child: LoadingAnimationWidget
-                                        .threeArchedCircle(
-                                      color: primaryColor,
-                                      size: 50,
+                              ? Stack(children: [
+                                  Container(
+                                    height: 200,
+                                    width: screenWidth(context),
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: AspectRatio(
+                                      aspectRatio:
+                                          _controller.value.aspectRatio,
+                                      child: VideoPlayer(_controller),
                                     ),
                                   ),
-                                ),
-                          _controller.value.isBuffering
-                              ? const SizedBox()
-                              : _controller.value.isPlaying
-                                  ? const SizedBox()
-                                  : Container(
+                                  Center(
+                                    child: Container(
                                       height: 200,
                                       width: screenWidth(context),
                                       color: Colors.black38,
@@ -143,11 +127,16 @@ class _QuotationDetailScreenForPayState
                                         ),
                                       ),
                                     ),
-                          _controller.value.isBuffering
-                              ? Container(
+                                  )
+                                ])
+                              : Container(
                                   height: 200,
                                   width: screenWidth(context),
-                                  color: Colors.transparent,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: themeController
+                                        .currentTheme.value.cardColor,
+                                  ),
                                   child: Center(
                                     child: LoadingAnimationWidget
                                         .threeArchedCircle(
@@ -155,8 +144,7 @@ class _QuotationDetailScreenForPayState
                                       size: 50,
                                     ),
                                   ),
-                                )
-                              : const SizedBox(),
+                                ),
                         ],
                       ),
                     ),
@@ -309,11 +297,18 @@ class _QuotationDetailScreenForPayState
                                     // to check by receiver to accept or reject
                                     : _quotationController.orderStatus ==
                                             'dispatch'
-                                        ? DeliveryButton(
-                                            orderId:
-                                                _quotationController.orderId,
-                                            senderId:
-                                                _quotationController.senderId)
+                                        ? _quotationController.deliveredCode ==
+                                                ''
+                                            ? DeliveryButton(
+                                                orderId: _quotationController
+                                                    .orderId,
+                                                senderId: _quotationController
+                                                    .senderId)
+                                            : RefundButton(
+                                                orderId: _quotationController
+                                                    .orderId,
+                                                senderId: _quotationController
+                                                    .senderId)
                                         : const SizedBox(),
                   ],
                 ),
