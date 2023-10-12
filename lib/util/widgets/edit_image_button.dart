@@ -3,9 +3,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../Controllers/profile_controller.dart';
 
-
-
-
 class EditImageButton extends StatefulWidget {
   const EditImageButton({Key? key}) : super(key: key);
 
