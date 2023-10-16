@@ -13,7 +13,9 @@ const String signupURl = '${baseUrl}signup';
 const String loginUrl = '${baseUrl}login';
 const String logoutUrl = '${baseUrl}tokenDeleteById';
 const String termsUrl = '${baseUrl}get_terms_and_conditions';
+const String termsWebUrl = 'https://server24.in/sizasend/terms-and-conditions';
 const String privacyUrl = '${baseUrl}get_privacy_policy';
+const String privacyWebUrl = 'https://server24.in/sizasend/privacy-policy';
 
 
 //User profile apis
