@@ -260,6 +260,7 @@ class CustomDrawer extends StatelessWidget {
                 onPressed: () async {
                   Dialogs.materialDialog(
                       msg: 'Do you want to logout?',
+                      msgAlign: TextAlign.center,
                       title: 'Logout',
                       context: context,
                       actions: [

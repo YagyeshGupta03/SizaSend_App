@@ -80,12 +80,26 @@ class QuotationController extends GetxController {
 
     if (reply['status'] == 1) {
       receiveQuotation();
-    } else {
-      Fluttertoast.showToast(
-        msg: "Quotation is already paid",
-        gravity: ToastGravity.SNACKBAR,
-        backgroundColor: Colors.red,
-      );
+      Navigator.pop(context);
+      Dialogs.materialDialog(
+          msg:
+          'Your quotation is canceled',
+          title: "Canceled",
+          msgAlign: TextAlign.center,
+          color: Colors.white,
+          context: context,
+          actions: [
+            IconsButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Get.to(()=> const DashBoardScreen());
+              },
+              text: 'Go back',
+              color: primaryColor,
+              textStyle: const TextStyle(
+                  color: Colors.white),
+            ),
+          ]);
     }
   }
 

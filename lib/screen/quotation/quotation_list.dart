@@ -112,15 +112,19 @@ class _QuotationListState extends State<QuotationList> {
                                               .senderId ==
                                           credentialController.id
                                       ? _quotationController
-                                                  .getQuotationList[index]
-                                                  .paid ==
-                                              'unpaid'
+                                                      .getQuotationList[index]
+                                                      .paid ==
+                                                  'unpaid' ||
+                                              _quotationController
+                                                      .getQuotationList[index]
+                                                      .paid ==
+                                                  'paid'
                                           ? IconButton(
                                               onPressed: () {
                                                 Dialogs.materialDialog(
                                                     msg:
-                                                        'Are you sure ? You want to delete this',
-                                                    title: "Delete",
+                                                        'Are you sure ? You want to cancel this quotation',
+                                                    title: "Cancel",
                                                     color: Colors.white,
                                                     context: context,
                                                     actions: [
@@ -129,7 +133,7 @@ class _QuotationListState extends State<QuotationList> {
                                                           Navigator.pop(
                                                               context);
                                                         },
-                                                        text: 'Cancel',
+                                                        text: 'No',
                                                         iconData: Icons
                                                             .cancel_outlined,
                                                         textStyle:
@@ -150,7 +154,7 @@ class _QuotationListState extends State<QuotationList> {
                                                           Navigator.pop(
                                                               context);
                                                         },
-                                                        text: 'Delete',
+                                                        text: 'Yes',
                                                         iconData: Icons.delete,
                                                         color: primaryColor,
                                                         textStyle:
@@ -190,8 +194,7 @@ class _QuotationListState extends State<QuotationList> {
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
-                                    '${_quotationController
-                                          .getQuotationList[index].weight} Kg',
+                                    '${_quotationController.getQuotationList[index].weight} Kg',
                                     style: const TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.bold),

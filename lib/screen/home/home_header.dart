@@ -18,16 +18,16 @@ class HomeHeaderScreen extends StatelessWidget {
         SizedBox(
           height: s.height * .038,
         ),
-         Padding(
-           padding: const EdgeInsets.only(left: 10),
-           child: Text(
+        Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Text(
             "Hello, ${userInfoController.fullName} ",
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
         ),
-         ),
-       const Padding(
-          padding:  EdgeInsets.only(left: 10),
-          child:  Text(
+        const Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: Text(
             "These are today's updates.",
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
           ),
@@ -38,7 +38,8 @@ class HomeHeaderScreen extends StatelessWidget {
         Stack(
           children: [
             Image.asset(Images.balCardImage),
-            Column( mainAxisAlignment: MainAxisAlignment.center,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // Align(
                 //   alignment: Alignment.centerRight,
@@ -51,7 +52,7 @@ class HomeHeaderScreen extends StatelessWidget {
                 //   ),
                 // ),
                 const SizedBox(height: 50),
-                 Padding(
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +82,9 @@ class HomeHeaderScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 15,),
+                const SizedBox(
+                  height: 15,
+                ),
                 // const Padding(
                 //   padding: EdgeInsets.symmetric(horizontal: 20),
                 //   child: Row(
@@ -96,7 +99,9 @@ class HomeHeaderScreen extends StatelessWidget {
             )
           ],
         ),
-        SizedBox(height: s.height*.024,),
+        SizedBox(
+          height: s.height * .024,
+        ),
       ],
     );
   }
