@@ -30,7 +30,7 @@ class HomeOperations extends StatelessWidget {
         ),
         OperationButton(
           image: Images.icArrowDown,
-          title: "Quotation\nreceived",
+          title: "Quotation\nReceived",
           onTap: (){
             Get.to(()=> const ReceivedQuotationList());
           },

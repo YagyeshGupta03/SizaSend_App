@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/global_controllers.dart';
+import 'package:savo/util/widgets/widget.dart';
 import '../../Controllers/quotation_controller.dart';
 import '../quotation/quotation_details.dart';
+
 
 class TransactionList extends StatefulWidget {
   const TransactionList({super.key});
@@ -21,9 +22,9 @@ class _TransactionListState extends State<TransactionList> {
     return Obx(
       () => _quotationController.getQuotationHistory.length.isEqual(0)
           ? Center(
-              child: Text('No quotations available',
+              child: Text('No transactions available',
                   style:
-                      themeController.currentTheme.value.textTheme.bodyLarge),
+                      themeController.currentTheme.value.textTheme.displaySmall),
             )
           : ListView.builder(
               shrinkWrap: true,
@@ -108,19 +109,19 @@ class _TransactionListState extends State<TransactionList> {
                                     ],
                                   ),
                                   trailing: _quotationController
-                                      .getQuotationHistory[index]
-                                      .paid ==
-                                      'refund'
-                                      ? const Text(
-                                      '[Refunded]',
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.red, fontWeight: FontWeight.w800))
-                                  :  const Text(
-                                    '[Completed]',
-                                    style: TextStyle(
-                                        fontSize: 10,
-                                        color: Colors.green, fontWeight: FontWeight.w800)),
+                                              .getQuotationHistory[index]
+                                              .paid ==
+                                          'refund'
+                                      ? const Text('[Refunded]',
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.w800))
+                                      : const Text('[Completed]',
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.w800)),
                                 ),
                               ),
                             ],
@@ -137,14 +138,13 @@ class _TransactionListState extends State<TransactionList> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   const Text(
-                                    "Weight/Size",
+                                    "Weight",
                                     style: TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
-                                    _quotationController
-                                        .getQuotationHistory[index].weight,
+                                    '${_quotationController.getQuotationHistory[index].weight} kg',
                                     style: const TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.bold),
@@ -185,8 +185,8 @@ class _TransactionListState extends State<TransactionList> {
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
-                                    _quotationController
-                                        .getQuotationHistory[index].price,
+                                    convertToCurrency(_quotationController
+                                        .getQuotationHistory[index].price),
                                     style: const TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.bold),

@@ -69,110 +69,56 @@ class _QuotationListState extends State<QuotationList> {
                               ),
                               Expanded(
                                 child: ListTile(
-                                  title: Text(
-                                      _quotationController
-                                          .getQuotationList[index].productName,
-                                      maxLines: 1,
-                                      style: themeController.currentTheme.value
-                                          .textTheme.bodyLarge),
-                                  subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
+                                    title: Text(
                                         _quotationController
                                             .getQuotationList[index]
-                                            .description,
-                                        style: themeController.currentTheme
-                                            .value.textTheme.bodySmall,
+                                            .productName,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(height: 7),
-                                      _quotationController
-                                                  .getQuotationList[index]
-                                                  .senderId ==
-                                              credentialController.id
-                                          ? const Text(
-                                              'Sent',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.red),
-                                            )
-                                          : const Text(
-                                              'Received',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.green),
-                                            ),
-                                    ],
-                                  ),
-                                  trailing: _quotationController
+                                        style: themeController.currentTheme
+                                            .value.textTheme.bodyLarge),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          _quotationController
                                               .getQuotationList[index]
-                                              .senderId ==
-                                          credentialController.id
-                                      ? _quotationController
-                                                      .getQuotationList[index]
-                                                      .paid ==
-                                                  'unpaid' ||
-                                              _quotationController
-                                                      .getQuotationList[index]
-                                                      .paid ==
-                                                  'paid'
-                                          ? IconButton(
-                                              onPressed: () {
-                                                Dialogs.materialDialog(
-                                                    msg:
-                                                        'Are you sure ? You want to cancel this quotation',
-                                                    title: "Cancel",
-                                                    color: Colors.white,
-                                                    context: context,
-                                                    actions: [
-                                                      IconsOutlineButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        text: 'No',
-                                                        iconData: Icons
-                                                            .cancel_outlined,
-                                                        textStyle:
-                                                            const TextStyle(
-                                                                color: Colors
-                                                                    .grey),
-                                                        iconColor: Colors.grey,
-                                                      ),
-                                                      IconsButton(
-                                                        onPressed: () {
-                                                          _quotationController
-                                                              .deleteQuotation(
-                                                                  context,
-                                                                  _quotationController
-                                                                      .getQuotationList[
-                                                                          index]
-                                                                      .orderId);
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        text: 'Yes',
-                                                        iconData: Icons.delete,
-                                                        color: primaryColor,
-                                                        textStyle:
-                                                            const TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                        iconColor: Colors.white,
-                                                      ),
-                                                    ]);
-                                              },
-                                              icon: const Icon(
-                                                Icons.delete,
-                                                color: Colors.red,
+                                              .description,
+                                          style: themeController.currentTheme
+                                              .value.textTheme.bodySmall,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 7),
+                                        _quotationController
+                                                    .getQuotationList[index]
+                                                    .senderId ==
+                                                credentialController.id
+                                            ? const Text(
+                                                'Sent',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.red),
+                                              )
+                                            : const Text(
+                                                'Received',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.green),
                                               ),
-                                            )
-                                          : const SizedBox()
-                                      : const SizedBox(),
-                                ),
+                                      ],
+                                    ),
+                                    trailing: _quotationController
+                                                .getQuotationList[index].paid ==
+                                            'pending'
+                                        ? const Text(
+                                            'Refund pending',
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red),
+                                          )
+                                        : const SizedBox()),
                               ),
                             ],
                           ),

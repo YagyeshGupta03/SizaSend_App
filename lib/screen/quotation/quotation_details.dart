@@ -9,7 +9,6 @@ import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:savo/Constants/sizes.dart';
 import 'package:savo/Controllers/quotation_controller.dart';
 import 'package:savo/screen/quotation/full_video_screen.dart';
-import 'package:savo/screen/quotation/quotatiion_invoice_screen.dart';
 import 'package:savo/screen/quotation/quotation_detail_screen_for_pay.dart';
 import 'package:savo/util/widgets/dispatch_button.dart';
 import 'package:savo/util/widgets/login_button.dart';
@@ -338,8 +337,54 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                           )
                         : const SizedBox(),
                     const SizedBox(height: 30),
-                    _quotationController.senderId == credentialController.id
-                        ? _quotationController.orderStatus == 'unpaid' ||
+                    _quotationController.senderId != credentialController.id
+                        ? _quotationController.status == 'accept'
+                            ? _quotationController.orderStatus == 'unpaid' ||
+                                    _quotationController.orderStatus == 'paid'
+                                ? LoginButton(
+                                    onTap: () {
+                                      Dialogs.materialDialog(
+                                          msg:
+                                              'Do you want to cancel this quotation?',
+                                          title: "Cancel",
+                                          msgAlign: TextAlign.center,
+                                          color: Colors.white,
+                                          context: context,
+                                          actions: [
+                                            IconsOutlineButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              text: 'No',
+                                              iconData: Icons.cancel_outlined,
+                                              textStyle: const TextStyle(
+                                                  color: primaryColor),
+                                              iconColor: primaryColor,
+                                            ),
+                                            IconsButton(
+                                              onPressed: () {
+                                                _quotationController
+                                                    .deleteQuotation(
+                                                        context,
+                                                        _quotationController
+                                                            .orderId);
+                                              },
+                                              text: 'Yes',
+                                              iconData: Icons
+                                                  .check_circle_outline_outlined,
+                                              color: primaryColor,
+                                              textStyle: const TextStyle(
+                                                  color: Colors.white),
+                                              iconColor: Colors.white,
+                                            ),
+                                          ]);
+                                    },
+                                    title: 'Cancel the quotation',
+                                    btnColor: Colors.white,
+                                    txtColor: primaryColor)
+                                : const SizedBox()
+                            : const SizedBox()
+                        : _quotationController.orderStatus == 'unpaid' ||
                                 _quotationController.orderStatus == 'paid'
                             ? LoginButton(
                                 onTap: () {
@@ -370,7 +415,8 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                                         .orderId);
                                           },
                                           text: 'Yes',
-                                          iconData: Icons.check_circle_outline_outlined,
+                                          iconData: Icons
+                                              .check_circle_outline_outlined,
                                           color: primaryColor,
                                           textStyle: const TextStyle(
                                               color: Colors.white),
@@ -381,9 +427,8 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                                 title: 'Cancel the quotation',
                                 btnColor: Colors.white,
                                 txtColor: primaryColor)
-                            : const SizedBox()
-                        : const SizedBox(),
-                    const SizedBox(height: 30),
+                            : const SizedBox(),
+                    const SizedBox(height: 20),
                     _quotationController.orderStatus == 'complete'
                         ? LoginButton(
                             onTap: () {
@@ -396,7 +441,13 @@ class _QuotationDetailScreenState extends State<QuotationDetailScreen> {
                             title: 'View Invoice',
                             txtColor: Colors.white,
                             btnColor: primaryColor)
-                        : const SizedBox(),
+                        : _quotationController.orderStatus == 'pending'
+                            ? const Text('Refund is pending',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                    color: primaryColor))
+                            : const SizedBox(),
                     const SizedBox(height: 30),
                   ],
                 ),
@@ -527,7 +578,8 @@ class OtherInformation extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              InfoColumn(title: 'Weight', value: _quotationController.weight),
+              InfoColumn(
+                  title: 'Weight', value: '${_quotationController.weight} kg'),
               InfoColumn(
                   title: 'Height x width',
                   value:

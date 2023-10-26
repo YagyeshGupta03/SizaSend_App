@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:savo/util/widgets/login_button.dart';
+import 'package:savo/util/widgets/widget.dart';
 import '../../Constants/theme_data.dart';
 import '../../Controllers/global_controllers.dart';
 import '../../Controllers/walllet_controller.dart';
@@ -41,12 +42,12 @@ class AddTotalMoneyScreen extends StatelessWidget {
                             style: themeController
                                 .currentTheme.value.textTheme.headlineLarge)),
                     const SizedBox(height: 20),
-                    TotalAmountTile(value: amount, title: 'Amount to add'),
+                    TotalAmountTile(value: convertToCurrency(amount), title: 'Amount to add'),
                     TotalAmountTile(value: transactionGateway, title: 'Transaction type'),
                     TotalAmountTile(
-                        value: '+ $charges', title: 'Transaction charges'),
+                        value: convertToCurrency(charges), title: 'Transaction charges'),
                     TotalAmountTile(
-                        value: finalPrice,
+                        value: convertToCurrency(finalPrice),
                         title: 'Total amount'),
                     const SizedBox(height: 30),
                     Padding(

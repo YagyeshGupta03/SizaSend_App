@@ -603,7 +603,7 @@ class QuotationController extends GetxController {
       loadingController.updateDispatchLoading(false);
     } else {
       Dialogs.materialDialog(
-          msg: 'Order does not exist',
+          msg: 'Incorrect parcel',
           title: 'Failed',
           context: context,
           actions: [

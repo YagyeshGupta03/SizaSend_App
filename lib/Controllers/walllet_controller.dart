@@ -239,6 +239,7 @@ class WalletController extends GetxController {
        if(status == 'complete'){
          Dialogs.materialDialog(
              msg: 'Parcel accepted successfully',
+             msgAlign: TextAlign.center,
              title: 'Accepted',
              context: context,
              actions: [
@@ -254,7 +255,7 @@ class WalletController extends GetxController {
        } else{
          updateRefundReason(context, orderId, reason);
          Dialogs.materialDialog(
-             msg: 'Amount will be added to your wallet',
+             msg: 'Amount will be credited to your wallet in a short time',
              title: 'Refund successful',
              msgAlign: TextAlign.center,
              context: context,

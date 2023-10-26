@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:savo/screen/dashboard_screen.dart';
+import 'package:savo/util/widgets/widget.dart';
 
 class PaymentSuccessfulScreen extends StatelessWidget {
   const PaymentSuccessfulScreen(
@@ -37,7 +38,7 @@ class PaymentSuccessfulScreen extends StatelessWidget {
               const SizedBox(height: 20),
               PaymentTile(name: 'Order name', value: orderName),
               const SizedBox(height: 20),
-              PaymentTile(name: 'Amount Paid', value: '$amount USD'),
+              PaymentTile(name: 'Amount Paid', value: convertToCurrency(amount)),
               const SizedBox(height: 30),
               ElevatedButton(
                   onPressed: () {

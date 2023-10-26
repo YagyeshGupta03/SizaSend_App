@@ -22,6 +22,7 @@ class _RefundScreenState extends State<RefundScreen> {
   final QuotationController _quotationController =
       Get.put(QuotationController());
   final WalletController _walletController = Get.put(WalletController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +61,7 @@ class _RefundScreenState extends State<RefundScreen> {
                               _walletController.completeOrderPayment(
                                   context,
                                   _quotationController.orderId,
-                                  'refund',
+                                  'pending',
                                   _quotationController.senderId, _refund.text);
                             },
                             text: 'Refund',

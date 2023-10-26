@@ -28,7 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _phone = TextEditingController();
   final _password = TextEditingController();
   final _confirmPassword = TextEditingController();
-  var codeOfCountry = '+91';
+  var codeOfCountry = '+27';
   bool checked = false;
 
   @override

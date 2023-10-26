@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:savo/Constants/theme_data.dart';
 import 'package:savo/Controllers/global_controllers.dart';
 import 'package:savo/util/widgets/login_button.dart';
+import 'package:savo/util/widgets/widget.dart';
 import '../../Controllers/walllet_controller.dart';
 
 class BankDetailsScreen extends StatelessWidget {
@@ -52,7 +53,7 @@ class BankDetailsScreen extends StatelessWidget {
               ),
               BankListTile(
                 title: 'Withdrawal amount',
-                value: '${credentialController.amount.toString()} USD',
+                value: convertToCurrency(credentialController.amount.toString()),
               ),
               const SizedBox(height: 25),
               Padding(

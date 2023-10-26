@@ -48,7 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
            Obx(() =>  _buyerInfoController.buyerList.length.isEqual(0)
                ? const SizedBox()
                : const HomeTopBuyersScreen()),
-            const HomeTransactionList()
+            const HomeTransactionList(),
+            const SizedBox(height: 30),
           ],
         ),
       ),

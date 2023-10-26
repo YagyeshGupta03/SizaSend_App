@@ -9,8 +9,8 @@ String? validateField(String value, String fieldLabel, BuildContext context) {
         validators: [
           const RequiredValidator(),
           const NumberValidator(),
-          const MaxLengthValidator(length: 10),
-          const MinLengthValidator(length: 10),
+          // const MaxLengthValidator(length: 10),
+          // const MinLengthValidator(length: 9),
         ]
     );
     return validator.validate(
