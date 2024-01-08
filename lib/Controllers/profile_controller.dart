@@ -81,7 +81,7 @@ class BankController extends GetxController {
             IconsButton(
               onPressed: () {
                 Get.back();
-                Get.to(() => BankListWithdraw());
+                Get.to(() => const BankListWithdraw());
               },
               text: 'Go back',
               color: primaryColor,

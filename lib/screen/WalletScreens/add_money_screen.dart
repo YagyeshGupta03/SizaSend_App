@@ -495,7 +495,7 @@ class _QuotationMoneyAddState extends State<QuotationMoneyAdd> {
                       fieldLabel: 'Amount',
                       keyboard: TextInputType.number,
                       fillColor: themeController.currentTheme.value.cardColor,
-                      hintText: 'Enter Amount in USD'),
+                      hintText: 'Enter Amount'),
                   const SizedBox(height: 25),
                   Padding(
                     padding:

@@ -4,7 +4,6 @@ import '../Constants/sizes.dart';
 import '../Controllers/global_controllers.dart';
 
 
-
 class TimeoutScreen extends StatefulWidget {
   const TimeoutScreen({super.key});
 

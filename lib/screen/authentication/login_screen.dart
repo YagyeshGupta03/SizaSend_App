@@ -46,19 +46,19 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Center(
-                  child: Text(S.of(context).welcomeBack,
+                  child: Text('Welcome back',
                       style: themeController
                           .currentTheme.value.textTheme.displayLarge),
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  S
-                      .of(context)
-                      .loremIpsumDolorSitAmetConsecteturAdipiscingElitSedDo,
-                  style:
-                      themeController.currentTheme.value.textTheme.displayMedium,
-                  textAlign: TextAlign.center,
-                ),
+                // const SizedBox(height: 10),
+                // Text(
+                //   S
+                //       .of(context)
+                //       .loremIpsumDolorSitAmetConsecteturAdipiscingElitSedDo,
+                //   style:
+                //       themeController.currentTheme.value.textTheme.displayMedium,
+                //   textAlign: TextAlign.center,
+                // ),
                 const SizedBox(height: 20),
                 CustomTextFormField(
                   topTitle: S.of(context).phoneNo,
