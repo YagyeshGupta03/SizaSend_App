@@ -54,8 +54,7 @@ class FCM {
     if (Platform.isAndroid) {
       flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()!
-          .requestPermission();
+              AndroidFlutterLocalNotificationsPlugin>()!.requestNotificationsPermission();
     } else if (Platform.isIOS) {
       flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
