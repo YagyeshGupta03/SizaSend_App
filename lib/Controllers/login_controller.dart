@@ -48,7 +48,6 @@ class LoginController extends GetxController {
   //
   //
 
-
   //
   Future signUpVerification(context, contactsToSend, codeOfCountry) async {
     await loadingController.updateLoading(true);
@@ -61,22 +60,21 @@ class LoginController extends GetxController {
       userrId = reply['data'][0]['id'];
       await FirebaseAuth.instance
           .verifyPhoneNumber(
-        phoneNumber: codeOfCountry.toString() + contactsToSend,
-        verificationCompleted: (PhoneAuthCredential credential) {},
-        verificationFailed: (FirebaseAuthException e) {
-          Fluttertoast.showToast(
-            msg: 'Your daily limit exceeded',
-            gravity: ToastGravity.SNACKBAR,
-            backgroundColor: Colors.red,
-          );
-        },
-        codeSent: (String verificationId, int? resendToken) {
-          Get.to(() => OtpScreen(
-              verifyId: verificationId,
-              userId: userrId));
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {},
-      )
+            phoneNumber: codeOfCountry.toString() + contactsToSend,
+            verificationCompleted: (PhoneAuthCredential credential) {},
+            verificationFailed: (FirebaseAuthException e) {
+              Fluttertoast.showToast(
+                msg: 'Your daily limit exceeded',
+                gravity: ToastGravity.SNACKBAR,
+                backgroundColor: Colors.red,
+              );
+            },
+            codeSent: (String verificationId, int? resendToken) {
+              Get.to(
+                  () => OtpScreen(verifyId: verificationId, userId: userrId));
+            },
+            codeAutoRetrievalTimeout: (String verificationId) {},
+          )
           .whenComplete(() => loadingController.updateLoading(false));
     } else {
       userrId = '';
@@ -88,6 +86,7 @@ class LoginController extends GetxController {
       loadingController.updateLoading(false);
     }
   }
+
   //
   //
   //
@@ -181,6 +180,7 @@ class LoginController extends GetxController {
       print('error in getting terms and conditons');
     }
   }
+
   //
   //
   //
@@ -196,8 +196,7 @@ class LoginController extends GetxController {
       privacyDescription = reply['data']['description'];
 
       // Navigator.pop(context);
-    } else {
-    }
+    } else {}
   }
 
   //
@@ -219,20 +218,29 @@ class LoginController extends GetxController {
             phoneNumber: codeOfCountry.toString() + contactsToSend,
             verificationCompleted: (PhoneAuthCredential credential) {},
             verificationFailed: (FirebaseAuthException e) {
+              loadingController.updateLoading(false);
               Fluttertoast.showToast(
-                msg: 'Your daily limit exceeded',
+                msg: e.toString(),
                 gravity: ToastGravity.SNACKBAR,
                 backgroundColor: Colors.red,
               );
             },
             codeSent: (String verificationId, int? resendToken) {
-              Get.to(() => OtpScreen(
-                  verifyId: verificationId,
-                  userId: userrId));
+              Get.to(
+                  () => OtpScreen(verifyId: verificationId, userId: userrId));
+              loadingController.updateLoading(false);
             },
             codeAutoRetrievalTimeout: (String verificationId) {},
           )
-          .whenComplete(() => loadingController.updateLoading(false));
+          .whenComplete(() => loadingController.updateLoading(false))
+          .catchError((e) {
+        loadingController.updateLoading(false);
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.SNACKBAR,
+          backgroundColor: Colors.red,
+        );
+      });
     } else {
       userrId = '';
       Fluttertoast.showToast(
@@ -243,12 +251,14 @@ class LoginController extends GetxController {
       loadingController.updateLoading(false);
     }
   }
+
   //
   //
   //
   //
   String phoneVerify = '';
-  Future verifySignNumber(context, phone, codeOfCountry, fullName, password) async {
+  Future verifySignNumber(
+      context, phone, codeOfCountry, fullName, password) async {
     await loadingController.updateLoading(true);
     final NetworkHelper networkHelper = NetworkHelper(url: verifySignNumberUrl);
     var reply = await networkHelper.postData({
@@ -258,35 +268,35 @@ class LoginController extends GetxController {
     if (reply['status'] == 0) {
       await FirebaseAuth.instance
           .verifyPhoneNumber(
-            phoneNumber:
-            codeOfCountry.toString() + phone,
-            verificationCompleted:
-                (PhoneAuthCredential credential) {},
-            verificationFailed: (FirebaseAuthException e) {
-              Fluttertoast.showToast(
-                msg: e.toString(),
-                gravity: ToastGravity.SNACKBAR,
-                backgroundColor: Colors.red,
-              );
-              print('????????????????????????');
-              print(e.toString());
-              print('????????????????????????');
-            },
-            codeSent:
-                (String verificationId, int? resendToken) {
-              Get.to(() => SignupOtpVerification(
-                    verifyId: verificationId,
-                    fullName: fullName,
-                    phone: phone,
-                    password: password,
-                    codeOfCountry: codeOfCountry.toString(),
-                  ));
-            },
-            codeAutoRetrievalTimeout:
-                (String verificationId) {},
-          )
-          .whenComplete(
-              () => loadingController.updateLoading(false));
+        phoneNumber: codeOfCountry.toString() + phone,
+        verificationCompleted: (PhoneAuthCredential credential) {},
+        verificationFailed: (FirebaseAuthException e) {
+          Fluttertoast.showToast(
+            msg: e.toString(),
+            gravity: ToastGravity.SNACKBAR,
+            backgroundColor: Colors.red,
+          );
+          loadingController.updateLoading(false);
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          Get.to(() => SignupOtpVerification(
+                verifyId: verificationId,
+                fullName: fullName,
+                phone: phone,
+                password: password,
+                codeOfCountry: codeOfCountry.toString(),
+              ));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      )
+          .catchError((e) {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          gravity: ToastGravity.SNACKBAR,
+          backgroundColor: Colors.red,
+        );
+        loadingController.updateLoading(false);
+      }).whenComplete(() => loadingController.updateLoading(false));
     } else {
       Fluttertoast.showToast(
         msg: "Phone number is already registered",
@@ -357,7 +367,7 @@ class LoginController extends GetxController {
               padding: EdgeInsets.only(top: 20),
               child: Text(
                 'You will shortly receive a reply on your registered e-mail',
-                 style: TextStyle(
+                style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
