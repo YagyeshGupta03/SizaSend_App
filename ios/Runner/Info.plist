@@ -47,5 +47,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Sizasend app requires access to your photo library to upload images and enhance your overall app experience.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Sizasend app requires access to your photo library to upload images and enhance your overall app experience.</string>
+    <key>NSContactsUsageDescription</key>
+    <string>This app requires contacts access to function properly. Your contacts are safe and not share with anyone, neither with us</string>
 </dict>
 </plist>
